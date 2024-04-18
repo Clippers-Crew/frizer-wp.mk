@@ -2,6 +2,7 @@ package mk.frizer.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +14,15 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessOwner extends BaseUser {
+public class Employee extends BaseUser{
     @Id
     private Long id;
     @OneToMany
-    List<Salon> salonList;
+    List<Review> reviews;
+    @OneToMany
+    List<Appointment> appointmentsActive;
+    @OneToMany
+    List<Appointment> appointmentsHistory;
+    @ManyToOne
+    private Salon salon;
 }

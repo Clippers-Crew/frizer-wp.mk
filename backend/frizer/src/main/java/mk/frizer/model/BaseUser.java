@@ -1,23 +1,25 @@
 package mk.frizer.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import mk.frizer.model.enums.Role;
+
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseUser {
-    //TODO Id
-    //TODO make unique email?
+    @Id
+    private Long id;
+    @Column(unique = true)
     private String email;
     private String password;
     private String firstName;
     private String lastName;
-//   TODO must be unique
+    @Column(unique = true)
     private String phoneNumber;
-
-    public BaseUser() {
-    }
-
-    public BaseUser(String email, String password, String firstName, String lastName, String phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

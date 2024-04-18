@@ -13,9 +13,9 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessOwner extends BaseUser {
+public class Customer extends BaseUser{
     @Id
     private Long id;
-    @OneToMany
-    List<Salon> salonList;
+    @OneToMany(mappedBy = "customer")
+    List<Appointment> appointments;
 }
