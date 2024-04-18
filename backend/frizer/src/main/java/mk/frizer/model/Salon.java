@@ -21,8 +21,8 @@ public class Salon {
     // TODO Lista od sliki
     @OneToMany(mappedBy = "salon")
     List<Employee> employees;
-//    @ManyToMany
-//    List<Service> services;
+    @OneToMany(mappedBy = "service")
+    List<SalonService> salonServices;
     @ManyToOne
     private BusinessOwner owner;
 }
