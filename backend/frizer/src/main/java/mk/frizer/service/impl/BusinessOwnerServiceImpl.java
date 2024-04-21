@@ -7,6 +7,7 @@ import mk.frizer.model.enums.Role;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.BaseUserRepository;
 import mk.frizer.repository.BusinessOwnerRepository;
+import mk.frizer.repository.SalonRepository;
 import mk.frizer.service.BusinessOwnerService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ import java.util.Optional;
 @Service
 public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     private final BusinessOwnerRepository businessOwnerRepository;
+    private final SalonRepository salonRepository;
 
-    public BusinessOwnerServiceImpl(BusinessOwnerRepository businessOwnerRepository) {
+    public BusinessOwnerServiceImpl(BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository) {
         this.businessOwnerRepository = businessOwnerRepository;
+        this.salonRepository = salonRepository;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
-    public Optional<BusinessOwner> updateBusinessOwner(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role, List<Salon> salonList) {
+    public Optional<BusinessOwner> updateBusinessOwner(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role, List<Long> salonIds) {
         BusinessOwner user = getBusinessOwnerById(id).get();
 
         user.setEmail(email);
@@ -49,7 +52,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
         user.setLastName(lastName);
         user.setPhoneNumber(phoneNumber);
         user.setRole(role);
-        user.setSalonList(salonList);
+        user.setSalonList(salonRepository.findAllById(salonIds));
 
         return Optional.of(businessOwnerRepository.save(user));
     }

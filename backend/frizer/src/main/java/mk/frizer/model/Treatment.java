@@ -15,7 +15,7 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<SalonTreatment> salonTreatments;
 
     public Treatment(String name) {
