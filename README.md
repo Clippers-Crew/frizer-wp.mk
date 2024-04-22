@@ -1,1 +1,1 @@
-This is an EMT project
+This is a WP project
