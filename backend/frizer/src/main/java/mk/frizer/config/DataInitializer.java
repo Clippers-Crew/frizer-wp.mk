@@ -2,59 +2,43 @@ package mk.frizer.config;
 
 import jakarta.annotation.PostConstruct;
 
-import mk.frizer.model.*;
-import mk.frizer.model.enums.Role;
-import mk.frizer.model.exceptions.UserNotFoundException;
-import mk.frizer.repository.BaseUserRepository;
-import mk.frizer.repository.BusinessOwnerRepository;
-import mk.frizer.repository.SalonRepository;
+import mk.frizer.model.BaseUser;
+import mk.frizer.model.BusinessOwner;
+import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.service.BaseUserService;
+import mk.frizer.service.BusinessOwnerService;
+import mk.frizer.service.SalonService;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 @Component
 
 public class DataInitializer {
     private final BaseUserService baseUserService;
-//    private final BusinessOwnerRepository businessOwnerRepository;
-//    private final SalonRepository salonRepository;
-    public DataInitializer(BaseUserService baseUserService){//, BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository) {
+    private final BusinessOwnerService businessOwnerService;
+    private final SalonService salonService;
+    public DataInitializer(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, SalonService salonService){//, BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository) {
         this.baseUserService = baseUserService;
-//        this.businessOwnerRepository = businessOwnerRepository;
-//        this.salonRepository = salonRepository;
+        this.businessOwnerService = businessOwnerService;
+        this.salonService = salonService;
     }
     @PostConstruct
     public void init(){
-//        BaseUser user = new BaseUser("dario@email.com","password","FirstName","LastName","phoneNumber",Role.ROLE_ADMIN);
-//        baseUserRepository.save(user);
+//        baseUserService.createBaseUser("dario@email.com","password","FirstName","LastName","phoneNumber");
+//        baseUserService.createBaseUser("sanja@email.com","password","FirstName","LastName","numberPhone");
+//        baseUserService.createBaseUser("denis@email.com","password","FirstName","LastName","LycaMobile");
+//        BaseUser baseUser1 = baseUserService.getBaseUsers().get(0);
+//        BaseUser baseUser2 = baseUserService.getBaseUsers().get(1);
+//        BaseUser baseUser3 = baseUserService.getBaseUsers().get(2);
 //
-//        BusinessOwner businessOwner = new BusinessOwner("dario1@email.com","password","FirstName","LastName","phoneNumber1",Role.ROLE_ADMIN, new ArrayList<Salon>());
-//        businessOwnerRepository.save(businessOwner);
-//        Salon salon = new Salon("Kaj Shekspiro","Frizerski salon za mazhi","Kej 1vi Maj,Prilep","078695467",new ArrayList<Employee>(),new ArrayList<SalonTreatment>(),businessOwner);
-//        Salon salon1 = new Salon("Krc krc","Berber","doma","broj",new ArrayList<Employee>(),new ArrayList<SalonTreatment>(),businessOwner);
-//        salonRepository.save(salon);
-//        salonRepository.save(salon1);
+//        businessOwnerService.createBusinessOwner(baseUser1.getId());
+//        businessOwnerService.createBusinessOwner(baseUser2.getId());
+//        businessOwnerService.createBusinessOwner(baseUser3.getId());
+//        BusinessOwner businessOwner1 = businessOwnerService.getBusinessOwners().get(0);
+//        BusinessOwner businessOwner2 = businessOwnerService.getBusinessOwners().get(1);
+//        BusinessOwner businessOwner3 = businessOwnerService.getBusinessOwners().get(2);
 //
-//        businessOwner.getSalonList().add(salon);
-//        businessOwner.getSalonList().add(salon1);
-//        businessOwnerRepository.save(businessOwner);
-
-
-        //TODO test
-//        System.out.println(baseUserService.getBaseUsers());
-//        Optional<BaseUser> b = baseUserService.getBaseUserById((long)1);
-//        System.out.println(b);
-//        //belja
-//        try {
-//            System.out.println(baseUserService.getBaseUserById(3L));
-//        }
-//        catch(UserNotFoundException exception){
-//            System.out.println("user not found thanks");
-//        }
-//        System.out.println(baseUserService.createBaseUser("dario4@email.com", "passowrd", "first", "name", "phonenumbersszcx", Role.ROLE_USER));
-//        System.out.println(baseUserService.updateBaseUser(1L,"mario12@email.com", "passowrd", "first", "name", "phonenumberss12", Role.ROLE_ADMIN));
-//        System.out.println(baseUserService.deleteBaseUserById(3L));
+//        salonService.createSalon(new SalonDTO("Krc krc","Berber","doma","broj", businessOwner.getId()));
+//        salonService.createSalon(new SalonAddDTO("Kaj Shekspiro","Frizerski salon za mazhi","prilep","broj2", businessOwner3.getId()));
+//        salonService.createSalon(new SalonDTO("Frizerski salon Asim","Frizerski salon za mazhi","veles","broj3", businessOwner.getId()));
     }
 }
