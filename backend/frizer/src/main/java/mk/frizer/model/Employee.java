@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class Employee extends BaseUser{
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +24,16 @@ public class Employee extends BaseUser{
     List<Appointment> appointmentsHistory;
     @ManyToOne
     private Salon salon;
-
-    public Employee(String email, String password, String firstName, String lastName, String phoneNumber, Role role, Salon salon) {
-        super(email, password, firstName, lastName, phoneNumber, role);
+    @OneToOne
+    @JoinColumn(name = "base_user_id")
+    private BaseUser baseUser;
+    public Employee(BaseUser baseUser,Salon salon) {
+        this.baseUser = baseUser;
         this.reviews = new ArrayList<>();
         this.appointmentsActive = new ArrayList<>();
         this.appointmentsHistory = new ArrayList<>();
         this.salon = salon;
     }
+
+
 }

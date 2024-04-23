@@ -12,15 +12,17 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class Customer extends BaseUser{
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     List<Appointment> appointments;
-
-    public Customer(String email, String password, String firstName, String lastName, String phoneNumber, Role role) {
-        super(email, password, firstName, lastName, phoneNumber, role);
+    @OneToOne
+    @JoinColumn(name = "base_user_id")
+    private BaseUser baseUser;
+    public Customer(BaseUser baseUser) {
+        this.baseUser = baseUser;
         this.appointments = new ArrayList<>();
     }
 }

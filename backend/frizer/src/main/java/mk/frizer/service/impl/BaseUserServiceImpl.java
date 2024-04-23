@@ -31,8 +31,8 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public Optional<BaseUser> createBaseUser(String email, String password, String firstName, String lastName, String phoneNumber, Role role) {
-        BaseUser user = new BaseUser(email, password, firstName, lastName, phoneNumber, role);
+    public Optional<BaseUser> createBaseUser(String email, String password, String firstName, String lastName, String phoneNumber) {
+        BaseUser user = new BaseUser(email, password, firstName, lastName, phoneNumber);
         return Optional.of(baseUserRepository.save(user));
     }
 

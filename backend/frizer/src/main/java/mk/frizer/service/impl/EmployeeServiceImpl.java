@@ -3,9 +3,9 @@ package mk.frizer.service.impl;
 import mk.frizer.model.*;
 import mk.frizer.model.enums.Role;
 import mk.frizer.model.exceptions.AppointmentNotFoundException;
-import mk.frizer.model.exceptions.CustomerNotFoundException;
 import mk.frizer.model.exceptions.EmployeeNotFoundException;
 import mk.frizer.model.exceptions.SalonNotFoundException;
+import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.*;
 import mk.frizer.service.EmployeeService;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,14 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final AppointmentRepository appointmentRepository;
+    private final BaseUserRepository baseUserRepository;
     private final ReviewRepository reviewRepository;
     private final SalonRepository salonRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, AppointmentRepository appointmentRepository, ReviewRepository reviewRepository, SalonRepository salonRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, AppointmentRepository appointmentRepository, BaseUserRepository baseUserRepository, ReviewRepository reviewRepository, SalonRepository salonRepository) {
         this.employeeRepository = employeeRepository;
         this.appointmentRepository = appointmentRepository;
+        this.baseUserRepository = baseUserRepository;
         this.reviewRepository = reviewRepository;
         this.salonRepository = salonRepository;
     }
@@ -40,30 +42,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> createEmployee(String email, String password, String firstName, String lastName, String phoneNumber, Role role, Long salonId) {
-        Salon salon = salonRepository.findById(salonId)
-                .orElseThrow(SalonNotFoundException::new);
-        Employee employee = new Employee(email, password, firstName, lastName, phoneNumber, role, salon);
-        return Optional.of(employeeRepository.save(employee));
-    }
-
-    @Override
-    public Optional<Employee> updateEmployee(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role, Long salonId, List<Long> reviewIds, List<Long> appointmentHistoryIds, List<Long> appointmentActiveIds) {
-        Employee employee = getEmployeeById(id).get();
+    public Optional<Employee> createEmployee(Long baseUserId, Long salonId) {
+        BaseUser baseUser = baseUserRepository.findById(baseUserId)
+                .orElseThrow(UserNotFoundException::new);
         Salon salon = salonRepository.findById(salonId)
                 .orElseThrow(SalonNotFoundException::new);
 
-        employee.setEmail(email);
-        employee.setPassword(password);
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
-        employee.setPhoneNumber(phoneNumber);
-        employee.setRole(role);
-        employee.setSalon(salon);
-        employee.setAppointmentsActive(appointmentRepository.findAllById(appointmentActiveIds));
-        employee.setAppointmentsHistory(appointmentRepository.findAllById(appointmentHistoryIds));
-        employee.setReviews(reviewRepository.findAllById(reviewIds));
+        Employee employee = new Employee(baseUser, salon);
+        baseUser.setRole(Role.ROLE_EMPLOYEE);
 
+        baseUserRepository.save(baseUser);
         return Optional.of(employeeRepository.save(employee));
     }
 

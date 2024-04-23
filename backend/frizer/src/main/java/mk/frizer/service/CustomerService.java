@@ -11,8 +11,7 @@ import java.util.Optional;
 public interface CustomerService {
     List<Customer> getCustomers();
     Optional<Customer> getCustomerById(Long id);
-    Optional<Customer> createCustomer(String email, String password, String firstName, String lastName, String phoneNumber, Role role);
-    Optional<Customer> updateCustomer(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role, List<Long> appointmentIds);
+    Optional<Customer> createCustomer(Long baseUserId);
     Optional<Customer> deleteCustomerById(Long id);
     //TODO event listen for creation of appointment
 //    Optional<Customer> addAppointmentForCustomer(Long appointmentId);

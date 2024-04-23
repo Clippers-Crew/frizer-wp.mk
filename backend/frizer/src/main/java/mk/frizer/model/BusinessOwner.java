@@ -1,5 +1,8 @@
 package mk.frizer.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,22 +15,27 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class BusinessOwner extends BaseUser {
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class BusinessOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(fetch = FetchType.EAGER)
+//    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     List<Salon> salonList;
-
-    public BusinessOwner(String email, String password, String firstName, String lastName, String phoneNumber, Role role) {
-        super(email, password, firstName, lastName, phoneNumber, role);
+    @OneToOne
+    @JoinColumn(name = "base_user_id")
+    private BaseUser baseUser;
+    public BusinessOwner(BaseUser baseUser) {
+        this.baseUser = baseUser;
         this.salonList = new ArrayList<>();
-    }
 
+    }
     @Override
     public String toString() {
         return "BusinessOwner{" +
                 "id=" + id +
-                ", salonList= list}";
+                ", salonList= " + salonList +
+                "}";
     }
 }

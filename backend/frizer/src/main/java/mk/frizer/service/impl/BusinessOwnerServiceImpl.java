@@ -18,10 +18,12 @@ import java.util.Optional;
 public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     private final BusinessOwnerRepository businessOwnerRepository;
     private final SalonRepository salonRepository;
+    private final BaseUserRepository baseUserRepository;
 
-    public BusinessOwnerServiceImpl(BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository) {
+    public BusinessOwnerServiceImpl(BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository, BaseUserRepository baseUserRepository) {
         this.businessOwnerRepository = businessOwnerRepository;
         this.salonRepository = salonRepository;
+        this.baseUserRepository = baseUserRepository;
     }
 
     @Override
@@ -37,23 +39,13 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
-    public Optional<BusinessOwner> createBusinessOwner(String email, String password, String firstName, String lastName, String phoneNumber, Role role) {
-        BusinessOwner user = new BusinessOwner(email, password, firstName, lastName, phoneNumber, role);
-        return Optional.of(businessOwnerRepository.save(user));
-    }
+    public Optional<BusinessOwner> createBusinessOwner(Long baseUserId) {
+        BaseUser baseUser = baseUserRepository.findById(baseUserId)
+                .orElseThrow(UserNotFoundException::new);
 
-    @Override
-    public Optional<BusinessOwner> updateBusinessOwner(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role, List<Long> salonIds) {
-        BusinessOwner user = getBusinessOwnerById(id).get();
-
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setPhoneNumber(phoneNumber);
-        user.setRole(role);
-        user.setSalonList(salonRepository.findAllById(salonIds));
-
+        baseUser.setRole(Role.ROLE_OWNER);
+        BusinessOwner user = new BusinessOwner(baseUser);
+        baseUserRepository.save(baseUser);
         return Optional.of(businessOwnerRepository.save(user));
     }
 
@@ -63,6 +55,14 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
         BusinessOwner user = getBusinessOwnerById(id).get();
         businessOwnerRepository.deleteById(id);
         return Optional.of(user);
+    }
+
+    @Override
+    public Optional<BusinessOwner> addSalonToBusinessOwner(Long businessOwnerId, Salon salon) {
+        BusinessOwner businessOwner = getBusinessOwnerById(businessOwnerId).get();
+        businessOwner.getSalonList().add(salon);
+        businessOwnerRepository.save(businessOwner);
+        return Optional.of(businessOwner);
     }
 
     //TODO listen for salon created event
