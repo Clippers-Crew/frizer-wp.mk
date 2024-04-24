@@ -17,11 +17,9 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(fetch = FetchType.EAGER)
-    List<Review> reviews;
+    private List<Appointment> appointmentsActive;
     @OneToMany(fetch = FetchType.EAGER)
-    List<Appointment> appointmentsActive;
-    @OneToMany(fetch = FetchType.EAGER)
-    List<Appointment> appointmentsHistory;
+    private List<Appointment> appointmentsHistory;
     @ManyToOne
     private Salon salon;
     @OneToOne
@@ -29,11 +27,8 @@ public class Employee {
     private BaseUser baseUser;
     public Employee(BaseUser baseUser,Salon salon) {
         this.baseUser = baseUser;
-        this.reviews = new ArrayList<>();
         this.appointmentsActive = new ArrayList<>();
         this.appointmentsHistory = new ArrayList<>();
         this.salon = salon;
     }
-
-
 }

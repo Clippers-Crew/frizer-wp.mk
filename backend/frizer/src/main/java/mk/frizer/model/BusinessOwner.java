@@ -20,16 +20,14 @@ public class BusinessOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
-    List<Salon> salonList;
+    private List<Salon> salonList;
     @OneToOne
     @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
     public BusinessOwner(BaseUser baseUser) {
         this.baseUser = baseUser;
         this.salonList = new ArrayList<>();
-
     }
     @Override
     public String toString() {

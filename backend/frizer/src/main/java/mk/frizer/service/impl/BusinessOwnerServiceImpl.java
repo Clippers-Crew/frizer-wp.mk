@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BusinessOwnerServiceImpl implements BusinessOwnerService {
@@ -65,5 +66,16 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
         return Optional.of(businessOwner);
     }
 
-    //TODO listen for salon created event
+    @Override
+    public Optional<BusinessOwner> editSalonForBusinessOwner(Salon salon) {
+        BusinessOwner owner = getBusinessOwnerById(salon.getOwner().getId()).get();
+        owner.setSalonList(owner.getSalonList()
+                .stream().map(s -> {
+                    if(s.getId().equals(salon.getId()))
+                        return salon;
+                    return s;
+                }).collect(Collectors.toList()));
+        businessOwnerRepository.save(owner);
+        return Optional.of(owner);
+    }
 }

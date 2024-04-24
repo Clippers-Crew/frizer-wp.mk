@@ -13,6 +13,6 @@ public interface BusinessOwnerService {
     Optional<BusinessOwner> getBusinessOwnerById(Long id);
     Optional<BusinessOwner> createBusinessOwner(Long baseUserId);
     Optional<BusinessOwner> deleteBusinessOwnerById(Long id);
-//    TODO listen for created salon event and update salon list
     Optional<BusinessOwner> addSalonToBusinessOwner(Long businessOwnerId, Salon salon);
+    Optional<BusinessOwner> editSalonForBusinessOwner(Salon salon);
 }

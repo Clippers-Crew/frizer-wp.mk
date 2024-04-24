@@ -17,7 +17,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-    List<Appointment> appointments;
+    private List<Appointment> appointments;
     @OneToOne
     @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
