@@ -15,11 +15,14 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<SalonTreatment> salonTreatments;
+    @ManyToOne
+    private Salon salon;
+    private Double price;
 
-    public Treatment(String name) {
+    public Treatment(String name, Salon salon, Double price) {
         this.name = name;
-        this.salonTreatments = new ArrayList<>();
+        this.salon = salon;
+        this.price = price;
     }
 }
+

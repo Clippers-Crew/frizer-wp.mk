@@ -1,13 +1,16 @@
 package mk.frizer.service;
 
 import mk.frizer.model.Treatment;
+import mk.frizer.model.dto.TreatmentAddDTO;
+import mk.frizer.model.dto.TreatmentUpdateDTO;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface TreatmentService{
     List<Treatment> getTreatments();
     Optional<Treatment> getTreatmentById(Long id);
-    Optional<Treatment> createTreatment(String name);
-    Optional<Treatment> updateTreatment(Long id, String name, List<Long> salonTreatmentIds);
+    Optional<Treatment> createTreatment(TreatmentAddDTO treatmentAddDTO);
+    Optional<Treatment> updateTreatment(Long id, TreatmentUpdateDTO treatmentUpdateDTO);
     Optional<Treatment> deleteTreatmentById(Long id);
 }
