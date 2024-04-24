@@ -17,9 +17,15 @@ public class SalonEventHandler {
     }
 
     @EventListener
-    public void onProductCreated(SalonCreatedEvent event) {
-        //TODO
+    public void onSalonCreated(SalonCreatedEvent event) {
         Salon salon = (Salon)event.getSource();
         businessOwnerService.addSalonToBusinessOwner(salon.getOwner().getId(), salon);
     }
+    @EventListener
+    public void onSalonUpdated(SalonCreatedEvent event) {
+        Salon salon = (Salon)event.getSource();
+        businessOwnerService.editSalonForBusinessOwner(salon);
+    }
+
+
 }

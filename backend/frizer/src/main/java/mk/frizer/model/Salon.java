@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Salon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +23,12 @@ public class Salon {
     private String description;
     private String location;
     private String phoneNumber;
-    // TODO Lista od sliki
     @OneToMany(mappedBy = "salon", fetch = FetchType.EAGER)
-    List<Employee> employees;
-    @OneToMany(fetch = FetchType.EAGER)
-    List<SalonTreatment> salonTreatments;
-//    @JsonBackReference
+    private List<Employee> employees;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "salon")
+    private List<Treatment> salonTreatments;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags;
     @ManyToOne
     private BusinessOwner owner;
 
@@ -40,6 +39,7 @@ public class Salon {
         this.phoneNumber = phoneNumber;
         this.employees = new ArrayList<>();
         this.salonTreatments = new ArrayList<>();
+        this.tags = new ArrayList<>();
         this.owner = owner;
     }
 

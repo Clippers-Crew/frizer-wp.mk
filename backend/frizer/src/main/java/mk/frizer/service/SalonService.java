@@ -1,6 +1,8 @@
 package mk.frizer.service;
 
 import mk.frizer.model.Salon;
+import mk.frizer.model.Tag;
+import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
 
@@ -13,4 +15,7 @@ public interface SalonService {
     Optional<Salon> createSalon(SalonAddDTO salonAddDTO);
     Optional<Salon> updateSalon(Long id, SalonUpdateDTO salonUpdateDTO);
     Optional<Salon> deleteSalonById(Long id);
+    Optional<Salon> addTagToSalon(Long salonId, Long tagId);
+    Optional<Salon> addTreatmentToSalon(Treatment treatment);
+    Optional<Salon> editTreatmentForSalon(Treatment treatment);
 }

@@ -1,8 +1,10 @@
 package mk.frizer.web;
 
 import mk.frizer.model.Salon;
+import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import mk.frizer.model.dto.TreatmentUpdateDTO;
 import mk.frizer.service.SalonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,24 +37,21 @@ public class SalonRestController {
     public ResponseEntity<Salon> save(@RequestBody SalonAddDTO salonAddDTO) {
         System.out.println(salonAddDTO);
         return this.salonService.createSalon(salonAddDTO)
-                .map(product -> ResponseEntity.ok().body(product))
+                .map(salon -> ResponseEntity.ok().body(salon))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PutMapping("/edit/{id}")
+    @PostMapping("/edit/{id}")
     public ResponseEntity<Salon> update(@PathVariable Long id, @RequestBody SalonUpdateDTO salonUpdateDTO) {
-        System.out.println(salonUpdateDTO);
         return this.salonService.updateSalon(id, salonUpdateDTO)
-                .map(product -> ResponseEntity.ok().body(product))
+                .map(salon -> ResponseEntity.ok().body(salon))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteById(@PathVariable Long id) {
+    public ResponseEntity<Salon> deleteById(@PathVariable Long id) {
         this.salonService.deleteSalonById(id);
         if (this.salonService.getSalonById(id).isEmpty()) return ResponseEntity.ok().build();
         return ResponseEntity.badRequest().build();
     }
-
-
 }

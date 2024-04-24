@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import mk.frizer.model.Salon;
+import mk.frizer.model.Tag;
+import mk.frizer.model.Treatment;
 
 import java.io.IOException;
 
@@ -26,7 +28,25 @@ public class SalonSerializer extends JsonSerializer<Salon> {
         jsonGenerator.writeStringField("location", salon.getLocation());
         jsonGenerator.writeStringField("phoneNumber", salon.getPhoneNumber());
         jsonGenerator.writeNumberField("owner", salon.getOwner().getId());
-        //TODO salon treatments and employees
+        jsonGenerator.writeArrayFieldStart("salonTreatments");
+        for (Treatment treatment: salon.getSalonTreatments()) {
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeNumberField("id", treatment.getId());
+            jsonGenerator.writeStringField("name", treatment.getName());
+            jsonGenerator.writeNumberField("price", treatment.getPrice());
+            jsonGenerator.writeNumberField("salon", treatment.getSalon().getId());
+            jsonGenerator.writeEndObject();
+        }
+        jsonGenerator.writeEndArray();
+        jsonGenerator.writeArrayFieldStart("salonTags");
+        for (Tag tag: salon.getTags()) {
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeNumberField("id", tag.getId());
+            jsonGenerator.writeStringField("name", tag.getName());
+            jsonGenerator.writeEndObject();
+        }
+        jsonGenerator.writeEndArray();
+        //TODO employees
         jsonGenerator.writeEndObject();
     }
 }
