@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import mk.frizer.model.BaseUser;
 import mk.frizer.model.BusinessOwner;
 import mk.frizer.model.Salon;
 import mk.frizer.model.Tag;
+import mk.frizer.utilities.BaseUserSerializer;
 import mk.frizer.utilities.BusinessOwnerSerializer;
 import mk.frizer.utilities.SalonSerializer;
 import mk.frizer.utilities.TagSerializer;
@@ -29,6 +31,7 @@ public class FrizerApplication {
 		module.addSerializer(BusinessOwner.class, new BusinessOwnerSerializer());
 		module.addSerializer(Salon.class, new SalonSerializer());
 		module.addSerializer(Tag.class, new TagSerializer());
+		module.addSerializer(BaseUser.class, new BaseUserSerializer());
 		objectMapper.registerModule(module);
 
 		objectMapper.registerModule(new ParameterNamesModule())

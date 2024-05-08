@@ -1,6 +1,8 @@
 package mk.frizer.service.impl;
 
 import mk.frizer.model.BaseUser;
+import mk.frizer.model.dto.BaseUserAddDTO;
+import mk.frizer.model.dto.BaseUserUpdateDTO;
 import mk.frizer.model.enums.Role;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.BaseUserRepository;
@@ -31,22 +33,26 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public Optional<BaseUser> createBaseUser(String email, String password, String firstName, String lastName, String phoneNumber) {
-        BaseUser user = new BaseUser(email, password, firstName, lastName, phoneNumber);
+    public Optional<BaseUser> createBaseUser(BaseUserAddDTO baseUserAddDTO) {
+        BaseUser user = new BaseUser(baseUserAddDTO.getEmail(), baseUserAddDTO.getPassword(), baseUserAddDTO.getFirstName(), baseUserAddDTO.getLastName(), baseUserAddDTO.getPhoneNumber());
         return Optional.of(baseUserRepository.save(user));
     }
 
     @Override
-    public Optional<BaseUser> updateBaseUser(Long id, String email, String password, String firstName, String lastName, String phoneNumber, Role role) {
+    public Optional<BaseUser> updateBaseUser(Long id, BaseUserUpdateDTO baseUserUpdateDTO) {
         BaseUser user = getBaseUserById(id).get();
 
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setPhoneNumber(phoneNumber);
-        user.setRole(role);
+        user.setFirstName(baseUserUpdateDTO.getFirstName());
+        user.setLastName(baseUserUpdateDTO.getLastName());
+        user.setPhoneNumber(baseUserUpdateDTO.getPhoneNumber());
 
+        return Optional.of(baseUserRepository.save(user));
+    }
+
+    @Override
+    public Optional<BaseUser> changeBaseUserPassword(Long id, String password) {
+        BaseUser user = getBaseUserById(id).get();
+        user.setPassword(password);
         return Optional.of(baseUserRepository.save(user));
     }
 
