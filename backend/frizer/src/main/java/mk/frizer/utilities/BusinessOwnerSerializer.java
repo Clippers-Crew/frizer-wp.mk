@@ -18,7 +18,7 @@ public class BusinessOwnerSerializer extends JsonSerializer<BusinessOwner> {
         jsonGenerator.writeObjectFieldStart("baseUser");
         jsonGenerator.writeNumberField("id", owner.getBaseUser().getId());
         jsonGenerator.writeStringField("email", owner.getBaseUser().getEmail());
-        jsonGenerator.writeStringField("password", owner.getBaseUser().getPassword());
+//        jsonGenerator.writeStringField("password", owner.getBaseUser().getPassword());
         jsonGenerator.writeStringField("firstName", owner.getBaseUser().getFirstName());
         jsonGenerator.writeStringField("lastName", owner.getBaseUser().getLastName());
         jsonGenerator.writeStringField("phoneNumber", owner.getBaseUser().getPhoneNumber());

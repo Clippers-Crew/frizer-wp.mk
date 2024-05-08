@@ -27,7 +27,7 @@ public class SalonSerializer extends JsonSerializer<Salon> {
         jsonGenerator.writeStringField("description", salon.getDescription());
         jsonGenerator.writeStringField("location", salon.getLocation());
         jsonGenerator.writeStringField("phoneNumber", salon.getPhoneNumber());
-        jsonGenerator.writeNumberField("owner", salon.getOwner().getId());
+        jsonGenerator.writeStringField("owner", salon.getOwner() != null ? salon.getOwner().getId().toString() : null);
         jsonGenerator.writeArrayFieldStart("salonTreatments");
         for (Treatment treatment: salon.getSalonTreatments()) {
             jsonGenerator.writeStartObject();

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -16,9 +18,12 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //TODO maybe modify it, to save the name of the deleted user?
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private BaseUser userFrom;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private BaseUser userTo;
     private Double rating;
     private String comment;

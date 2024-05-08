@@ -42,7 +42,7 @@ public class DataInitializer {
 //        BaseUser baseUser4 = baseUserService.getBaseUsers().get(3);
 //        BaseUser baseUser5 = baseUserService.getBaseUsers().get(4);
 //        BaseUser baseUser6 = baseUserService.getBaseUsers().get(5);
-
+//
 //        businessOwnerService.createBusinessOwner(baseUser1.getId());
 //        businessOwnerService.createBusinessOwner(baseUser2.getId());
 //        businessOwnerService.createBusinessOwner(baseUser3.getId());
@@ -57,10 +57,10 @@ public class DataInitializer {
 //
 //        Salon salon1 = salonService.getSalons().get(1);
 //        Salon salon2 = salonService.getSalons().get(2);
-
+//
 //        treatmentService.createTreatment(new TreatmentAddDTO("mienje", salon1.getId(), 50.0));
 //        treatmentService.createTreatment(new TreatmentAddDTO("pedikir", salon2.getId(), 500.0));
-
+//
 //        tagService.createTag("Mienje");
 //        tagService.createTag("Sisanje");
 //
@@ -70,10 +70,10 @@ public class DataInitializer {
 //        salonService.addTagToSalon(salon1.getId(), tag1.getId());
 //        salonService.addTagToSalon(salon1.getId(), tag2.getId());
 //        salonService.addTagToSalon(salon2.getId(), tag2.getId());
-
+//
 //        employeeService.createEmployee(baseUser4.getId(), salon2.getId());
 //        employeeService.createEmployee(baseUser5.getId(), salon2.getId());
-
+//
 //        customerService.createCustomer(baseUser6.getId());
 //
 //        Employee employee1 = employeeService.getEmployees().get(0);

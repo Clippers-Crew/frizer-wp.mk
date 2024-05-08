@@ -3,6 +3,8 @@ package mk.frizer.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -18,10 +20,13 @@ public class Appointment {
     @ManyToOne
     private Treatment treatment;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Salon salon;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Employee employee;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
     private boolean attended;
 

@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class Salon {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private BusinessOwner owner;
 
     public Salon(String name, String description, String location, String phoneNumber, BusinessOwner owner) {
@@ -42,6 +45,4 @@ public class Salon {
         this.tags = new ArrayList<>();
         this.owner = owner;
     }
-
-
 }
