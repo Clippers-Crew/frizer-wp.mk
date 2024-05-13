@@ -3,7 +3,10 @@ package mk.frizer.config;
 import jakarta.annotation.PostConstruct;
 
 import mk.frizer.model.*;
+import mk.frizer.model.dto.BaseUserAddDTO;
 import mk.frizer.model.dto.ReviewAddDTO;
+import mk.frizer.model.dto.SalonAddDTO;
+import mk.frizer.model.dto.TreatmentAddDTO;
 import mk.frizer.service.*;
 import org.springframework.stereotype.Component;
 
@@ -30,12 +33,12 @@ public class DataInitializer {
     }
     @PostConstruct
     public void init(){
-//        baseUserService.createBaseUser("dario@email.com","password","FirstName","LastName","phoneNumber");
-//        baseUserService.createBaseUser("sanja@email.com","password","FirstName","LastName","numberPhone");
-//        baseUserService.createBaseUser("denis@email.com","password","FirstName","LastName","LycaMobile");
-//        baseUserService.createBaseUser("tajfun@email.com","password","FirstName","LastName","telelink");
-//        baseUserService.createBaseUser("salon@email.com","password","FirstName","LastName","kabelnet");
-//        baseUserService.createBaseUser("toni@email.com","password","FirstName","LastName","telekabel");
+//        baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com","password","FirstName","LastName","phoneNumber"));
+//        baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com","password","FirstName","LastName","numberPhone"));
+//        baseUserService.createBaseUser(new BaseUserAddDTO("denis@email.com","password","FirstName","LastName","LycaMobile"));
+//        baseUserService.createBaseUser(new BaseUserAddDTO("tajfun@email.com","password","FirstName","LastName","telelink"));
+//        baseUserService.createBaseUser(new BaseUserAddDTO("salon@email.com","password","FirstName","LastName","kabelnet"));
+//        baseUserService.createBaseUser(new BaseUserAddDTO("toni@email.com","password","FirstName","LastName","telekabel"));
 //        BaseUser baseUser1 = baseUserService.getBaseUsers().get(0);
 //        BaseUser baseUser2 = baseUserService.getBaseUsers().get(1);
 //        BaseUser baseUser3 = baseUserService.getBaseUsers().get(2);

@@ -28,7 +28,7 @@ public class Employee {
     @JoinColumn(name = "base_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseUser baseUser;
-    public Employee(BaseUser baseUser,Salon salon) {
+    public Employee(BaseUser baseUser, Salon salon) {
         this.baseUser = baseUser;
         this.appointmentsActive = new ArrayList<>();
         this.appointmentsHistory = new ArrayList<>();

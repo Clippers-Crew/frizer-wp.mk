@@ -1,6 +1,7 @@
 package mk.frizer.service.impl;
 
 import mk.frizer.model.*;
+import mk.frizer.model.dto.EmployeeAddDTO;
 import mk.frizer.model.enums.Role;
 import mk.frizer.model.exceptions.AppointmentNotFoundException;
 import mk.frizer.model.exceptions.EmployeeNotFoundException;
@@ -42,41 +43,41 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> createEmployee(Long baseUserId, Long salonId) {
-        BaseUser baseUser = baseUserRepository.findById(baseUserId)
-                .orElseThrow(UserNotFoundException::new);
-        Salon salon = salonRepository.findById(salonId)
+    public Optional<Employee> createEmployee(EmployeeAddDTO employeeAddDTO) {
+        Optional<Employee> employee = employeeRepository.findById(employeeAddDTO.getUserId());
+        Salon salon = salonRepository.findById(employeeAddDTO.getSalonId())
                 .orElseThrow(SalonNotFoundException::new);
+        if(employee.isEmpty()){
+            BaseUser baseUser = baseUserRepository.findById(employeeAddDTO.getUserId())
+                    .orElseThrow(UserNotFoundException::new);
 
-        Employee employee = new Employee(baseUser, salon);
-        baseUser.setRole(Role.ROLE_EMPLOYEE);
-
-        baseUserRepository.save(baseUser);
-        return Optional.of(employeeRepository.save(employee));
+            employee = Optional.of(new Employee(baseUser, salon));
+            baseUser.setRole(Role.ROLE_EMPLOYEE);
+            baseUserRepository.save(baseUser);
+        }
+        employee.get().setSalon(salon);
+        return Optional.of(employeeRepository.save(employee.get()));
     }
 
     @Override
     public Optional<Employee> deleteEmployeeById(Long id) {
-        //try catch?
         Employee customer = getEmployeeById(id).get();
         employeeRepository.deleteById(id);
         return Optional.of(customer);
     }
 
     @Override
-    public Optional<Employee> addActiveAppointmentForEmployee(Long employeeId, Long appointmentId) {
-        Employee employee = getEmployeeById(employeeId).get();
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(AppointmentNotFoundException::new);
+    public Optional<Employee> addActiveAppointmentForEmployee(Appointment appointment) {
+        Employee employee = appointment.getEmployee();
         employee.getAppointmentsActive().add(appointment);
         return Optional.of(employeeRepository.save(employee));
     }
 
     @Override
-    public Optional<Employee> addHistoryAppointmentForEmployee(Long employeeId, Long appointmentId) {
-        Employee employee = getEmployeeById(employeeId).get();
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(AppointmentNotFoundException::new);
+    public Optional<Employee> addHistoryAppointmentForEmployee(Appointment appointment) {
+        Employee employee = appointment.getEmployee();
+        employee.getAppointmentsActive().remove(appointment);
         employee.getAppointmentsHistory().add(appointment);
-        return Optional.of(employeeRepository.save(employee));    }
+        return Optional.of(employeeRepository.save(employee));
+    }
 }
