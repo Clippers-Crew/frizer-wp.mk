@@ -1,9 +1,12 @@
 package mk.frizer.service.impl;
 
 import mk.frizer.model.*;
+import mk.frizer.model.dto.AppointmentAddDTO;
+import mk.frizer.model.events.AppointmentCreatedEvent;
 import mk.frizer.model.exceptions.*;
 import mk.frizer.repository.*;
 import mk.frizer.service.AppointmentService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,13 +20,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final CustomerRepository customerRepository;
     private final SalonRepository salonRepository;
     private final EmployeeRepository employeeRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, TreatmentRepository treatmentRepository, CustomerRepository customerRepository, SalonRepository salonRepository, EmployeeRepository employeeRepository) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, TreatmentRepository treatmentRepository, CustomerRepository customerRepository, SalonRepository salonRepository, EmployeeRepository employeeRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.appointmentRepository = appointmentRepository;
         this.treatmentRepository = treatmentRepository;
         this.customerRepository = customerRepository;
         this.salonRepository = salonRepository;
         this.employeeRepository = employeeRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -39,18 +44,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Optional<Appointment> createAppointment(LocalDateTime from, LocalDateTime to, Long treatmentId, Long salonId, Long employeeId, Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
+    public Optional<Appointment> createAppointment(AppointmentAddDTO appointmentAddDTO) {
+        Customer customer = customerRepository.findById(appointmentAddDTO.getCustomerId())
                 .orElseThrow(CustomerNotFoundException::new);
-        Salon salon = salonRepository.findById(salonId)
+        Salon salon = salonRepository.findById(appointmentAddDTO.getSalonId())
                 .orElseThrow(SalonNotFoundException::new);
-        Employee employee = employeeRepository.findById(employeeId)
+        Employee employee = salon.getEmployees().stream()
+                .filter(e -> e.getId().equals(appointmentAddDTO.getEmployeeId()))
+                .findFirst()
                 .orElseThrow(EmployeeNotFoundException::new);
-        Treatment treatment = treatmentRepository.findById(treatmentId)
+        Treatment treatment = salon.getSalonTreatments().stream()
+                .filter(t -> t.getId().equals(appointmentAddDTO.getTreatmentId()))
+                .findFirst()
                 .orElseThrow(TreatmentNotFoundException::new);
 
-        Appointment appointment = new Appointment(from, to, treatment, salon, employee, customer);
-        return Optional.of(appointmentRepository.save(appointment));
+        Appointment appointment = new Appointment(appointmentAddDTO.getDateFrom(), appointmentAddDTO.getDateTo(), treatment, salon, employee, customer);
+        appointmentRepository.save(appointment);
+
+        applicationEventPublisher.publishEvent(new AppointmentCreatedEvent(appointment));
+
+        return Optional.of(appointment);
     }
 
     @Override

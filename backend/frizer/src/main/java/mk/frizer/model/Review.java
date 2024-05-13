@@ -18,16 +18,15 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //TODO maybe modify it, to save the name of the deleted user?
     @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private BaseUser userFrom;
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseUser userTo;
     private Double rating;
     private String comment;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern = "yyyy-dd-MM HH:mm")
     private LocalDateTime date;
 

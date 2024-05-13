@@ -1,5 +1,7 @@
 package mk.frizer.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,18 +17,23 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime dateFrom;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime dateTo;
     @ManyToOne
     private Treatment treatment;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Salon salon;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Employee employee;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Customer customer;
     private boolean attended;
 
