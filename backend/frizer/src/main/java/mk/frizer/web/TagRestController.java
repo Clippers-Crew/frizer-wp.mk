@@ -1,17 +1,20 @@
 package mk.frizer.web;
 
+import mk.frizer.model.BaseUser;
 import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.TreatmentAddDTO;
 import mk.frizer.model.dto.TreatmentUpdateDTO;
+import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tags")
+@RequestMapping({"/api/tags", "/api/tag"})
 @CrossOrigin(origins = {"localhost:3000","localhost:3001"})
 public class TagRestController {
     private final TagService tagService;
@@ -31,16 +34,21 @@ public class TagRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Tag> save(@RequestParam String name) {
+    public ResponseEntity<Tag> createTag(@RequestParam String name) {
         return this.tagService.createTag(name)
                 .map(tag -> ResponseEntity.ok().body(tag))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Tag> deleteById(@PathVariable Long id) {
-        this.tagService.deleteTagById(id);
-        if (this.tagService.getTagById(id).isEmpty()) return ResponseEntity.ok().build();
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Tag> deleteTagById(@PathVariable Long id) {
+        Optional<Tag> tag = this.tagService.deleteTagById(id);
+        try{
+            this.tagService.getTagById(id);
+            return ResponseEntity.badRequest().build();
+        }
+        catch(UserNotFoundException exception){
+            return ResponseEntity.ok().body(tag.get());
+        }
     }
 }

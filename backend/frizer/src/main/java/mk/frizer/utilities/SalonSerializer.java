@@ -3,6 +3,7 @@ package mk.frizer.utilities;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import mk.frizer.model.Employee;
 import mk.frizer.model.Salon;
 import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
@@ -10,15 +11,6 @@ import mk.frizer.model.Treatment;
 import java.io.IOException;
 
 public class SalonSerializer extends JsonSerializer<Salon> {
-
-//    "id": 3,
-//    "name": "Frizerski salon Asim",
-//    "description": "Frizerski salon za mazhi",
-//    "location": "veles",
-//    "phoneNumber": "broj3",
-//    "employees": [],
-//    "salonTreatments": []
-
     @Override
     public void serialize(Salon salon, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
@@ -28,6 +20,15 @@ public class SalonSerializer extends JsonSerializer<Salon> {
         jsonGenerator.writeStringField("location", salon.getLocation());
         jsonGenerator.writeStringField("phoneNumber", salon.getPhoneNumber());
         jsonGenerator.writeStringField("owner", salon.getOwner() != null ? salon.getOwner().getId().toString() : null);
+        jsonGenerator.writeArrayFieldStart("employees");
+        for (Employee employee: salon.getEmployees()) {
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeNumberField("id", employee.getId());
+            jsonGenerator.writeStringField("name", employee.getBaseUser().getFirstName());
+            jsonGenerator.writeNumberField("baseUserId", employee.getBaseUser().getId());
+            jsonGenerator.writeEndObject();
+        }
+        jsonGenerator.writeEndArray();
         jsonGenerator.writeArrayFieldStart("salonTreatments");
         for (Treatment treatment: salon.getSalonTreatments()) {
             jsonGenerator.writeStartObject();

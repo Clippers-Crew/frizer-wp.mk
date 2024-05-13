@@ -1,20 +1,23 @@
 package mk.frizer.web;
 
+import mk.frizer.model.BaseUser;
 import mk.frizer.model.Review;
 import mk.frizer.model.Salon;
 import mk.frizer.model.dto.ReviewAddDTO;
 import mk.frizer.model.dto.ReviewUpdateDTO;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.ReviewService;
 import mk.frizer.service.SalonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping({"/api/reviews", "/api/review"})
 @CrossOrigin(origins = {"localhost:3000","localhost:3001"})
 public class ReviewRestController {
     private final ReviewService reviewService;
@@ -52,16 +55,21 @@ public class ReviewRestController {
     }
 
     @PostMapping("/edit/{id}")
-    public ResponseEntity<Review> update(@PathVariable Long id, @RequestBody ReviewUpdateDTO reviewUpdateDTO) {
+    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateDTO reviewUpdateDTO) {
         return this.reviewService.updateReview(id, reviewUpdateDTO)
                 .map(review -> ResponseEntity.ok().body(review))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Review> deleteById(@PathVariable Long id) {
-        this.reviewService.deleteReviewById(id);
-        if (this.reviewService.getReviewById(id).isEmpty()) return ResponseEntity.ok().build();
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Review> deleteReviewById(@PathVariable Long id) {
+        Optional<Review> review = this.reviewService.deleteReviewById(id);
+        try{
+            this.reviewService.getReviewById(id);
+            return ResponseEntity.badRequest().build();
+        }
+        catch(UserNotFoundException exception){
+            return ResponseEntity.ok().body(review.get());
+        }
     }
 }

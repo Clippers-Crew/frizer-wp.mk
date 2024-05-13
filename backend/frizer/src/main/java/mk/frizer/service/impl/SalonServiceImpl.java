@@ -78,6 +78,7 @@ public class SalonServiceImpl implements SalonService {
         return Optional.of(salon);
     }
 
+    //TODO add event for deleting a salon
     @Override
     public Optional<Salon> deleteSalonById(Long id) {
         Salon salon = getSalonById(id)

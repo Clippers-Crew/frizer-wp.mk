@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping({"/api/users", "/api/user"})
 @CrossOrigin(origins = {"localhost:3000","localhost:3001"})
 public class UserController {
     private final BaseUserService baseUserService;
@@ -34,14 +34,14 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BaseUser> save(@RequestBody BaseUserAddDTO baseUserAddDTO) {
+    public ResponseEntity<BaseUser> createUser(@RequestBody BaseUserAddDTO baseUserAddDTO) {
         return this.baseUserService.createBaseUser(baseUserAddDTO)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/edit/{id}")
-    public ResponseEntity<BaseUser> update(@PathVariable Long id, @RequestBody BaseUserUpdateDTO baseUserUpdateDTO) {
+    public ResponseEntity<BaseUser> updateUser(@PathVariable Long id, @RequestBody BaseUserUpdateDTO baseUserUpdateDTO) {
         return this.baseUserService.updateBaseUser(id, baseUserUpdateDTO)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
@@ -49,14 +49,14 @@ public class UserController {
 
     //TODO send encrypted password from frontend, and decrypt it here with same key...
     @PostMapping("/edit/password/{id}")
-    public ResponseEntity<BaseUser> updatePassword(@PathVariable Long id, @RequestParam String password){
+    public ResponseEntity<BaseUser> updatePasswordForUser(@PathVariable Long id, @RequestParam String password){
         return this.baseUserService.changeBaseUserPassword(id, password)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<BaseUser> deleteById(@PathVariable Long id) {
+    public ResponseEntity<BaseUser> deleteUserById(@PathVariable Long id) {
         Optional<BaseUser> user = this.baseUserService.deleteBaseUserById(id);
         try{
             this.baseUserService.getBaseUserById(id);

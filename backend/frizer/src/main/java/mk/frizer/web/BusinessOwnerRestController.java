@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-//TODO users/owners or just /owners ??
-@RequestMapping("/api/users/owners")
+@RequestMapping({"/api/owners", "/api/owner"})
 @CrossOrigin(origins = {"localhost:3000","localhost:3001"})
 public class BusinessOwnerRestController {
     private final BusinessOwnerService businessOwnerService;
@@ -30,21 +29,21 @@ public class BusinessOwnerRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BusinessOwner> getTreatment(@PathVariable Long id){
+    public ResponseEntity<BusinessOwner> getBusinessOwners(@PathVariable Long id){
         return this.businessOwnerService.getBusinessOwnerById(id)
                 .map(owner -> ResponseEntity.ok().body(owner))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/add/{id}")
-    public ResponseEntity<BusinessOwner> save(@PathVariable Long id) {
+    public ResponseEntity<BusinessOwner> createBusinessOwner(@PathVariable Long id) {
         return this.businessOwnerService.createBusinessOwner(id)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<BusinessOwner> deleteById(@PathVariable Long id) {
+    public ResponseEntity<BusinessOwner> deleteBusinessOwnerById(@PathVariable Long id) {
         Optional<BusinessOwner> user = this.businessOwnerService.deleteBusinessOwnerById(id);
         try{
             this.businessOwnerService.getBusinessOwnerById(id);
