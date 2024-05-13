@@ -1,5 +1,6 @@
 package mk.frizer.utilities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -16,7 +17,7 @@ public class AppointmentSerializer extends JsonSerializer<Appointment> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", appointment.getId());
         jsonGenerator.writeStringField("dateFrom", appointment.getDateFrom().format(formatter));
-        jsonGenerator.writeStringField("dateTo", appointment.getDateFrom().format(formatter));
+        jsonGenerator.writeStringField("dateTo", appointment.getDateTo().format(formatter));
         jsonGenerator.writeNumberField("treatmentId", appointment.getTreatment().getId());
         jsonGenerator.writeNumberField("salonId", appointment.getSalon().getId());
         jsonGenerator.writeNumberField("employeeId", appointment.getEmployee().getId());
