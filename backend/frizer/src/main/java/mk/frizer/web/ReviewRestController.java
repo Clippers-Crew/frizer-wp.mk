@@ -38,7 +38,7 @@ public class ReviewRestController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/add-emp")
+    @PostMapping("/add-for-employee")
     public ResponseEntity<Review> createReviewForEmployee(@RequestBody ReviewAddDTO reviewAddDto) {
         System.out.println(reviewAddDto);
         return this.reviewService.createReviewForEmployee(reviewAddDto)
@@ -46,7 +46,7 @@ public class ReviewRestController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping("/add-cus")
+    @PostMapping("/add-for-customer")
     public ResponseEntity<Review> createReviewForCustomer(@RequestBody ReviewAddDTO reviewAddDto) {
         System.out.println(reviewAddDto);
         return this.reviewService.createReviewForCustomer(reviewAddDto)

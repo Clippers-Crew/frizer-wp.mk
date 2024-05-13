@@ -47,7 +47,6 @@ public class SalonSerializer extends JsonSerializer<Salon> {
             jsonGenerator.writeEndObject();
         }
         jsonGenerator.writeEndArray();
-        //TODO employees
         jsonGenerator.writeEndObject();
     }
 }

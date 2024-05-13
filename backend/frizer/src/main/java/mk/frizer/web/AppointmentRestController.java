@@ -54,7 +54,7 @@ public class AppointmentRestController {
         }
     }
 
-    @PostMapping("/attendance/{id}")
+    @PostMapping("/attended/{id}")
     public ResponseEntity<Appointment> changeAttendanceForAppointment(@PathVariable Long id){
         return this.appointmentService.changeUserAttendanceAppointment(id)
                 .map(appointment -> ResponseEntity.ok().body(appointment))
