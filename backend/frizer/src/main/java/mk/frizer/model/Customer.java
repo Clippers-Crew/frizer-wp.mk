@@ -18,14 +18,17 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-    private List<Appointment> appointments;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Appointment> appointmentsActive;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Appointment> appointmentsHistory;
     @OneToOne
     @JoinColumn(name = "base_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseUser baseUser;
     public Customer(BaseUser baseUser) {
         this.baseUser = baseUser;
-        this.appointments = new ArrayList<>();
+        this.appointmentsActive = new ArrayList<>();
+        this.appointmentsHistory = new ArrayList<>();
     }
 }

@@ -13,6 +13,6 @@ public interface CustomerService {
     Optional<Customer> getCustomerById(Long id);
     Optional<Customer> createCustomer(Long baseUserId);
     Optional<Customer> deleteCustomerById(Long id);
-    //TODO event listen for creation of appointment
-//    Optional<Customer> addAppointmentForCustomer(Long appointmentId);
+    Optional<Customer> addActiveAppointmentForCustomer(Appointment appointment);
+    Optional<Customer> addHistoryAppointmentForCustomer(Appointment appointment);
 }

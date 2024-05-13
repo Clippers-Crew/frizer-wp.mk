@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.exceptions.CustomerNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
@@ -51,5 +52,22 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = getCustomerById(id).get();
         customerRepository.deleteById(id);
         return Optional.of(customer);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Customer> addActiveAppointmentForCustomer(Appointment appointment) {
+        Customer customer = getCustomerById(appointment.getCustomer().getId()).get();
+        customer.getAppointmentsActive().add(appointment);
+        return Optional.of(customerRepository.save(customer));
+    }
+
+    @Override
+    @Transactional
+    public Optional<Customer> addHistoryAppointmentForCustomer(Appointment appointment) {
+        Customer customer = getCustomerById(appointment.getCustomer().getId()).get();
+        customer.getAppointmentsActive().remove(appointment);
+        customer.getAppointmentsHistory().add(appointment);
+        return Optional.of(customerRepository.save(customer));
     }
 }
