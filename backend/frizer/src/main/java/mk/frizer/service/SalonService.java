@@ -5,7 +5,10 @@ import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +21,5 @@ public interface SalonService {
     Optional<Salon> addTagToSalon(Long salonId, Long tagId);
     Optional<Salon> addTreatmentToSalon(Treatment treatment);
     Optional<Salon> editTreatmentForSalon(Treatment treatment);
+    Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException;
 }

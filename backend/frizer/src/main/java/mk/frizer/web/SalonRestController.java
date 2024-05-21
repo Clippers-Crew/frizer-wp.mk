@@ -11,7 +11,13 @@ import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.SalonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +26,7 @@ import java.util.Optional;
 @CrossOrigin(origins = {"localhost:3000","localhost:3001"})
 public class SalonRestController {
     private final SalonService salonService;
+    private static final String UPLOAD_DIR = "src/main/resources/static/salons/";
 
     public SalonRestController(SalonService salonService) {
         this.salonService = salonService;
@@ -62,4 +69,23 @@ public class SalonRestController {
             return ResponseEntity.ok().body(salon.get());
         }
     }
+
+    @PostMapping("/{id}/uploadImage")
+    public ResponseEntity<Salon> uploadImage(@PathVariable Long id, @RequestParam("image") MultipartFile image)  {
+        try{
+            Optional<Salon> salon = salonService.saveImage(id, image);
+            return ResponseEntity.ok().body(salon.get());
+        }
+        catch (IOException exception){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+//    @GetMapping("/images/{id}")
+//    public List<> getImages(@PathVariable Long id){
+//        return salonService.getSalons();
+//    }
+//    public ResponseEntity<Salon> getImages(@PathVariable Long id){
+//        salonService.getImagesForSalon(id)
+//    }
 }

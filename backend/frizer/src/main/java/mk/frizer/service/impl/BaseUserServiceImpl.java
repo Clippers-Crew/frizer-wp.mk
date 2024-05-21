@@ -34,6 +34,7 @@ public class BaseUserServiceImpl implements BaseUserService {
 
     @Override
     public Optional<BaseUser> createBaseUser(BaseUserAddDTO baseUserAddDTO) {
+        //TODO encrypt password
         BaseUser user = new BaseUser(baseUserAddDTO.getEmail(), baseUserAddDTO.getPassword(), baseUserAddDTO.getFirstName(), baseUserAddDTO.getLastName(), baseUserAddDTO.getPhoneNumber());
         return Optional.of(baseUserRepository.save(user));
     }

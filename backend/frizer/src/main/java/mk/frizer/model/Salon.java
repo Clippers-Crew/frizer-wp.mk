@@ -34,7 +34,8 @@ public class Salon {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private BusinessOwner owner;
-
+    @ElementCollection
+    private List<String> imagePaths;
     public Salon(String name, String description, String location, String phoneNumber, BusinessOwner owner) {
         this.name = name;
         this.description = description;
@@ -44,5 +45,6 @@ public class Salon {
         this.salonTreatments = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.owner = owner;
+        this.imagePaths = new ArrayList<>();
     }
 }

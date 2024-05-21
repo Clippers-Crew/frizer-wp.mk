@@ -47,6 +47,11 @@ public class SalonSerializer extends JsonSerializer<Salon> {
             jsonGenerator.writeEndObject();
         }
         jsonGenerator.writeEndArray();
+        jsonGenerator.writeArrayFieldStart("imagePaths");
+        for (String path: salon.getImagePaths()) {
+            jsonGenerator.writeString(path);
+        }
+        jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
     }
 }

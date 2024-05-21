@@ -38,4 +38,10 @@ public class FrizerApplication {
 
 		return objectMapper;
 	}
+
+//	@Bean
+//	PasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder(10);
+//	}
+
 }

@@ -15,7 +15,14 @@ import mk.frizer.repository.TagRepository;
 import mk.frizer.service.SalonService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +34,7 @@ public class SalonServiceImpl implements SalonService {
     private final EmployeeRepository employeeRepository;
     private final TagRepository tagRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private static final String UPLOAD_DIR = "src/main/resources/static/salons/";
 
     public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.salonRepository = salonRepository;
@@ -78,7 +86,6 @@ public class SalonServiceImpl implements SalonService {
         return Optional.of(salon);
     }
 
-    //TODO add event for deleting a salon
     @Override
     public Optional<Salon> deleteSalonById(Long id) {
         Salon salon = getSalonById(id)
@@ -116,6 +123,28 @@ public class SalonServiceImpl implements SalonService {
                    return item;
                 }).collect(Collectors.toList()));
         salonRepository.save(salon);
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException {
+        String dirPath = String.format("%s/salon_%d", UPLOAD_DIR, id);
+
+        File directory = new File(dirPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+        Path filePath = Paths.get(dirPath, fileName);
+        Files.write(filePath, image.getBytes());
+
+        Optional<Salon> salon = getSalonById(id);
+        if(salon.isPresent()){
+            salon.get().getImagePaths().add(filePath.toString().replace("static/",""));
+            salonRepository.save(salon.get());
+            return salon;
+        }
         return Optional.empty();
     }
 }
