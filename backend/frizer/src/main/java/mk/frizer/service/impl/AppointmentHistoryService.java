@@ -10,6 +10,7 @@ import mk.frizer.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Optional;
 
 @Service
@@ -25,13 +26,19 @@ public class AppointmentHistoryService implements mk.frizer.service.AppointmentH
     @Override
     @Transactional
     public void addAppointmentsToHistory() {
-        for (Employee employee : employeeRepository.findAll()) {
-            for (Appointment appointment : employee.getAppointmentsActive()) {
-                if(appointment.getDateTo().isBefore(LocalDateTime.now())){
+        Iterator<Employee> employeeIterator = employeeRepository.findAll().iterator();
+        while (employeeIterator.hasNext()) {
+            Employee employee = employeeIterator.next();
+            Iterator<Appointment> appointmentIterator = employee.getAppointmentsActive().iterator();
+            while (appointmentIterator.hasNext()) {
+
+                Appointment appointment = appointmentIterator.next();
+                if (appointment.getDateTo().isBefore(LocalDateTime.now())) {
                     Customer customer = appointment.getCustomer();
 
+                    //Remove appointment from employees active appointments
+                    appointmentIterator.remove();
                     customer.getAppointmentsActive().remove(appointment);
-                    employee.getAppointmentsActive().remove(appointment);
 
                     customer.getAppointmentsHistory().add(appointment);
                     employee.getAppointmentsHistory().add(appointment);
