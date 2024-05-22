@@ -81,7 +81,7 @@ The web application consists of the following controllers:
     "customerId": 2,
     "attended": true
 }
-   
+ ```  
   ### Create Appointment
   #### HTTP Request
   ```bash
