@@ -1,5 +1,6 @@
 package mk.frizer.web;
 
+import mk.frizer.model.Customer;
 import mk.frizer.model.Employee;
 import mk.frizer.model.dto.EmployeeAddDTO;
 import mk.frizer.model.exceptions.UserNotFoundException;
@@ -41,13 +42,8 @@ public class EmployeeRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Employee> deleteEmployeeById(@PathVariable Long id) {
-        Optional<Employee> user = this.employeeService.deleteEmployeeById(id);
-        try{
-            this.employeeService.getEmployeeById(id);
-            return ResponseEntity.badRequest().build();
-        }
-        catch(UserNotFoundException exception){
-            return ResponseEntity.ok().body(user.get());
-        }
+        return this.employeeService.deleteEmployeeById(id)
+                .map(employee -> ResponseEntity.ok().body(employee))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

@@ -45,6 +45,5 @@ public class CustomerRestController {
        return this.customerService.deleteCustomerById(id)
                .map(customer -> ResponseEntity.ok().body(customer))
                .orElseGet(() -> ResponseEntity.badRequest().build());
-
     }
 }
