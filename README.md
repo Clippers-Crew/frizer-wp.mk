@@ -81,7 +81,7 @@ The web application consists of the following controllers:
     "customerId": 2,
     "attended": true
 }
-  ``` 
+   
   ### Create Appointment
   #### HTTP Request
   ```bash
@@ -1309,10 +1309,8 @@ The EmployeeRestController class handles RESTful web services for managing emplo
   ### Create Employee
   #### HTTP Request
   ```bash
-  POST /api/employees/add/{id}
+  POST /api/employees/add
   ```
- #### Path parameters
-  - `id` (required): The unique identifier of the base user.
 
  #### Request Body
 The request body must contain a JSON object with the following fields:
@@ -1325,7 +1323,7 @@ The request body must contain a JSON object with the following fields:
 
   #### Example Request 
    ```bash
-POST /api/employees/add/{id}
+POST /api/employees/add
 
 Content-Type: application/json   
 {

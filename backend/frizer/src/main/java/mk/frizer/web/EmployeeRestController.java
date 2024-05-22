@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping({"/api/employees", "/api/employee" })
-@CrossOrigin(origins = {"localhost:3000","localhost:3001"})
+@RequestMapping({ "/api/employees", "/api/employee" })
+@CrossOrigin(origins = { "localhost:3000", "localhost:3001" })
 public class EmployeeRestController {
     private final EmployeeService employeeService;
 
@@ -26,13 +26,13 @@ public class EmployeeRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         return this.employeeService.getEmployeeById(id)
                 .map(owner -> ResponseEntity.ok().body(owner))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/add/{id}")
+    @PostMapping("/add")
     public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeAddDTO employeeAddDTO) {
         return this.employeeService.createEmployee(employeeAddDTO)
                 .map(user -> ResponseEntity.ok().body(user))
@@ -42,11 +42,10 @@ public class EmployeeRestController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Employee> deleteEmployeeById(@PathVariable Long id) {
         Optional<Employee> user = this.employeeService.deleteEmployeeById(id);
-        try{
+        try {
             this.employeeService.getEmployeeById(id);
             return ResponseEntity.badRequest().build();
-        }
-        catch(UserNotFoundException exception){
+        } catch (UserNotFoundException exception) {
             return ResponseEntity.ok().body(user.get());
         }
     }
