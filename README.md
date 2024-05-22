@@ -81,7 +81,7 @@ The web application consists of the following controllers:
     "customerId": 2,
     "attended": true
 }
- ```  
+   
   ### Create Appointment
   #### HTTP Request
   ```bash
@@ -152,7 +152,7 @@ The request body must contain a JSON object with the following fields:
     "customerId": 2,
     "attended": true
 }
-
+```
   ### Change Attendance Status of Appointment
   #### HTTP Request
   ```bash
@@ -179,7 +179,7 @@ The request body must contain a JSON object with the following fields:
     "customerId": 2,
     "attended": true
 }
-    
+  ```  
 ## 2.2 Review Controller
 The Review Controller class manages RESTful web services for handling reviews in the "Frizer.mk" application.
   
@@ -241,7 +241,7 @@ The Review Controller class manages RESTful web services for handling reviews in
     "rating": 4.6,
     "comment": "Great service!"
 }
-  
+  ```
 #
 
   ### Create Review for Employee
@@ -580,7 +580,6 @@ Content-Type: application/json
     "imagePaths": []    
 }
   ```  
-
 #
 ### 2.4 Tag Controller
   The TagRestController class handles RESTful web services for managing tags in the "Frizer.mk" application
@@ -684,6 +683,7 @@ The request body must contain a JSON object with the following fields:
     "id": 3,
     "name": "Tag C"
 }
+```
 #
 ### 2.5 Treatment Controller
   The TreatmentRestController class handles RESTful web services for managing treatments in the "Frizer.mk" application
@@ -1472,7 +1472,6 @@ The CustomerRestController class handles RESTful web services for managing custo
         }
   }
 ```
-   
 #
   ### Create Customer
   #### HTTP Request
