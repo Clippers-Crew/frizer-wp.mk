@@ -28,13 +28,16 @@ public class Appointment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Salon salon;
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(cascade = CascadeType.ALL)
+   //@OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @JoinColumn(name = "employee_id")
+
     private Employee employee;
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(cascade = CascadeType.ALL)
+   // @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+   @JoinColumn(name = "customer_id")
     private Customer customer;
     private boolean attended;
 

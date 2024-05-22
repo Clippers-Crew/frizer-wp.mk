@@ -19,8 +19,10 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "customer_id")
     private List<Appointment> appointmentsActive;
     @OneToMany(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "customer_id")
     private List<Appointment> appointmentsHistory;
     @OneToOne
     @JoinColumn(name = "base_user_id")
