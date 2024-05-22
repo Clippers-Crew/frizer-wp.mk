@@ -50,7 +50,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public Optional<Salon> getSalonById(Long id) {
+    public Optional<Salon> getSalonById(Long id) throws SalonNotFoundException{
         Salon salon = salonRepository.findById(id)
                 .orElseThrow(SalonNotFoundException::new);
         return Optional.of(salon);

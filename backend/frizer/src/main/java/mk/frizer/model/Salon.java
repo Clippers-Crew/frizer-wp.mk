@@ -34,7 +34,7 @@ public class Salon {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private BusinessOwner owner;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imagePaths;
     public Salon(String name, String description, String location, String phoneNumber, BusinessOwner owner) {
         this.name = name;
