@@ -81,12 +81,13 @@ The web application consists of the following controllers:
     "customerId": 2,
     "attended": true
 }
+```
    
   ### Create Appointment
   #### HTTP Request
   ```bash
   POST /api/appointment/add
-  ```
+```
 #### Request Body
 The request body must contain a JSON object with the following fields:
   - dateFrom (LocalDateTime, required): The start date and time of the appointment.
