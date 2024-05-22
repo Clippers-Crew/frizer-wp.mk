@@ -18,11 +18,11 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     //TODO smeneto e CascadeType.ALL, ne e testirano
     private List<Appointment> appointmentsActive;
     //TODO smeneto e CascadeType.ALL, ne e testirano
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Appointment> appointmentsHistory;
     @ManyToOne
     private Salon salon;

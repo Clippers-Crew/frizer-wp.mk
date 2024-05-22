@@ -2,6 +2,7 @@ package mk.frizer.web;
 
 import mk.frizer.model.BusinessOwner;
 import mk.frizer.model.Customer;
+import mk.frizer.model.exceptions.CustomerNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.BusinessOwnerService;
 import mk.frizer.service.CustomerService;
@@ -47,7 +48,7 @@ public class CustomerRestController {
             this.customerService.getCustomerById(id);
             return ResponseEntity.badRequest().build();
         }
-        catch(UserNotFoundException exception){
+        catch(CustomerNotFoundException exception){
             return ResponseEntity.ok().body(user.get());
         }
     }

@@ -2,6 +2,7 @@ package mk.frizer.web;
 
 import mk.frizer.model.Employee;
 import mk.frizer.model.dto.EmployeeAddDTO;
+import mk.frizer.model.exceptions.EmployeeNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,7 @@ public class EmployeeRestController {
             this.employeeService.getEmployeeById(id);
             return ResponseEntity.badRequest().build();
         }
-        catch(UserNotFoundException exception){
+        catch(EmployeeNotFoundException exception){
             return ResponseEntity.ok().body(user.get());
         }
     }
