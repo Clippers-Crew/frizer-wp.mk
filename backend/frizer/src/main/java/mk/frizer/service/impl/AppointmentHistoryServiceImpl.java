@@ -6,19 +6,17 @@ import mk.frizer.model.Customer;
 import mk.frizer.model.Employee;
 import mk.frizer.repository.CustomerRepository;
 import mk.frizer.repository.EmployeeRepository;
-import mk.frizer.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
-import java.util.Optional;
 
 @Service
-public class AppointmentHistoryService implements mk.frizer.service.AppointmentHistoryService {
+public class AppointmentHistoryServiceImpl implements mk.frizer.service.AppointmentHistoryService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
 
-    public AppointmentHistoryService(EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
+    public AppointmentHistoryServiceImpl(EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
     }

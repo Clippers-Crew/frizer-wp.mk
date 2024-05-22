@@ -30,10 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
 
-    @Override
+@Override
     public Optional<Customer> getCustomerById(Long id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(CustomerNotFoundException::new);
+        Customer customer = customerRepository.findById(id).orElseThrow(CustomerNotFoundException::new);
         return Optional.of(customer);
     }
 
@@ -48,10 +47,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Optional<Customer> deleteCustomerById(Long id) {
-        //try catch?
-        Customer customer = getCustomerById(id).get();
-        customerRepository.deleteById(id);
-        return Optional.of(customer);
+      Optional<Customer> customer = customerRepository.findById(id);
+      if(customer.isEmpty())
+          throw new CustomerNotFoundException();
+       customerRepository.deleteById(id);
+       return customer;
     }
 
     @Override

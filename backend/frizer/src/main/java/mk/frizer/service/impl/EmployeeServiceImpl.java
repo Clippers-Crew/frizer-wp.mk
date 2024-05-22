@@ -3,10 +3,7 @@ package mk.frizer.service.impl;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.EmployeeAddDTO;
 import mk.frizer.model.enums.Role;
-import mk.frizer.model.exceptions.AppointmentNotFoundException;
-import mk.frizer.model.exceptions.EmployeeNotFoundException;
-import mk.frizer.model.exceptions.SalonNotFoundException;
-import mk.frizer.model.exceptions.UserNotFoundException;
+import mk.frizer.model.exceptions.*;
 import mk.frizer.repository.*;
 import mk.frizer.service.EmployeeService;
 import org.springframework.stereotype.Service;
@@ -61,9 +58,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Optional<Employee> deleteEmployeeById(Long id) {
-        Employee customer = getEmployeeById(id).get();
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(employee.isEmpty())
+            throw new EmployeeNotFoundException();
+        appointmentRepository.deleteAll(employee.get().getAppointmentsActive());
         employeeRepository.deleteById(id);
-        return Optional.of(customer);
+        return employee;
+
     }
 
     @Override
