@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping({"/api/appointments", "/api/appointment"})
-@CrossOrigin(origins = {"localhost:3000","localhost:3001"})
+@RequestMapping({ "/api/appointments", "/api/appointment" })
+@CrossOrigin(origins = { "localhost:3000", "localhost:3001" })
 public class AppointmentRestController {
     private final AppointmentService appointmentService;
 
@@ -24,12 +24,12 @@ public class AppointmentRestController {
     }
 
     @GetMapping()
-    public List<Appointment> getAllOwners() {
+    public List<Appointment> getAllAppointments() {
         return appointmentService.getAppointments();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> getAppointments(@PathVariable Long id){
+    public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long id) {
         return this.appointmentService.getAppointmentById(id)
                 .map(owner -> ResponseEntity.ok().body(owner))
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -44,18 +44,13 @@ public class AppointmentRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Appointment> deleteAppointmentById(@PathVariable Long id) {
-        Optional<Appointment> appointment = this.appointmentService.deleteAppointmentById(id);
-        try{
-            this.appointmentService.getAppointmentById(id);
-            return ResponseEntity.badRequest().build();
-        }
-        catch(AppointmentNotFoundException exception){
-            return ResponseEntity.ok().body(appointment.get());
-        }
+        return this.appointmentService.deleteAppointmentById(id)
+                .map(customer -> ResponseEntity.ok().body(customer))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/attended/{id}")
-    public ResponseEntity<Appointment> changeAttendanceForAppointment(@PathVariable Long id){
+    public ResponseEntity<Appointment> changeAttendanceForAppointment(@PathVariable Long id) {
         return this.appointmentService.changeUserAttendanceAppointment(id)
                 .map(appointment -> ResponseEntity.ok().body(appointment))
                 .orElseGet(() -> ResponseEntity.badRequest().build());

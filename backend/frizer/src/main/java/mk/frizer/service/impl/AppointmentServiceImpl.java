@@ -91,7 +91,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Optional<Appointment> deleteAppointmentById(Long id) {
-        Optional<Appointment> appointment = getAppointmentById(id);
+        Optional<Appointment> appointment = appointmentRepository.findById(id);
+        if(appointment.isEmpty())
+            throw new AppointmentNotFoundException();
         appointmentRepository.deleteById(id);
         return appointment;
     }
