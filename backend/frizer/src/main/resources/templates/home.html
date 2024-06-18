@@ -1,0 +1,86 @@
+<div class="bodyContent">
+  <div class="landingPage">
+    <div class="blackOverlay"></div>
+    <h1 class="title">Само еден клик одалечени од Вашиот <br/>
+      омилен салон за убавина</h1>
+    <h4 class="subtitle">Резервирај брзо, лесно и едноставно со Frizer.mk</h4>
+
+    <form action="#" class="searchForm">
+      <input class="searchByNameInput" type="text" placeholder="Назив на салон...">
+      <button type="submit">Пребарај</button>
+      <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно \/</a>
+      <div class="advanced-menu" id="advanced-menu">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city">
+
+        <label for="distance">Distance</label>
+        <input type="text" id="distance" name="distance">
+
+        <label for="rating">Rating</label>
+        <input type="text" id="rating" name="rating">
+      </div>
+    </form>
+
+
+    <div class="tags">
+      <h4>Категории</h4>
+      <a href="#" class="tag">
+        <div>
+          <h5>Коса</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+      <a href="#" class="tag">
+        <div>
+          <h5>Нега за лице</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+      <a href="#" class="tag">
+        <div>
+          <h5>Трепки</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+      <a href="#" class="tag">
+        <div>
+          <h5>Веѓи</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+      <a href="#" class="tag">
+        <div>
+          <h5>Нокти</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+      <a href="#" class="tag">
+        <div>
+          <h5>Депилација</h5>
+          <p>50 салони</p>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="featuredSalons">
+    <h1>Најчесто пребарувани салони</h1>
+    <div class="cards">
+      <div class="salonCard"  th:each="salon : ${salons}">
+          <img class="salonImage" src="../static/images/salon_image.png" alt="Salon">
+          <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
+          <p class="salonRating">
+            <i class="ri-star-fill"></i>
+            5.0 (80reviews)
+          </p>
+          <p class="salonLocation" th:text="${salon.getLocation()}">
+            <i class="ri-map-pin-line"></i>
+
+          </p>
+          <button class="salonButton"><a th:href="@{'/salons/{id}' (id=${salon.getId()})}">Прегледај</a></button>
+      </div>
+
+    </div>
+  </div>
+</div>

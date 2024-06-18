@@ -1,4 +1,4 @@
-package mk.frizer.web;
+package mk.frizer.web.rest;
 
 import mk.frizer.model.BusinessOwner;
 import mk.frizer.model.Customer;

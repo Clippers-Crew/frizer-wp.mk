@@ -1,19 +1,25 @@
 package mk.frizer.service.impl;
 
+import mk.frizer.model.Salon;
 import mk.frizer.model.Tag;
+import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.TagNotFoundException;
+import mk.frizer.repository.SalonRepository;
 import mk.frizer.repository.TagRepository;
 import mk.frizer.service.TagService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
-    public TagServiceImpl(TagRepository tagRepository) {
+    private final SalonRepository salonRepository;
+    public TagServiceImpl(TagRepository tagRepository, SalonRepository salonRepository) {
         this.tagRepository = tagRepository;
+        this.salonRepository = salonRepository;
     }
 
     @Override
@@ -32,7 +38,14 @@ public class TagServiceImpl implements TagService {
     public Optional<Tag> createTag(String name) {
         return Optional.of(tagRepository.save(new Tag(name)));
     }
-
+    @Override
+    public List<Tag> getTagsForSalon(Long id) {
+        Salon salon = salonRepository.findById(id)
+                .orElseThrow(SalonNotFoundException::new);
+         List<Tag> tagsForSalon = tagRepository.findAll().stream()
+                .filter(t->t.getSalonsWithTag().contains(salon)).collect(Collectors.toList());
+        return  tagsForSalon;
+    }
     @Override
     public Optional<Tag> deleteTagById(Long id) {
         Tag tag = getTagById(id).get();

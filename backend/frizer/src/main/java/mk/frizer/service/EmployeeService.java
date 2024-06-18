@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface EmployeeService {
     List<Employee> getEmployees();
     Optional<Employee> getEmployeeById(Long id);
+    List<Employee> getEmployeesForSalon(Long id);
+
     Optional<Employee> createEmployee(EmployeeAddDTO employeeAddDTO);
     Optional<Employee> deleteEmployeeById(Long id);
     Optional<Employee> addActiveAppointmentForEmployee(Appointment appointment);

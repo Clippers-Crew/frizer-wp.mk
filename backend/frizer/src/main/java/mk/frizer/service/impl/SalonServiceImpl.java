@@ -15,7 +15,6 @@ import mk.frizer.repository.TagRepository;
 import mk.frizer.service.SalonService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -141,7 +140,7 @@ public class SalonServiceImpl implements SalonService {
 
         Optional<Salon> salon = getSalonById(id);
         if(salon.isPresent()){
-            salon.get().getImagePaths().add(filePath.toString().replace("static/",""));
+            salon.get().getImagePaths().add(filePath.toString().replace("templates/",""));
             salonRepository.save(salon.get());
             return salon;
         }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -37,6 +38,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(EmployeeNotFoundException::new);
         return Optional.of(employee);
+    }
+
+    @Override
+    public List<Employee> getEmployeesForSalon(Long id) {
+        Salon salon = salonRepository.findById(id)
+                .orElseThrow(SalonNotFoundException::new);
+
+       List<Employee> employees =  employeeRepository.findAll().stream().filter(e->e.getSalon().equals(salon))
+                .collect(Collectors.toList());
+       return employees;
     }
 
     @Override
