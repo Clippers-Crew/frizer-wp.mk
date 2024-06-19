@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Data
-@Entity
 @NoArgsConstructor
 public class SalonTreatment {
     @Id

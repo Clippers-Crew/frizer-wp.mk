@@ -5,6 +5,7 @@ import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import mk.frizer.model.dto.TagAddDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public interface SalonService {
     Optional<Salon> createSalon(SalonAddDTO salonAddDTO);
     Optional<Salon> updateSalon(Long id, SalonUpdateDTO salonUpdateDTO);
     Optional<Salon> deleteSalonById(Long id);
-    Optional<Salon> addTagToSalon(Long salonId, Long tagId);
+    Optional<Salon> addTagToSalon(TagAddDTO tagAddDTO);
     Optional<Salon> addTreatmentToSalon(Treatment treatment);
     Optional<Salon> editTreatmentForSalon(Treatment treatment);
     Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException;

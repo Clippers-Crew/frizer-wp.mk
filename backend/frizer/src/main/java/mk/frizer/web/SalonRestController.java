@@ -5,6 +5,7 @@ import mk.frizer.model.Salon;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import mk.frizer.model.dto.TagAddDTO;
 import mk.frizer.model.dto.TreatmentUpdateDTO;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
@@ -47,6 +48,13 @@ public class SalonRestController {
     @PostMapping("/add")
     public ResponseEntity<Salon> createSalon(@RequestBody SalonAddDTO salonAddDTO) {
         return this.salonService.createSalon(salonAddDTO)
+                .map(salon -> ResponseEntity.ok().body(salon))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @PostMapping("/add-tag")
+    public ResponseEntity<Salon> addTagToSalon(@RequestBody TagAddDTO tagAddDTO) {
+        return this.salonService.addTagToSalon(tagAddDTO)
                 .map(salon -> ResponseEntity.ok().body(salon))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
