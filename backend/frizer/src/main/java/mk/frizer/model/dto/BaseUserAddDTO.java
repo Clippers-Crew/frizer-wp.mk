@@ -3,10 +3,12 @@ package mk.frizer.model.dto;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import mk.frizer.model.enums.Role;
 
 @Data
+@AllArgsConstructor
 public class BaseUserAddDTO {
     private String email;
     private String password;

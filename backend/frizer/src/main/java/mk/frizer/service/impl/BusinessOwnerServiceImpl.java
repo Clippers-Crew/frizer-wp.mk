@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.BaseUser;
 import mk.frizer.model.BusinessOwner;
 import mk.frizer.model.Salon;
@@ -40,6 +41,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
+    @Transactional
     public Optional<BusinessOwner> createBusinessOwner(Long baseUserId) {
         BaseUser baseUser = baseUserRepository.findById(baseUserId)
                 .orElseThrow(UserNotFoundException::new);
@@ -51,6 +53,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
+    @Transactional
     public Optional<BusinessOwner> deleteBusinessOwnerById(Long id) {
         //try catch?
         BusinessOwner user = getBusinessOwnerById(id).get();
@@ -59,6 +62,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
+    @Transactional
     public Optional<BusinessOwner> addSalonToBusinessOwner(Long businessOwnerId, Salon salon) {
         BusinessOwner businessOwner = getBusinessOwnerById(businessOwnerId).get();
         businessOwner.getSalonList().add(salon);
@@ -67,6 +71,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
+    @Transactional
     public Optional<BusinessOwner> editSalonForBusinessOwner(Salon salon) {
         BusinessOwner owner = getBusinessOwnerById(salon.getOwner().getId()).get();
         owner.setSalonList(owner.getSalonList()

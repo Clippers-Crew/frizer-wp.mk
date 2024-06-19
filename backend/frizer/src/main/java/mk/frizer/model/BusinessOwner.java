@@ -25,8 +25,8 @@ public class BusinessOwner {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     private List<Salon> salonList;
     @OneToOne
-    @JoinColumn(name = "base_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
     public BusinessOwner(BaseUser baseUser) {
         this.baseUser = baseUser;
