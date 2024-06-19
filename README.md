@@ -105,12 +105,12 @@ The request body must contain a JSON object with the following fields:
   POST /api/appointment/add
   Content-Type: application/json
   {
-      "dateFrom": "2024-05-12 10:00",
-      "dateTo": "2024-05-12 11:00",
+      "dateFrom": "2024-05-22T10:00:00",
+      "dateTo": "2024-05-22T11:00:00",
       "treatmentId": 2,
       "salonId": 3,
       "employeeId": 2,
-      "customerId": 2,
+      "customerId": 2
   }
   ```
   #### Example Response

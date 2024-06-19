@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.Salon;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.TreatmentAddDTO;
@@ -43,6 +44,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Treatment> createTreatment(TreatmentAddDTO treatmentAddDTO) {
         Salon salon = salonRepository.findById(treatmentAddDTO.getSalonId())
                 .orElseThrow(SalonNotFoundException::new);
@@ -55,6 +57,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Treatment> updateTreatment(Long id, TreatmentUpdateDTO treatmentUpdateDTO) {
         Treatment treatment = getTreatmentById(id).get();
         treatment.setName(treatmentUpdateDTO.getName());
@@ -66,6 +69,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Treatment> deleteTreatmentById(Long id) {
         Treatment treatment = getTreatmentById(id).get();
         treatmentRepository.deleteById(id);

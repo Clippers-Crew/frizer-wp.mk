@@ -1,5 +1,6 @@
 package mk.frizer.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,17 +19,22 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(fetch = FetchType.EAGER)
-    //TODO smeneto e CascadeType.ALL, ne e testirano
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "appointment_employee_active_id")
     private List<Appointment> appointmentsActive;
-    //TODO smeneto e CascadeType.ALL, ne e testirano
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "appointment_employee_history_id")
     private List<Appointment> appointmentsHistory;
+
     @ManyToOne
-    private Salon salon;
-    @OneToOne
-    @JoinColumn(name = "base_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    private Salon salon;
+
+    @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
     public Employee(BaseUser baseUser, Salon salon) {
         this.baseUser = baseUser;

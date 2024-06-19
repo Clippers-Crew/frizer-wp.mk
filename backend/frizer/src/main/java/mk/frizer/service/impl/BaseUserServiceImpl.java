@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.BaseUser;
 import mk.frizer.model.dto.BaseUserAddDTO;
 import mk.frizer.model.dto.BaseUserUpdateDTO;
@@ -33,6 +34,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
+    @Transactional
     public Optional<BaseUser> createBaseUser(BaseUserAddDTO baseUserAddDTO) {
         //TODO encrypt password
         BaseUser user = new BaseUser(baseUserAddDTO.getEmail(), baseUserAddDTO.getPassword(), baseUserAddDTO.getFirstName(), baseUserAddDTO.getLastName(), baseUserAddDTO.getPhoneNumber());
@@ -40,6 +42,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
+    @Transactional
     public Optional<BaseUser> updateBaseUser(Long id, BaseUserUpdateDTO baseUserUpdateDTO) {
         BaseUser user = getBaseUserById(id).get();
 
@@ -51,6 +54,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
+    @Transactional
     public Optional<BaseUser> changeBaseUserPassword(Long id, String password) {
         BaseUser user = getBaseUserById(id).get();
         user.setPassword(password);
@@ -58,6 +62,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
+    @Transactional
     public Optional<BaseUser> deleteBaseUserById(Long id) {
         //try catch?
         BaseUser user = getBaseUserById(id).get();

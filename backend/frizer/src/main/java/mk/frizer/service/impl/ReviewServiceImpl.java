@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.ReviewAddDTO;
 import mk.frizer.model.dto.ReviewUpdateDTO;
@@ -45,6 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> createReviewForCustomer(ReviewAddDTO reviewAddDTO) {
         Employee employee = employeeRepository.findById(reviewAddDTO.getEmployeeId())
                 .orElseThrow(UserNotFoundException::new);
@@ -56,6 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> createReviewForEmployee(ReviewAddDTO reviewAddDTO) {
         Employee employee = employeeRepository.findById(reviewAddDTO.getEmployeeId())
                 .orElseThrow(UserNotFoundException::new);
@@ -67,6 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> updateReview(Long id, ReviewUpdateDTO reviewUpdateDTO) {
         Review review = getReviewById(id).get();
 
@@ -78,6 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> deleteReviewById(Long id) {
         Review user = getReviewById(id).get();
         reviewRepository.deleteById(id);

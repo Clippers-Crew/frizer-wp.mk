@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.AppointmentAddDTO;
 import mk.frizer.model.events.AppointmentCreatedEvent;
@@ -31,6 +32,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    private boolean isDivisibleBy20Minutes(LocalDateTime dateTime) {
+        int minutes = dateTime.getMinute();
+        return minutes % 20 == 0;
+    }
+
     @Override
     public List<Appointment> getAppointments() {
         return appointmentRepository.findAll();
@@ -44,6 +50,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Appointment> createAppointment(AppointmentAddDTO appointmentAddDTO) {
         Customer customer = customerRepository.findById(appointmentAddDTO.getCustomerId())
                 .orElseThrow(CustomerNotFoundException::new);
@@ -58,6 +65,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .findFirst()
                 .orElseThrow(TreatmentNotFoundException::new);
 
+        // CHECK IF THE TIMES ARE DIVISIBLE BY 20 MINUTES, BECAUSE VALID APPOINTMENT MUST BE DIVISIBLE BY 20 MINUTES
+        if (!isDivisibleBy20Minutes(appointmentAddDTO.getDateFrom()) || !isDivisibleBy20Minutes(appointmentAddDTO.getDateTo())) {
+            throw new AppointmentNotDivisibleBy20Minutes("Appointment times must be divisible by 20 minutes.");
+        }
+
         Appointment appointment = new Appointment(appointmentAddDTO.getDateFrom(), appointmentAddDTO.getDateTo(), treatment, salon, employee, customer);
         appointmentRepository.save(appointment);
 
@@ -67,6 +79,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Appointment> updateAppointment(Long id, LocalDateTime from, LocalDateTime to, Long treatmentId, Long salonId, Long employeeId, Long customerId) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(AppointmentNotFoundException::new);
@@ -90,6 +103,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Appointment> deleteAppointmentById(Long id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
         if(appointment.isEmpty())
@@ -99,6 +113,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Optional<Appointment> changeUserAttendanceAppointment(Long id) {
         Appointment appointment = getAppointmentById(id).get();
         appointment.setAttended(!appointment.isAttended());

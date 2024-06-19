@@ -37,6 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public Optional<Customer> createCustomer(Long baseUserId) {
         BaseUser baseUser = baseUserRepository.findById(baseUserId)
                 .orElseThrow(UserNotFoundException::new);
@@ -46,6 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public Optional<Customer> deleteCustomerById(Long id) {
       Optional<Customer> customer = customerRepository.findById(id);
       if(customer.isEmpty())

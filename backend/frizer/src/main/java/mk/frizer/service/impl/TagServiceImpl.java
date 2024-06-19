@@ -1,6 +1,7 @@
 package mk.frizer.service.impl;
 
 import mk.frizer.model.Salon;
+import jakarta.transaction.Transactional;
 import mk.frizer.model.Tag;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.TagNotFoundException;
@@ -35,6 +36,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Optional<Tag> createTag(String name) {
         return Optional.of(tagRepository.save(new Tag(name)));
     }
@@ -47,6 +49,7 @@ public class TagServiceImpl implements TagService {
         return  tagsForSalon;
     }
     @Override
+    @Transactional
     public Optional<Tag> deleteTagById(Long id) {
         Tag tag = getTagById(id).get();
         tagRepository.deleteById(id);

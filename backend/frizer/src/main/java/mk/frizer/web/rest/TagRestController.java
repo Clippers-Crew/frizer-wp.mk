@@ -5,6 +5,7 @@ import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.TreatmentAddDTO;
 import mk.frizer.model.dto.TreatmentUpdateDTO;
+import mk.frizer.model.exceptions.TagNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.TagService;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class TagRestController {
             this.tagService.getTagById(id);
             return ResponseEntity.badRequest().build();
         }
-        catch(UserNotFoundException exception){
+        catch(TagNotFoundException exception){
             return ResponseEntity.ok().body(tag.get());
         }
     }

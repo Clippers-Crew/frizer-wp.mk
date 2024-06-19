@@ -1,8 +1,10 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
+import mk.frizer.model.dto.TagAddDTO;
 import mk.frizer.model.events.SalonCreatedEvent;
 import mk.frizer.model.events.SalonUpdatedEvent;
 import mk.frizer.model.exceptions.SalonNotFoundException;
@@ -56,6 +58,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    @Transactional
     public Optional<Salon> createSalon(SalonAddDTO salonAddDTO) {
         BusinessOwner businessOwner = businessOwnerRepository.findById(salonAddDTO.getBusinessOwnerId())
                 .orElseThrow(UserNotFoundException::new);
@@ -70,6 +73,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    @Transactional
     public Optional<Salon> updateSalon(Long id, SalonUpdateDTO salonUpdateDTO) {
         Salon salon = getSalonById(id)
                 .orElseThrow(SalonNotFoundException::new);
@@ -86,6 +90,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    @Transactional
     public Optional<Salon> deleteSalonById(Long id) {
         Salon salon = getSalonById(id)
                 .orElseThrow(SalonNotFoundException::new);
@@ -94,15 +99,17 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public Optional<Salon> addTagToSalon(Long salonId, Long tagId) {
-        Salon salon = getSalonById(salonId).get();
-        Tag tag = tagRepository.findById(tagId)
+    @Transactional
+    public Optional<Salon> addTagToSalon(TagAddDTO tagAddDTO) {
+        Salon salon = getSalonById(tagAddDTO.getSalonId()).get();
+        Tag tag = tagRepository.findById(tagAddDTO.getTagId())
                 .orElseThrow(TagNotFoundException::new);
         salon.getTags().add(tag);
         return Optional.of(salonRepository.save(salon));
     }
 
     @Override
+    @Transactional
     public Optional<Salon> addTreatmentToSalon(Treatment treatment) {
         Salon salon = getSalonById(treatment.getSalon().getId()).get();
         salon.getSalonTreatments().add(treatment);
@@ -111,6 +118,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    @Transactional
     public Optional<Salon> editTreatmentForSalon(Treatment treatment) {
         Salon salon = getSalonById(treatment.getSalon().getId()).get();
 
@@ -126,6 +134,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    @Transactional
     public Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException {
         String dirPath = String.format("%s/salon_%d", UPLOAD_DIR, id);
 

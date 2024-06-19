@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,18 +25,25 @@ public class Appointment {
     private LocalDateTime dateTo;
     @ManyToOne
     private Treatment treatment;
+
+
+    // TODO check here??
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Salon salon;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @JoinColumn(name = "employee_id")
     private Employee employee;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
     private boolean attended;
 
     public Appointment(LocalDateTime dateFrom, LocalDateTime dateTo, Treatment treatment, Salon salon, Employee employee, Customer customer) {
