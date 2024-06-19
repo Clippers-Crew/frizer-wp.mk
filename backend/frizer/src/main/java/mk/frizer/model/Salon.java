@@ -3,6 +3,7 @@ package mk.frizer.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,15 +26,23 @@ public class Salon {
     private String description;
     private String location;
     private String phoneNumber;
-    @OneToMany(mappedBy = "salon", fetch = FetchType.EAGER)
+
+    //cascade = Cascade.ALL
+    @OneToMany(mappedBy = "salon", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Employee> employees;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "salon")
     private List<Treatment> salonTreatments;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
+    @Nullable
     private BusinessOwner owner;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imagePaths;
     public Salon(String name, String description, String location, String phoneNumber, BusinessOwner owner) {
