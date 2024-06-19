@@ -6,6 +6,7 @@ import lombok.Data;
 import mk.frizer.model.Salon;
 
 @Data
+@AllArgsConstructor
 public class TreatmentAddDTO {
     private String name;
     private Long salonId;
