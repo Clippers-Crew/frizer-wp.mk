@@ -1,5 +1,6 @@
 package mk.frizer.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.EmployeeAddDTO;
 import mk.frizer.model.enums.Role;
@@ -40,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Optional<Employee> createEmployee(EmployeeAddDTO employeeAddDTO) {
         Optional<Employee> employee = employeeRepository.findById(employeeAddDTO.getUserId());
         Salon salon = salonRepository.findById(employeeAddDTO.getSalonId())
@@ -57,17 +59,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Optional<Employee> deleteEmployeeById(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isEmpty())
             throw new EmployeeNotFoundException();
-        appointmentRepository.deleteAll(employee.get().getAppointmentsActive());
+//        appointmentRepository.deleteAll(employee.get().getAppointmentsActive());
         employeeRepository.deleteById(id);
         return employee;
-
     }
 
     @Override
+    @Transactional
     public Optional<Employee> addActiveAppointmentForEmployee(Appointment appointment) {
         Employee employee = appointment.getEmployee();
         employee.getAppointmentsActive().add(appointment);
@@ -75,6 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Optional<Employee> addHistoryAppointmentForEmployee(Appointment appointment) {
         Employee employee = appointment.getEmployee();
         employee.getAppointmentsActive().remove(appointment);
