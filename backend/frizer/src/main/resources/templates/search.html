@@ -1,0 +1,129 @@
+<div class="bodyContent">
+    <div class="search">
+        <form class="searchForm" th:action="@{/salons/search}" method="get">
+            <input class="searchByNameInput" name="name" type="text" placeholder="Назив на салон...">
+            <button type="submit">Пребарај</button>
+            <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно \/</a>
+            <div class="advanced-menu" id="advanced-menu">
+                <label for="city">City</label>
+                <input type="text" name="city">
+
+                <label for="distance">Distance</label>
+                <input type="text" name="distance">
+
+                <label for="rating">Rating</label>
+                <input type="text" name="rating">
+            </div>
+        </form>
+    </div>
+    <main class="salonsListed">
+        <div></div>
+        <div class="resultButtons">
+            <p>Пребарувањето врати <span>10</span> резултати</p>
+            <div class="buttons">
+                <button class="listButton">Салони</button>
+                <form action="#" method="post" style="display: inline-block">
+                    <button class="mapButton">
+                        Мапа<i class="fa-regular fa-map"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="searchResults">
+            <div class="searchFilter">
+                <div class="title">Салони со името</div>
+                <p>Било кое</p>
+            </div>
+            <div class="searchFilter">
+                <div class="title">Салони со рејтинг над</div>
+                <p>4.3</p>
+            </div>
+            <div class="searchFilter">
+                <div class="title">Салони на оддалеченост до</div>
+                <p>100km</p>
+            </div>
+            <div class="searchFilter">
+                <div class="title">Салони во</div>
+                <p>Скопје</p>
+            </div>
+            <form action="#" method="post">
+                <div class="searchFilter">
+                    <div class="title">Подредено според</div>
+                    <div>
+                        <label for="radio_distance">
+                            <input
+                                    type="radio"
+                                    name="sort"
+                                    id="radio_distance"
+                                    value="distance"
+                            />
+                            Оддалеченост
+                        </label>
+                        <label for="radio_rating">
+                            <input
+                                    type="radio"
+                                    name="sort"
+                                    id="radio_rating"
+                                    value="rating"
+                            />
+                            Рејтинг
+                        </label>
+                        <label for="radio_popularity">
+                            <input
+                                    type="radio"
+                                    name="sort"
+                                    id="radio_popularity"
+                                    value="popularity"
+                            />
+                            Популарност
+                        </label>
+                    </div>
+                </div>
+                <div class="searchFilter">
+                    <div class="title">Пребарување по град</div>
+                    <div>
+                        <label for="1">
+                            <input type="radio" name="location" id="1" value="Штип"/>
+                            Штип
+                        </label>
+                        <label for="2">
+                            <input type="radio" name="location" id="2" value="Скопје"/>
+                            Скопје
+                        </label>
+                        <label for="3">
+                            <input type="radio" name="location" id="3" value="Велес"/>
+                            Велес
+                        </label>
+                        <label for="4">
+                            <input
+                                    type="radio"
+                                    name="location"
+                                    id="4"
+                                    value="Свети Николе"
+                            />
+                            Свети Николе
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit">Пребарај</button>
+                </div>
+            </form>
+        </div>
+        <div class="cards">
+            <div class="salonCard" th:each="salon : ${salons}">
+                <img class="salonImage" src="../images/salon_image.png" alt="Salon"/>
+                <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
+                <p class="salonRating">
+                    <i class="ri-star-fill"></i>
+                    5.0 (80reviews)
+                </p>
+                <p class="salonLocation" th:text="${salon.getLocation()}">
+                    <i class="ri-map-pin-line"></i>
+                </p>
+                <button class="salonButton">Прегледај</button>
+            </div>
+        </div>
+    </main>
+
+</div>

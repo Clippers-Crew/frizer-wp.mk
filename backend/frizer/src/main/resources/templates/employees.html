@@ -1,0 +1,81 @@
+<div class="bodyContent">
+    <div class="featuredImages">
+        <div class="primaryImage"></div>
+        <div class="secondaryImage"></div>
+        <div class="secondaryImage"></div>
+        <div class="teritaryImage"></div>
+    </div>
+
+    <div class="salonProfile" th:if="${salon}">
+        <div class="row">
+            <div class="salonImage">
+                <img src="../static/images/salon_image.png" alt="Salon image"/>
+            </div>
+            <div class="salonName">
+                <h1 th:text="${salon.getName()}"><i class="ri-heart-line"></i></h1>
+            </div>
+
+        </div>
+        <div class="row">
+            <i class="ri-map-pin-line"></i>
+            <p class="salonLocation" th:text="${salon.getLocation()}"></p>
+            <p class="salonRating"><i class="fas fa-star"></i> 4.4 (80reviews)</p>
+        </div>
+    </div>
+
+    <div class="employees">
+        <h1>Вработени</h1>
+        <div class="employee" th:each="employee : ${employees}">
+            <div class="employeeImage">
+                <img src="../images/salon_image.png" alt="Barber image"/>
+            </div>
+            <div class="employeeName">
+                <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
+            </div>
+            <p class="employeeRating"
+               th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'"></p>
+            <br>
+            <button class="confirmationButton">Резервирај</button>
+        </div>
+    </div>
+
+    <div class="reviews">
+        <h1>Резиме на рецензии</h1>
+        <div class="review" th:each="review : ${reviews}">
+            <div class="row">
+                <div class="reviewName">
+                    <h2 th:text="${(review.getUserFrom()?.getFirstName() ?: '') + ' ' + (review.getUserFrom()?.getLastName() ?: '')}"></h2>
+                </div>
+                <div class="reviewEmployeeName"
+                     th:text="${(review.getUserTo()?.getFirstName() ?: '') + ' ' + (review.getUserTo()?.getLastName() ?: '')}"></div>
+            </div>
+            <div class="row">
+                <div class="reviewStars" th:text="${review.getRating()}"></div>
+<!--                <div class="reviewDate"-->
+<!--                     th:text="${review.getDate().format(formatter)}"></div>-->
+            </div>
+            <div class="row">
+                <div class="reviewText" th:text="${review.getComment()}">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="employees">
+        <h1>Вработени</h1>
+        <div class="employee" th:each="employee : ${employees}">
+            <div class="employeeImage">
+                <img src="../images/salon_image.png" alt="Barber image"/>
+            </div>
+            <div class="employeeName">
+                <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
+            </div>
+            <p class="employeeRating"
+               th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'">
+                5.0 (80 reviews) </p>
+        </div>
+    </div>
+
+    <div id="map"></div>
+</div>
