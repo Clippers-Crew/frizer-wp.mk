@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface TreatmentService{
     List<Treatment> getTreatments();
+    List<Treatment> getTreatmentsForSalon(Long id);
     Optional<Treatment> getTreatmentById(Long id);
     Optional<Treatment> createTreatment(TreatmentAddDTO treatmentAddDTO);
     Optional<Treatment> updateTreatment(Long id, TreatmentUpdateDTO treatmentUpdateDTO);

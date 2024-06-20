@@ -1,7 +1,6 @@
 package mk.frizer.service;
 
 import mk.frizer.model.Salon;
-import mk.frizer.model.Tag;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
@@ -9,7 +8,6 @@ import mk.frizer.model.dto.TagAddDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +21,5 @@ public interface SalonService {
     Optional<Salon> addTreatmentToSalon(Treatment treatment);
     Optional<Salon> editTreatmentForSalon(Treatment treatment);
     Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException;
+    List<Salon> filterSalons(String name, String city, String distance, String rating);
 }

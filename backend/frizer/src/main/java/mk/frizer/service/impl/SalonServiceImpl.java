@@ -51,20 +51,17 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public Optional<Salon> getSalonById(Long id) throws SalonNotFoundException{
-        Salon salon = salonRepository.findById(id)
-                .orElseThrow(SalonNotFoundException::new);
+    public Optional<Salon> getSalonById(Long id) throws SalonNotFoundException {
+        Salon salon = salonRepository.findById(id).orElseThrow(SalonNotFoundException::new);
         return Optional.of(salon);
     }
 
     @Override
     @Transactional
     public Optional<Salon> createSalon(SalonAddDTO salonAddDTO) {
-        BusinessOwner businessOwner = businessOwnerRepository.findById(salonAddDTO.getBusinessOwnerId())
-                .orElseThrow(UserNotFoundException::new);
+        BusinessOwner businessOwner = businessOwnerRepository.findById(salonAddDTO.getBusinessOwnerId()).orElseThrow(UserNotFoundException::new);
 
-        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(),
-                salonAddDTO.getPhoneNumber(), businessOwner);
+        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), salonAddDTO.getPhoneNumber(), businessOwner);
 
         salonRepository.save(salon);
 
@@ -75,8 +72,7 @@ public class SalonServiceImpl implements SalonService {
     @Override
     @Transactional
     public Optional<Salon> updateSalon(Long id, SalonUpdateDTO salonUpdateDTO) {
-        Salon salon = getSalonById(id)
-                .orElseThrow(SalonNotFoundException::new);
+        Salon salon = getSalonById(id).orElseThrow(SalonNotFoundException::new);
 
         salon.setName(salonUpdateDTO.getName());
         salon.setDescription(salonUpdateDTO.getDescription());
@@ -92,8 +88,7 @@ public class SalonServiceImpl implements SalonService {
     @Override
     @Transactional
     public Optional<Salon> deleteSalonById(Long id) {
-        Salon salon = getSalonById(id)
-                .orElseThrow(SalonNotFoundException::new);
+        Salon salon = getSalonById(id).orElseThrow(SalonNotFoundException::new);
         salonRepository.deleteById(id);
         return Optional.of(salon);
     }
@@ -102,8 +97,7 @@ public class SalonServiceImpl implements SalonService {
     @Transactional
     public Optional<Salon> addTagToSalon(TagAddDTO tagAddDTO) {
         Salon salon = getSalonById(tagAddDTO.getSalonId()).get();
-        Tag tag = tagRepository.findById(tagAddDTO.getTagId())
-                .orElseThrow(TagNotFoundException::new);
+        Tag tag = tagRepository.findById(tagAddDTO.getTagId()).orElseThrow(TagNotFoundException::new);
         salon.getTags().add(tag);
         return Optional.of(salonRepository.save(salon));
     }
@@ -122,13 +116,12 @@ public class SalonServiceImpl implements SalonService {
     public Optional<Salon> editTreatmentForSalon(Treatment treatment) {
         Salon salon = getSalonById(treatment.getSalon().getId()).get();
 
-        salon.setSalonTreatments(salon.getSalonTreatments()
-                .stream().map(item -> {
-                    if(item.getId().equals(treatment.getId())) {
-                        return treatment;
-                    }
-                   return item;
-                }).collect(Collectors.toList()));
+        salon.setSalonTreatments(salon.getSalonTreatments().stream().map(item -> {
+            if (item.getId().equals(treatment.getId())) {
+                return treatment;
+            }
+            return item;
+        }).collect(Collectors.toList()));
         salonRepository.save(salon);
         return Optional.empty();
     }
@@ -148,11 +141,20 @@ public class SalonServiceImpl implements SalonService {
         Files.write(filePath, image.getBytes());
 
         Optional<Salon> salon = getSalonById(id);
-        if(salon.isPresent()){
-            salon.get().getImagePaths().add(filePath.toString().replace("templates/",""));
+        if (salon.isPresent()) {
+            salon.get().getImagePaths().add(filePath.toString().replace("templates/", ""));
             salonRepository.save(salon.get());
             return salon;
         }
         return Optional.empty();
     }
+
+    @Override
+    public List<Salon> filterSalons(String name, String city, String distance, String rating) {
+        //TODO: implement calculating by distance and add rating attribute to Salon
+
+        return salonRepository.findAll().stream().filter(salon -> (name == null || salon.getName().toLowerCase().contains(name.toLowerCase())) && (city == null || salon.getLocation().toLowerCase().contains(city.toLowerCase())) && (distance == null || Integer.parseInt(distance) >= 100) && (rating == null || Double.parseDouble(rating) >= 3)).collect(Collectors.toList());
+    }
+
 }
+

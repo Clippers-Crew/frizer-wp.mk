@@ -4,20 +4,21 @@ import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.ReviewAddDTO;
 import mk.frizer.model.dto.ReviewUpdateDTO;
-import mk.frizer.model.enums.Role;
 import mk.frizer.model.exceptions.ReviewNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.BaseUserRepository;
 import mk.frizer.repository.CustomerRepository;
 import mk.frizer.repository.EmployeeRepository;
 import mk.frizer.repository.ReviewRepository;
-import mk.frizer.service.EmployeeService;
 import mk.frizer.service.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -87,5 +88,26 @@ public class ReviewServiceImpl implements ReviewService {
         Review user = getReviewById(id).get();
         reviewRepository.deleteById(id);
         return Optional.of(user);
+    }
+    @Override
+    public Map<Long,ReviewStats> getStatisticsForEmployee(List<Employee> employees)
+    {
+        Map<Long,ReviewStats> map = new HashMap<>();
+        for(Employee employee : employees)
+        {
+           Double rating =  reviewRepository.findAll().stream().filter(r->r.getUserTo().equals(employee.getBaseUser()))
+                    .mapToDouble(e->e.getRating()).average().orElse(0.0);
+           int numberOfReviews = (int) reviewRepository.findAll().stream()
+                   .filter(r->r.getUserTo().equals(employee.getBaseUser()))
+                   .count();
+           ReviewStats reviewStats = new ReviewStats(rating,numberOfReviews);
+           map.put(employee.getId(),reviewStats);
+        }
+        return map;
+    }
+    @Override
+    public List<Review> getReviewsForEmployees(List<Employee> employees) {
+        List<BaseUser> users = employees.stream().map(e->e.getBaseUser()).collect(Collectors.toList());;
+        return reviewRepository.findAll().stream().filter(r->users.contains(r.getUserTo())).collect(Collectors.toList());
     }
 }

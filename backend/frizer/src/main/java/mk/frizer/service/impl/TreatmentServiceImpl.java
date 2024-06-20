@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TreatmentServiceImpl implements TreatmentService {
@@ -34,6 +35,13 @@ public class TreatmentServiceImpl implements TreatmentService {
     @Override
     public List<Treatment> getTreatments() {
         return treatmentRepository.findAll();
+    }
+
+    @Override
+    public List<Treatment> getTreatmentsForSalon(Long id) {
+        return treatmentRepository.findAll().stream()
+                .filter(t->t.getSalon().getId().equals(id))
+                .collect(Collectors.toList());
     }
 
     @Override

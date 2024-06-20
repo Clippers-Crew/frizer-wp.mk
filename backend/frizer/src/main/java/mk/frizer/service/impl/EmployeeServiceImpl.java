@@ -9,8 +9,7 @@ import mk.frizer.repository.*;
 import mk.frizer.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +32,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getEmployees() {
         return employeeRepository.findAll();
     }
-
     @Override
     public Optional<Employee> getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
