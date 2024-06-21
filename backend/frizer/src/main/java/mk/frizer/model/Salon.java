@@ -45,7 +45,14 @@ public class Salon {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imagePaths;
-    public Salon(String name, String description, String location, String phoneNumber, BusinessOwner owner) {
+
+    private Float rating;
+
+    private Float latitude;
+
+    private Float longitude;
+    public Salon(String name, String description, String location, String phoneNumber,
+                 BusinessOwner owner,Float rating,Float latitude, Float longitude) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -55,5 +62,8 @@ public class Salon {
         this.tags = new ArrayList<>();
         this.owner = owner;
         this.imagePaths = new ArrayList<>();
+        this.rating = rating;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

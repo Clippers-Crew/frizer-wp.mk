@@ -56,10 +56,10 @@ public class DataInitializer {
             BusinessOwner businessOwner2 = businessOwnerService.getBusinessOwners().get(1);
             BusinessOwner businessOwner3 = businessOwnerService.getBusinessOwners().get(2);
 
-            salonService.createSalon(new SalonAddDTO("Krc krc","Berber","doma","broj", businessOwner1.getId()));
-            salonService.createSalon(new SalonAddDTO("Nenko","Berber","kaj komsiite","broj1", businessOwner1.getId()));
-            salonService.createSalon(new SalonAddDTO("Kaj Shekspiro","Frizerski salon za mazhi","prilep","broj2", businessOwner2.getId()));
-            salonService.createSalon(new SalonAddDTO("Frizerski salon Asim","Frizerski salon za mazhi","veles","broj3", businessOwner1.getId()));
+            salonService.createSalon(new SalonAddDTO("Krc krc","Berber","doma","broj", businessOwner1.getId(), (float) 4.2, (float) 42.0037876, (float) 21.9278854));
+            salonService.createSalon(new SalonAddDTO("Nenko","Berber","kaj komsiite","broj1", businessOwner1.getId(), (float) 3.8,(float) 42.0586418, (float) 21.3176565));
+            salonService.createSalon(new SalonAddDTO("Kaj Shekspiro","Frizerski salon za mazhi","prilep","broj2", businessOwner2.getId(), (float) 4.7,(float) 41.4360468, (float) 22.0048696));
+            salonService.createSalon(new SalonAddDTO("Frizerski salon Asim","Frizerski salon za mazhi","veles","broj3", businessOwner1.getId(), (float) 4.2,(float) 41.4676689, (float) 22.0844239));
 
             Salon salon1 = salonService.getSalons().get(1);
             Salon salon2 = salonService.getSalons().get(2);

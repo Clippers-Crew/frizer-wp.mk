@@ -11,4 +11,7 @@ public class SalonAddDTO {
     private String location;
     private String phoneNumber;
     private Long businessOwnerId;
+    private Float rating;
+    private Float latitude;
+    private Float longitude;
 }
