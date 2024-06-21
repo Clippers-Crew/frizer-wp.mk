@@ -22,4 +22,8 @@ public interface SalonService {
     Optional<Salon> editTreatmentForSalon(Treatment treatment);
     Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException;
     List<Salon> filterSalons(String name, String city, String distance, String rating);
+
+    List<Salon> filteredSalons(String name, String city, Float distance, Float rating);
+
+    List<String> getSalonsAsString(List<Salon> salons);
 }

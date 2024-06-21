@@ -1,6 +1,6 @@
 <div class="bodyContent">
     <div class="search">
-        <form class="searchForm" th:action="@{/salons/search}" method="get">
+        <form class="searchForm" th:action="@{/search}" method="post">
             <input class="searchByNameInput" name="name" type="text" placeholder="Назив на салон...">
             <button type="submit">Пребарај</button>
             <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно \/</a>
@@ -19,66 +19,67 @@
     <main class="salonsListed">
         <div></div>
         <div class="resultButtons">
-            <p>Пребарувањето врати <span>10</span> резултати</p>
+            <p>Пребарувањето врати <span th:text="${count}"></span> резултати</p>
             <div class="buttons">
-                <button class="listButton">Салони</button>
-                <form action="#" method="post" style="display: inline-block">
+                <button class="listButton"><a th:href="@{/home}">Салони</a></button>
+                <form th:action="@{/search/map}" method="get" style="display: inline-block">
                     <button class="mapButton">
                         Мапа<i class="fa-regular fa-map"></i>
                     </button>
                 </form>
             </div>
         </div>
+
         <div class="searchResults">
             <div class="searchFilter">
                 <div class="title">Салони со името</div>
-                <p>Било кое</p>
+                <p th:text="${searchName != null && !searchName.isEmpty()? searchName: 'Било кое'}"></p>
             </div>
-            <div class="searchFilter">
+            <div class="searchFilter" th:if="${searchRating != null && searchRating != 0}">
                 <div class="title">Салони со рејтинг над</div>
-                <p>4.3</p>
+                <p th:text="${searchRating}"></p>
             </div>
-            <div class="searchFilter">
+            <div class="searchFilter" th:if="${searchDistance != null && searchDistance != 300}">
                 <div class="title">Салони на оддалеченост до</div>
-                <p>100km</p>
+                <p th:text="${searchDistance}"></p>
             </div>
-            <div class="searchFilter">
+            <div class="searchFilter" th:if="${searchCity != null}">
                 <div class="title">Салони во</div>
-                <p>Скопје</p>
+                <p th:text="${searchCity}"></p>
             </div>
-            <form action="#" method="post">
-                <div class="searchFilter">
-                    <div class="title">Подредено според</div>
-                    <div>
-                        <label for="radio_distance">
-                            <input
-                                    type="radio"
-                                    name="sort"
-                                    id="radio_distance"
-                                    value="distance"
-                            />
-                            Оддалеченост
-                        </label>
-                        <label for="radio_rating">
-                            <input
-                                    type="radio"
-                                    name="sort"
-                                    id="radio_rating"
-                                    value="rating"
-                            />
-                            Рејтинг
-                        </label>
-                        <label for="radio_popularity">
-                            <input
-                                    type="radio"
-                                    name="sort"
-                                    id="radio_popularity"
-                                    value="popularity"
-                            />
-                            Популарност
-                        </label>
-                    </div>
-                </div>
+            <form th:action="@{/search}" method="post">
+                <!--        <div class="searchFilter">-->
+                <!--          <div class="title">Подредено според</div>-->
+                <!--          <div>-->
+                <!--            <label for="radio_distance">-->
+                <!--              <input-->
+                <!--                      type="radio"-->
+                <!--                      name="sort"-->
+                <!--                      id="radio_distance"-->
+                <!--                      value="distance"-->
+                <!--              />-->
+                <!--              Оддалеченост-->
+                <!--            </label>-->
+                <!--            <label for="radio_rating">-->
+                <!--              <input-->
+                <!--                      type="radio"-->
+                <!--                      name="sort"-->
+                <!--                      id="radio_rating"-->
+                <!--                      value="rating"-->
+                <!--              />-->
+                <!--              Рејтинг-->
+                <!--            </label>-->
+                <!--            <label for="radio_popularity">-->
+                <!--              <input-->
+                <!--                      type="radio"-->
+                <!--                      name="sort"-->
+                <!--                      id="radio_popularity"-->
+                <!--                      value="popularity"-->
+                <!--              />-->
+                <!--              Популарност-->
+                <!--            </label>-->
+                <!--          </div>-->
+                <!--        </div>-->
                 <div class="searchFilter">
                     <div class="title">Пребарување по град</div>
                     <div>
@@ -114,6 +115,8 @@
             <div class="salonCard" th:each="salon : ${salons}">
                 <img class="salonImage" src="../images/salon_image.png" alt="Salon"/>
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
+                <p class="salonDistance" th:data-salon-id="${salon.getId()}"
+                    th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
                     5.0 (80reviews)
@@ -124,6 +127,7 @@
                 <button class="salonButton">Прегледај</button>
             </div>
         </div>
+        <script th:src="@{../static/javascript/geoLocation.js}" defer></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     </main>
-
 </div>

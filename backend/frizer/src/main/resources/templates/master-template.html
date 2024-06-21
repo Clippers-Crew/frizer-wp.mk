@@ -12,10 +12,14 @@
     <link rel="stylesheet" href="../styling/map/mapPage.css"/>
     <link rel="stylesheet" href="../static/styling/salons/confirmation.css"/>
     <link rel="stylesheet" href="../static/styling/salons/openSalon.css"/>
-    <link rel="stylesheet" href="..static/styling/icons.css"/>
+    <link rel="stylesheet" href="../static/styling/salons/listedSalons.css"/>
+    <link rel="stylesheet" href="../static/styling/icons.css"/>
+    <link rel="stylesheet" href="../static/styling/map/mapPage.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <title>Document</title>
 
 
@@ -23,9 +27,9 @@
 <body>
 <header th:replace="fragments/header"/>
 
-<section th:include="${bodyContent}">
+<main th:include="${bodyContent}">
 
-</section>
+</main>
 <footer th:replace="fragments/footer"/>
 <script src="../static/javascript/home.js"></script>
 </body>

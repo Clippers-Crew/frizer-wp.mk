@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class SalonServiceImpl implements SalonService {
     public Optional<Salon> createSalon(SalonAddDTO salonAddDTO) {
         BusinessOwner businessOwner = businessOwnerRepository.findById(salonAddDTO.getBusinessOwnerId()).orElseThrow(UserNotFoundException::new);
 
-        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), salonAddDTO.getPhoneNumber(), businessOwner);
+        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), salonAddDTO.getPhoneNumber(), businessOwner,salonAddDTO.getRating(),salonAddDTO.getLatitude(),salonAddDTO.getLongitude());
 
         salonRepository.save(salon);
 
@@ -78,6 +79,9 @@ public class SalonServiceImpl implements SalonService {
         salon.setDescription(salonUpdateDTO.getDescription());
         salon.setLocation(salonUpdateDTO.getLocation());
         salon.setPhoneNumber(salonUpdateDTO.getPhoneNumber());
+        salon.setRating(salonUpdateDTO.getRating());
+        salon.setLatitude(salonUpdateDTO.getLatitude());
+        salon.setLongitude(salonUpdateDTO.getLongitude());
         salonRepository.save(salon);
 
         applicationEventPublisher.publishEvent(new SalonUpdatedEvent(salon));
@@ -154,6 +158,37 @@ public class SalonServiceImpl implements SalonService {
         //TODO: implement calculating by distance and add rating attribute to Salon
 
         return salonRepository.findAll().stream().filter(salon -> (name == null || salon.getName().toLowerCase().contains(name.toLowerCase())) && (city == null || salon.getLocation().toLowerCase().contains(city.toLowerCase())) && (distance == null || Integer.parseInt(distance) >= 100) && (rating == null || Double.parseDouble(rating) >= 3)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Salon> filteredSalons(String name, String city, Float distance, Float rating) {
+        List<Salon> salonByName = salonRepository.findAllByNameContaining(name);
+        List<Salon> salonsByRating = salonRepository.findAllByRatingGreaterThanEqual(rating);
+        List<Salon> salonsByLocation;
+        if (!city.equals("Цела Македонија")) {
+            salonsByLocation = salonRepository.findAllByLocationContaining(city);
+        } else {
+            salonsByLocation = this.getSalons();
+        }
+        List<Salon> salonsByDistance = this
+                .getSalons()
+                .stream()
+                .filter(winery -> distance >= 100)
+                .toList();
+
+        List<Salon> interceptSalons = new ArrayList<>(salonByName);
+        interceptSalons.retainAll(salonsByRating);
+        interceptSalons.retainAll(salonsByLocation);
+        interceptSalons.retainAll(salonsByDistance);
+        return interceptSalons;
+    }
+
+    @Override
+    public List<String> getSalonsAsString(List<Salon> salons) {
+
+        return salons.stream()
+                .map(SalonAdapter::convertToString)
+                .collect(Collectors.toList());
     }
 
 }

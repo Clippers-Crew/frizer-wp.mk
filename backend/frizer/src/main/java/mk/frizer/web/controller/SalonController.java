@@ -65,5 +65,4 @@ public class SalonController {
         return "master-template";
     }
 
-
-}
+   }
