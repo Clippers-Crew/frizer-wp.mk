@@ -1,4 +1,4 @@
-<div class="bodyContent">
+<div class="bodyContent" id="homePage">
     <div class="landingPage">
         <div class="blackOverlay"></div>
         <h1 class="title">Само еден клик одалечени од Вашиот <br/>
@@ -7,17 +7,16 @@
 
         <form class="searchForm" th:action="@{/search}" method="post">
             <input class="searchByNameInput" name="name" type="text" placeholder="Назив на салон...">
-            <button type="submit">Пребарај</button>
+            <button type="submit" class="primaryButton">Пребарај</button>
             <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно \/</a>
             <div class="advanced-menu" id="advanced-menu">
                 <label for="city">City</label>
-                <input type="text" name="city">
-
+                <input type="text" name="city" id="city">
                 <label for="distance">Distance</label>
-                <input type="text" name="distance">
+                <input type="text" name="distance" id="distance">
 
                 <label for="rating">Rating</label>
-                <input type="text" name="rating">
+                <input type="text" name="rating" id="rating">
             </div>
         </form>
 
@@ -76,7 +75,6 @@
                 </p>
                 <p class="salonLocation" th:text="${salon.getLocation()}">
                     <i class="ri-map-pin-line"></i>
-
                 </p>
                 <button class="salonButton"><a th:href="@{'/salons/{id}' (id=${salon.getId()})}">Прегледај</a></button>
             </div>

@@ -36,7 +36,7 @@ public class SalonServiceImpl implements SalonService {
     private final EmployeeRepository employeeRepository;
     private final TagRepository tagRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private static final String UPLOAD_DIR = "src/main/resources/static/salons/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/salons/";
 
     public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.salonRepository = salonRepository;
@@ -146,7 +146,9 @@ public class SalonServiceImpl implements SalonService {
 
         Optional<Salon> salon = getSalonById(id);
         if (salon.isPresent()) {
-            salon.get().getImagePaths().add(filePath.toString().replace("templates/", ""));
+            String fullPath = filePath.toString().replace("templates/", "");
+            String pathAfterStatic = fullPath.substring(fullPath.indexOf("static"));
+            salon.get().getImagePaths().add(pathAfterStatic);
             salonRepository.save(salon.get());
             return salon;
         }
@@ -185,10 +187,14 @@ public class SalonServiceImpl implements SalonService {
 
     @Override
     public List<String> getSalonsAsString(List<Salon> salons) {
-
         return salons.stream()
                 .map(SalonAdapter::convertToString)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getSalonAsString(Salon salon) {
+        return SalonAdapter.convertToString(salon);
     }
 
 }

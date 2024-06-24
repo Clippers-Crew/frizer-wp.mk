@@ -48,6 +48,7 @@ public class SalonController {
         model.addAttribute("employees", employees);
         model.addAttribute("reviews", reviews);
         model.addAttribute("tags", tags);
+        model.addAttribute("salonAsString", salonService.getSalonAsString(salon));
         model.addAttribute("bodyContent", "salon");
         return "master-template";
     }

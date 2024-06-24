@@ -1,9 +1,4 @@
-a{
-    text-decoration: none;
-    color: #f7f7f7;
-}
-
-.landingPage{
+#homePage .landingPage {
     padding: 10vh 8vw;
     text-align: center;
     min-height: 100vh;
@@ -13,9 +8,10 @@ a{
     color: #f7f7f7;
     position: relative;
 }
-.blackOverlay{
+
+#homePage .blackOverlay {
     position: absolute;
-     top: 0;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -23,16 +19,17 @@ a{
     z-index: -5;
 }
 
-.title{
+#homePage .title {
     margin-top: 2em;
     line-height: 1.3;
 }
-.subtitle{
+
+#homePage .subtitle {
     margin-top: 0.5em;
     font-weight: normal;
 }
 
-.searchForm{
+#homePage .searchForm {
     margin: 4em auto;
     max-width: 50vw;
     display: grid;
@@ -40,27 +37,25 @@ a{
     gap: 0.5em;
     justify-content: center;
 }
-.searchForm input{
+
+#homePage .searchForm input {
     width: 100%;
     padding: 1em;
     border: none;
     border-radius: var(--border-radius);
     background-color: #d9d9d9;
 }
-.searchForm button{
+
+#homePage .searchForm .primaryButton {
     width: 100%;
-    padding: 1em;
-    border: none;
-    border-radius: var(--border-radius);
-    background-color: #FF0B23;
-    color: white;
 }
-.searchForm .advanced-toggle{
+
+#homePage .searchForm .advanced-toggle {
     text-align: left;
     grid-column: 1/-1;
 }
 
-.searchForm .advanced-menu{
+#homePage .searchForm .advanced-menu {
     width: 50%;
     text-align: left;
     display: grid;
@@ -69,11 +64,11 @@ a{
     display: none;
 }
 
-.searchForm .show-advanced-menu{
+#homePage .searchForm .show-advanced-menu {
     display: block;
 }
 
-.tags{
+#homePage .tags {
     margin-top: 10em;
     display: grid;
     flex-wrap: wrap;
@@ -81,24 +76,35 @@ a{
     gap: 2em;
     grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
 }
-.tags h4{
+
+#homePage .tags h4 {
     grid-column: 1/-1;
 }
 
-.tag{
+#homePage .tag {
     padding: 2rem 3rem;
     border-radius: var(--border-radius);
     background-color: rgb(217, 217, 217, 0.4);
+    text-decoration: none;
+}
+
+#homePage a {
+    text-decoration: none;
+}
+
+#homePage .landingPage a {
+    color: var(--off-white);
 }
 
 @media screen and (max-width: 1150px) {
-    .searchForm .advanced-menu{
+    #homePage .searchForm .advanced-menu {
         width: 100%;
         grid-column: 1/-1;
     }
 }
-@media screen and (max-width: 750px){
-    .searchForm .searchByNameInput, .searchForm button{
+
+@media screen and (max-width: 750px) {
+    #homePage .searchForm .searchByNameInput, #homePage .searchForm button {
         grid-column: 1/-1;
     }
 }

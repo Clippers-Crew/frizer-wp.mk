@@ -1,9 +1,17 @@
-<div class="bodyContent">
+<div class="bodyContent" id="openSalon">
     <div class="featuredImages">
-        <div class="primaryImage"></div>
-        <div class="secondaryImage"></div>
-        <div class="secondaryImage"></div>
-        <div class="teritaryImage"></div>
+        <div class="primaryImage">
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? '../' + salon.getImagePaths()[0] : '/static/images/salons/default/default_salon_1.jpg'}}" alt="Salon image"/>
+        </div>
+        <div class="secondaryImage">
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? '../' + salon.getImagePaths()[1] : '/static/images/salons/default/default_salon_2.jpg'}}" alt="Salon image"/>
+        </div>
+        <div class="secondaryImage">
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? '../' + salon.getImagePaths()[2] : '/static/images/salons/default/default_salon_3.jpg'}}" alt="Salon image"/>
+        </div>
+        <div class="teritaryImage">
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? '../' + salon.getImagePaths()[3] : '/static/images/salons/default/default_salon_4.jpg'}}" alt="Salon image"/>
+        </div>
     </div>
 
     <div class="salonProfile" th:if="${salon}">
@@ -25,14 +33,13 @@
 
     <div class="services">
         <div class="column">
-            <button class="service" th:each="tag : ${tags}" th:text="${tag.getName()}"></button>
-            public
+            <button class="service" th:each="treatment : ${treatments}" th:text="${treatment.getName()}"></button>
         </div>
         <div class="column">
             <div class="serviceType" th:each="treatment : ${treatments}">
-                <p class="serviceTitle" th:text = "${treatment.getName()}"></p>
-                <p class="servicePrice" th:text = "${treatment.getPrice() + ' МКД'}"></p>
-                <button class="reserve">Резервирај</button>
+                <p class="serviceTitle" th:text="${treatment.getName()}"></p>
+                <p class="servicePrice" th:text="${treatment.getPrice() + ' МКД'}"></p>
+                <button class="reserve primaryButton">Резервирај</button>
             </div>
             <hr>
 
@@ -50,13 +57,21 @@
                      th:text="${(review.getUserTo()?.getFirstName() ?: '') + ' ' + (review.getUserTo()?.getLastName() ?: '')}"></div>
             </div>
             <div class="row">
-                <div class="reviewStars" th:text="${review.getRating()}"></div>
+                <div class="reviewStars">
+                    <span th:text="${review.getRating()}"></span>
+                    <span>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                    </span>
+                </div>
                 <div class="reviewDate"
                      th:text="${review.getDate().format(formatter)}"></div>
             </div>
             <div class="row">
                 <div class="reviewText" th:text="${review.getComment()}">
-
                 </div>
             </div>
         </div>
@@ -66,17 +81,22 @@
         <h1>Вработени</h1>
         <div class="employee" th:each="employee : ${employees}">
             <div class="employeeImage">
-                <img src="../images/salon_image.png" alt="Barber image"/>
+                <!--                <img src="@{/images/salon_image.png}" alt="Barber image"/>-->
+                <img src="../static/images/salons/default/default_barber.jpg" alt="Barber image"/>
             </div>
             <div class="employeeName">
-                <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
+                <h2 th:text="${employee.getBaseUser().getFirstName()}"></h2>
             </div>
-            <p class="employeeRating"
-               th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'">
-                5.0 (80 reviews) </p>
+            <p class="employeeRating">
+                <span th:text="${employeeMap[employee.id].getRating()}"></span>
+                <i class="ri-star-fill"></i>
+                <span th:text="'(' + ${employeeMap[employee.id].getRating()} + ' reviews)'"></span>
+            </p>
             <p class="employeeExperience">Working since </p>
         </div>
     </div>
 
-    <div id="map"></div>
+    <div id="map" th:salon="${salonAsString}"></div>
+    <script th:src="@{../static/javascript/drawMap.js}" defer></script>
+
 </div>

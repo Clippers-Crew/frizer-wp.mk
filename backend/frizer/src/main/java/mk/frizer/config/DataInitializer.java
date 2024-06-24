@@ -34,7 +34,7 @@ public class DataInitializer {
     }
     @PostConstruct
     public void init(){
-        boolean init = true;
+        boolean init = false;
         if(init){
             baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com","password","FirstName","LastName","phoneNumber"));
             baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com","password","FirstName","LastName","numberPhone"));

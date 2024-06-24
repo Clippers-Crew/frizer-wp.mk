@@ -13,17 +13,28 @@ import java.util.Optional;
 
 public interface SalonService {
     List<Salon> getSalons();
+
     Optional<Salon> getSalonById(Long id);
+
     Optional<Salon> createSalon(SalonAddDTO salonAddDTO);
+
     Optional<Salon> updateSalon(Long id, SalonUpdateDTO salonUpdateDTO);
+
     Optional<Salon> deleteSalonById(Long id);
+
     Optional<Salon> addTagToSalon(TagAddDTO tagAddDTO);
+
     Optional<Salon> addTreatmentToSalon(Treatment treatment);
+
     Optional<Salon> editTreatmentForSalon(Treatment treatment);
+
     Optional<Salon> saveImage(Long id, MultipartFile image) throws IOException;
+
     List<Salon> filterSalons(String name, String city, String distance, String rating);
 
     List<Salon> filteredSalons(String name, String city, Float distance, Float rating);
 
     List<String> getSalonsAsString(List<Salon> salons);
+
+    String getSalonAsString(Salon salons);
 }

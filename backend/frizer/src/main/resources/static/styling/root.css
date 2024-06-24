@@ -7,6 +7,12 @@
     --background-color: #ececec;
     --darker-color: #c0c0c0;
     --lighter-color: #d9d9d9;
+    --off-white: #f7f7f7;
+    --dark-color: #20232e;
+    --star-color: #ffff16;
+    --primary-color: #FF0B23;
+    --accent-color: #ff5265;
+
     /*========== Font and typography ==========*/
     /*.5rem = 8px | 1rem = 16px ...*/
     font-family: "Poppins", sans-serif;
@@ -30,3 +36,16 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+.primaryButton {
+    padding: 1em;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--primary-color);
+    color: var(--off-white);
+    font-weight: bold;
+    cursor: pointer;
+}
+.primaryButton:hover{
+    background-color: var(--accent-color);
+}
