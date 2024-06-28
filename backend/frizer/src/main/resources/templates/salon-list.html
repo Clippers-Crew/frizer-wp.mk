@@ -1,18 +1,20 @@
 <div class="bodyContent">
     <div class="search">
-        <form class="searchForm" th:action="@{/search}" method="post">
+        <form class="searchForm" th:action="@{/salons   }" method="get">
             <input class="searchByNameInput" name="name" type="text" placeholder="Назив на салон...">
             <button type="submit">Пребарај</button>
-            <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно \/</a>
+            <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно
+                 <i class="ri-arrow-down-line"></i>
+            </a>
             <div class="advanced-menu" id="advanced-menu">
                 <label for="city">City</label>
-                <input type="text" name="city">
+                <input type="text" name="city" id="city">
 
                 <label for="distance">Distance</label>
-                <input type="text" name="distance">
+                <input type="text" name="distance" id="distance">
 
                 <label for="rating">Rating</label>
-                <input type="text" name="rating">
+                <input type="text" name="rating" id="rating">
             </div>
         </form>
     </div>
@@ -21,7 +23,7 @@
         <div class="resultButtons">
             <p>Пребарувањето врати <span th:text="${count}"></span> резултати</p>
             <div class="buttons">
-                <button class="listButton"><a th:href="@{/home}">Салони</a></button>
+                <button class="listButton">Салони</button>
                 <form th:action="@{/search/map}" method="get" style="display: inline-block">
                     <button class="mapButton">
                         Мапа<i class="fa-regular fa-map"></i>
@@ -33,7 +35,7 @@
         <div class="searchResults">
             <div class="searchFilter">
                 <div class="title">Салони со името</div>
-                <p th:text="${searchName != null && !searchName.isEmpty()? searchName: 'Било кое'}"></p>
+                <p th:text="${searchName != null && !searchName.isEmpty() ? searchName: 'Било кое'}"></p>
             </div>
             <div class="searchFilter" th:if="${searchRating != null && searchRating != 0}">
                 <div class="title">Салони со рејтинг над</div>
@@ -116,7 +118,7 @@
                 <img class="salonImage" src="../images/salon_image.png" alt="Salon"/>
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonDistance" th:data-salon-id="${salon.getId()}"
-                    th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
+                   th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
                     5.0 (80reviews)

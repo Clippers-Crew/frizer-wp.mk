@@ -11,13 +11,20 @@ import java.util.Optional;
 
 public interface ReviewService {
     List<Review> getReviews();
+
     Optional<Review> getReviewById(Long id);
+
     Optional<Review> createReviewForEmployee(ReviewAddDTO reviewAddDTO);
+
     Optional<Review> createReviewForCustomer(ReviewAddDTO reviewAddDTO);
+
     Optional<Review> updateReview(Long id, ReviewUpdateDTO reviewUpdateDTO);
+
     Optional<Review> deleteReviewById(Long id);
 
     Map<Long, ReviewStats> getStatisticsForEmployee(List<Employee> employees);
+
+    Map<Long, ReviewStats> getStatisticsForSalon(List<Salon> salons);
 
     List<Review> getReviewsForEmployees(List<Employee> employees);
 }

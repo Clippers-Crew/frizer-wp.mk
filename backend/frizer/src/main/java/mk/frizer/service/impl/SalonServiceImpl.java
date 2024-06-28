@@ -15,6 +15,7 @@ import mk.frizer.repository.EmployeeRepository;
 import mk.frizer.repository.SalonRepository;
 import mk.frizer.repository.TagRepository;
 import mk.frizer.service.SalonService;
+import mk.frizer.utilities.DistanceCalculator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,14 +37,16 @@ public class SalonServiceImpl implements SalonService {
     private final EmployeeRepository employeeRepository;
     private final TagRepository tagRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final DistanceCalculator distanceCalculator;
     private static final String UPLOAD_DIR = "src/main/resources/static/images/salons/";
 
-    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher) {
+    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator) {
         this.salonRepository = salonRepository;
         this.businessOwnerRepository = businessOwnerRepository;
         this.employeeRepository = employeeRepository;
         this.tagRepository = tagRepository;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.distanceCalculator = distanceCalculator;
     }
 
     @Override
@@ -156,15 +159,11 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public List<Salon> filterSalons(String name, String city, String distance, String rating) {
-        //TODO: implement calculating by distance and add rating attribute to Salon
-
-        return salonRepository.findAll().stream().filter(salon -> (name == null || salon.getName().toLowerCase().contains(name.toLowerCase())) && (city == null || salon.getLocation().toLowerCase().contains(city.toLowerCase())) && (distance == null || Integer.parseInt(distance) >= 100) && (rating == null || Double.parseDouble(rating) >= 3)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Salon> filteredSalons(String name, String city, Float distance, Float rating) {
-        List<Salon> salonByName = salonRepository.findAllByNameContaining(name);
+    public List<Salon> filterSalons(String name, String city, Float distance, Float rating, String userLocation){
+//        List<Salon> salonByName = salonRepository.findAllByNameContaining(name);
+        List<Salon> salonByName = salonRepository.findAll()
+                .stream().filter(salon -> salon.getName().toLowerCase().contains(name.toLowerCase()))
+                .toList();
         List<Salon> salonsByRating = salonRepository.findAllByRatingGreaterThanEqual(rating);
         List<Salon> salonsByLocation;
         if (!city.equals("Цела Македонија")) {
@@ -175,7 +174,7 @@ public class SalonServiceImpl implements SalonService {
         List<Salon> salonsByDistance = this
                 .getSalons()
                 .stream()
-                .filter(winery -> distance >= 100)
+                .filter(salon -> distance >= distanceCalculator.getDistance(userLocation, salon.getLatitude(), salon.getLongitude()))
                 .toList();
 
         List<Salon> interceptSalons = new ArrayList<>(salonByName);

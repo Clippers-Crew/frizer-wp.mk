@@ -32,6 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getEmployees() {
         return employeeRepository.findAll();
     }
+
     @Override
     public Optional<Employee> getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
@@ -44,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Salon salon = salonRepository.findById(id)
                 .orElseThrow(SalonNotFoundException::new);
 
-        List<Employee> employees =  employeeRepository.findAll().stream().filter(e->e.getSalon().equals(salon))
+        List<Employee> employees = employeeRepository.findAll().stream().filter(e -> e.getSalon().equals(salon))
                 .collect(Collectors.toList());
         return employees;
     }
@@ -52,26 +53,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public Optional<Employee> createEmployee(EmployeeAddDTO employeeAddDTO) {
-        Optional<Employee> employee = employeeRepository.findById(employeeAddDTO.getUserId());
+        Employee employee = employeeRepository.findAll()
+                .stream().filter(e -> e.getBaseUser().getId().equals(employeeAddDTO.getUserId()))
+                .findFirst().orElse(null);
         Salon salon = salonRepository.findById(employeeAddDTO.getSalonId())
                 .orElseThrow(SalonNotFoundException::new);
-        if(employee.isEmpty()){
+        if (employee == null) {
             BaseUser baseUser = baseUserRepository.findById(employeeAddDTO.getUserId())
                     .orElseThrow(UserNotFoundException::new);
 
-            employee = Optional.of(new Employee(baseUser, salon));
+            employee = new Employee(baseUser, salon);
             baseUser.setRole(Role.ROLE_EMPLOYEE);
             baseUserRepository.save(baseUser);
         }
-        employee.get().setSalon(salon);
-        return Optional.of(employeeRepository.save(employee.get()));
+        employee.setSalon(salon);
+        return Optional.of(employeeRepository.save(employee));
     }
 
     @Override
     @Transactional
     public Optional<Employee> deleteEmployeeById(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
-        if(employee.isEmpty())
+        if (employee.isEmpty())
             throw new EmployeeNotFoundException();
 //        appointmentRepository.deleteAll(employee.get().getAppointmentsActive());
         employeeRepository.deleteById(id);

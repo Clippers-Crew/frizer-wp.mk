@@ -1,16 +1,20 @@
 <div class="bodyContent" id="openSalon">
     <div class="featuredImages">
         <div class="primaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? '../' + salon.getImagePaths()[0] : '/static/images/salons/default/default_salon_1.jpg'}}" alt="Salon image"/>
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? '../' + salon.getImagePaths()[0] : '/static/images/salons/default/default_salon_1.jpg'}}"
+                 alt="Salon image"/>
         </div>
         <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? '../' + salon.getImagePaths()[1] : '/static/images/salons/default/default_salon_2.jpg'}}" alt="Salon image"/>
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? '../' + salon.getImagePaths()[1] : '/static/images/salons/default/default_salon_2.jpg'}}"
+                 alt="Salon image"/>
         </div>
         <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? '../' + salon.getImagePaths()[2] : '/static/images/salons/default/default_salon_3.jpg'}}" alt="Salon image"/>
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? '../' + salon.getImagePaths()[2] : '/static/images/salons/default/default_salon_3.jpg'}}"
+                 alt="Salon image"/>
         </div>
         <div class="teritaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? '../' + salon.getImagePaths()[3] : '/static/images/salons/default/default_salon_4.jpg'}}" alt="Salon image"/>
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? '../' + salon.getImagePaths()[3] : '/static/images/salons/default/default_salon_4.jpg'}}"
+                 alt="Salon image"/>
         </div>
     </div>
 
@@ -27,7 +31,9 @@
         <div class="row">
             <i class="ri-map-pin-line"></i>
             <p class="salonLocation" th:text="${salon.getLocation()}"></p>
-            <p class="salonRating"><i class="fas fa-star"></i> 4.4 (80reviews)</p>
+            <p class="salonRating"><i class="fas fa-star"></i> <span th:text="${salonStats.getRating()}"></span> (<span
+                    th:text="${salonStats.getNumberOfReviews()}"></span> <span
+                    th:text="${salonStats.getNumberOfReviews() > 1 ? 'reviews': 'review'}"></span>)</p>
         </div>
     </div>
 
@@ -75,7 +81,37 @@
                 </div>
             </div>
         </div>
+        <div>
+            <form action="/reviews/add" method="post">
+                <input type="hidden" name="salonId" th:value="${salon.getId()}">
+<!--                TODO add field for current customer -->
+                <label for="comment">Коментар</label>
+                <input type="text" name="comment" id="comment">
+                <br>
+                <label for="rating">Оценка</label>
+                <input type="number" name="rating" id="rating">
+                <br>
+                <label for="employee">Вработен</label>
+                <select name="employeeId" id="employee">
+                    <option th:each="employee: ${employees}" th:value="${employee.getId()}"
+                            th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}">
+                    </option>
+                </select>
+                <br>
+                <label for="customer">Клиент</label>
+                <select name="customerId" id="customer">
+                    <option th:each="customer: ${customers}" th:value="${customer.getId()}"
+                            th:text="${customer.getBaseUser().getFirstName() + ' ' + customer.getBaseUser().getLastName()}">
+                    </option>
+                </select>
+                <br>
+                <button type="submit" class="primaryButton">Додади рецензија</button>
+            </form>
+        </div>
+
     </div>
+
+    <div>
 
     <div class="employees">
         <h1>Вработени</h1>
@@ -90,9 +126,24 @@
             <p class="employeeRating">
                 <span th:text="${employeeMap[employee.id].getRating()}"></span>
                 <i class="ri-star-fill"></i>
-                <span th:text="'(' + ${employeeMap[employee.id].getRating()} + ' reviews)'"></span>
+                <span th:text="'(' + ${employeeMap[employee.id].getNumberOfReviews()} + ' reviews)'"></span>
             </p>
             <p class="employeeExperience">Working since </p>
+        </div>
+    </div>
+        <div>
+            <form action="/employees/add" method="post">
+                <h2>Додади вработен</h2>
+                <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                <label for="userId">Корисник</label>
+                <select name="userId" id="userId">
+                    <option th:each="user: ${baseUsers}" th:value="${user.getId()}"
+                            th:text="${user.getFirstName() + ' ' + user.getLastName()}">
+                    </option>
+                </select>
+                <br>
+                <button type="submit" class="primaryButton">Додади вработен</button>
+            </form>
         </div>
     </div>
 

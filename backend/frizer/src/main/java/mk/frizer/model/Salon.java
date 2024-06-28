@@ -49,7 +49,6 @@ public class Salon {
     private Float rating;
 
     private Float latitude;
-
     private Float longitude;
     public Salon(String name, String description, String location, String phoneNumber,
                  BusinessOwner owner,Float rating,Float latitude, Float longitude) {

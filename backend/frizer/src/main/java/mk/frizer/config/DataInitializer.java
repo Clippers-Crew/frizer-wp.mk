@@ -36,12 +36,12 @@ public class DataInitializer {
     public void init(){
         boolean init = false;
         if(init){
-            baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com","password","FirstName","LastName","phoneNumber"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com","password","FirstName","LastName","numberPhone"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("denis@email.com","password","FirstName","LastName","LycaMobile"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("tajfun@email.com","password","FirstName","LastName","telelink"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("salon@email.com","password","FirstName","LastName","kabelnet"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("toni@email.com","password","FirstName","LastName","telekabel"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com","password","Dario","Delov","phoneNumber"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com","password","Sanja","Petkova","numberPhone"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("denis@email.com","password","Denis","Ibraimi","LycaMobile"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("tajfun@email.com","password","Tajfun","Ventilator","telelink"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("salon@email.com","password","Salon","Biznis","kabelnet"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("toni@email.com","password","Toni","Tarabov","telekabel"));
             BaseUser baseUser1 = baseUserService.getBaseUsers().get(0);
             BaseUser baseUser2 = baseUserService.getBaseUsers().get(1);
             BaseUser baseUser3 = baseUserService.getBaseUsers().get(2);
@@ -98,5 +98,7 @@ public class DataInitializer {
 //
 //            appointmentService.createAppointment(new AppointmentAddDTO(dateFrom, dateTo, treatment.getId(), salon2.getId(), employee2.getId(), customer.getId()));
         }
+
+
     }
 }
