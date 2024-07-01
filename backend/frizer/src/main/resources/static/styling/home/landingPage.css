@@ -38,7 +38,7 @@
     justify-content: center;
 }
 
-#homePage .searchForm input {
+#homePage .searchForm input, #homePage .searchForm select {
     width: 100%;
     padding: 1em;
     border: none;

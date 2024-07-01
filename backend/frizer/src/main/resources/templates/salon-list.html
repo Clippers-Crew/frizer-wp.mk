@@ -1,22 +1,6 @@
 <div class="bodyContent">
     <div class="search">
-        <form class="searchForm" th:action="@{/salons   }" method="get">
-            <input class="searchByNameInput" name="name" type="text" placeholder="Назив на салон...">
-            <button type="submit">Пребарај</button>
-            <a href="#" class="advanced-toggle" id="advanced-toggle">Напредно
-                 <i class="ri-arrow-down-line"></i>
-            </a>
-            <div class="advanced-menu" id="advanced-menu">
-                <label for="city">City</label>
-                <input type="text" name="city" id="city">
-
-                <label for="distance">Distance</label>
-                <input type="text" name="distance" id="distance">
-
-                <label for="rating">Rating</label>
-                <input type="text" name="rating" id="rating">
-            </div>
-        </form>
+        <div th:insert="~{fragments/Search :: search}"></div>
     </div>
     <main class="salonsListed">
         <div></div>
@@ -113,20 +97,23 @@
                 </div>
             </form>
         </div>
+
         <div class="cards">
             <div class="salonCard" th:each="salon : ${salons}">
-                <img class="salonImage" src="../images/salon_image.png" alt="Salon"/>
+                <img class="salonImage" src="../static/images/salon_image.png" alt="Salon"/>
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonDistance" th:data-salon-id="${salon.getId()}"
                    th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
-                    5.0 (80reviews)
+                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> reviews)
                 </p>
                 <p class="salonLocation" th:text="${salon.getLocation()}">
                     <i class="ri-map-pin-line"></i>
                 </p>
-                <button class="salonButton">Прегледај</button>
+                <a th:href="@{'/salons/{id}' (id=${salon.getId()})}">
+                    <button class="salonButton">Прегледај</button>
+                </a>
             </div>
         </div>
         <script th:src="@{../static/javascript/geoLocation.js}" defer></script>
