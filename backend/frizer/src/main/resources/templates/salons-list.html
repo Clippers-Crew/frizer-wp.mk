@@ -8,7 +8,11 @@
             <p>Пребарувањето врати <span th:text="${count}"></span> резултати</p>
             <div class="buttons">
                 <button class="listButton">Салони</button>
-                <form th:action="@{/search/map}" method="get" style="display: inline-block">
+                <form th:action="@{/salons/map}" method="get" style="display: inline-block">
+                    <input type="hidden" name="name" th:value="${searchName}" readonly>
+                    <input type="hidden" name="city" th:value="${searchCity}" readonly>
+                    <input type="hidden" name="distance" th:value="${searchDistance}" readonly>
+                    <input type="hidden" name="rating" th:value="${searchRating}" readonly>
                     <button class="mapButton">
                         Мапа<i class="fa-regular fa-map"></i>
                     </button>
@@ -106,7 +110,8 @@
                    th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
-                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> reviews)
+                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span
+                        th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> reviews)
                 </p>
                 <p class="salonLocation" th:text="${salon.getLocation()}">
                     <i class="ri-map-pin-line"></i>

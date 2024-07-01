@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let marker_helper, circle_helper;
 
     function drawLocation(salon){
-        //Winery list: Lat|Long|Name, first split
+        //list: Lat|Long|Name, first split
         const accuracy= 200;
 
         // id|lat|lng|name

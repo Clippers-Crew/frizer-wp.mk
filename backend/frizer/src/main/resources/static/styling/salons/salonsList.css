@@ -110,7 +110,7 @@
 
 /* SEARCH FORM START */
 .searchForm{
-    margin: 4em auto;
+    margin: 5em auto 2em;
     max-width: 50vw;
     display: grid;
     grid-template-columns: 4fr 1fr;
@@ -128,15 +128,16 @@
 .searchForm a{
     text-decoration: none;
     color: #000;
+    cursor: pointer;
 }
-.searchForm button{
-    width: 100%;
-    padding: 1em;
-    border: none;
-    border-radius: var(--border-radius);
-    background-color: #FF0B23;
-    color: white;
-}
+/*.searchForm button{*/
+/*    width: 100%;*/
+/*    padding: 1em;*/
+/*    border: none;*/
+/*    border-radius: var(--border-radius);*/
+/*    background-color: #FF0B23;*/
+/*    color: white;*/
+/*}*/
 .searchForm .advanced-toggle{
     text-align: left;
     grid-column: 1/-1;

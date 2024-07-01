@@ -53,6 +53,7 @@
 #homePage .searchForm .advanced-toggle {
     text-align: left;
     grid-column: 1/-1;
+    cursor: pointer;
 }
 
 #homePage .searchForm .advanced-menu {

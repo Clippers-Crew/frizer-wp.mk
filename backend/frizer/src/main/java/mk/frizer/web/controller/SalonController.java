@@ -81,7 +81,7 @@ public class SalonController {
         return "master-template";
     }
 
-    private void setSearchAttributes(String name, Float rating, Float distance, String city, String sortingMethod, Model model, HttpSession session) {
+    private List<Salon> setSearchAttributes(String name, Float rating, Float distance, String city, String sortingMethod, Model model, HttpSession session) {
         model.addAttribute("searchName", name);
         model.addAttribute("searchRating", rating);
         model.addAttribute("searchDistance", distance);
@@ -106,6 +106,7 @@ public class SalonController {
 
         model.addAttribute("salons", filteredSalons);
         model.addAttribute("count", filteredSalons.size());
+        return filteredSalons;
     }
 
     @GetMapping()
@@ -118,8 +119,47 @@ public class SalonController {
         setSearchAttributes(name, rating, distance, city, sortingMethod, model, session);
         model.addAttribute("cities", cityService.getCities());
         model.addAttribute("salonRatings", reviewService.getStatisticsForSalon(salonService.getSalons()));
-        model.addAttribute("bodyContent", "salon-list");
+        model.addAttribute("bodyContent", "salons-list");
         return "master-template";
     }
+
+
+    @GetMapping("/map")
+    public String showSalonsMap(@RequestParam(name = "name", required = false) String name,
+                                @RequestParam(name = "rating", required = false) Float rating,
+                                @RequestParam(name = "distance", required = false) Float distance,
+                                @RequestParam(name = "city", required = false) String city,
+                                @RequestParam(name = "sort", required = false) String sortingMethod,
+                                Model model, HttpSession session){
+        List<Salon> filteredSalons = setSearchAttributes(name, rating, distance, city, sortingMethod, model, session);
+
+        List<String> salons = salonService.getSalonsAsString(filteredSalons);
+        model.addAttribute("salonsAsString", salons);
+
+        model.addAttribute("cities", cityService.getCities());
+        model.addAttribute("bodyContent", "salons-map");
+        return "master-template";
+    }
+
+
+
+//
+//    @PostMapping("/map")
+//    public String showFilteredSalonsMap(HttpSession session, Model model){
+//
+//        SearchQuery retrievedQuery = (SearchQuery) session.getAttribute("searchQuery");
+//
+//        if(retrievedQuery == null){
+//            List<String> salons = salonService.getSalonsAsString(salonService.getSalons());
+//            model.addAttribute("salons", salons);
+//        }
+//        else{
+//
+//            List<String> salons = salonService.getSalonsAsString(retrievedQuery.getSalons());
+//            model.addAttribute("salons",salons);
+//        }
+//        model.addAttribute("bodyContent","map");
+//        return "master-template";
+//    }
 
 }

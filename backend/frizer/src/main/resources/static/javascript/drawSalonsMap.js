@@ -1,16 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof L === 'undefined') {
-        console.error('Leaflet library not loaded');
-        return;
-    }
-
-    // Initializes map
+// Initializes map
     const map = L.map("map");
 
-    // Sets initial coordinates and zoom level, Center of Macedonia
+// Sets initial coordinates and zoom level, Center of Macedonia
     map.setView([41.6086, 21.7453], 9);
 
-    // Sets map data source and associates with map
+// Sets map data source and associates with map
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap'
@@ -18,55 +13,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createPopup(id, name) {
         const popupContent = `
-            <b>${name}</b></br>
-            <a href="/salons/${id}">
-                <button>Details</button>
-            </a>
-        `;
+    <b>${name}</b></br>
+    <a href="/salons/${id}">
+        <button>Details</button>
+    </a>
+   `;
         return L.popup().setContent(popupContent);
     }
 
-    function createUserPopup(message) {
+    function createUserPopup(message){
         const popupContent = `
-            <b>${message}</b>
-        `;
+    <b>${message}</b>
+    `;
         return L.popup().setContent(popupContent);
     }
 
     let marker_helper, circle_helper;
 
-    function drawLocations(salons) {
-        console.log("Drawing salons:", salons); // Print salons to console
-        const accuracy = 200;
+    function drawLocations(salonsList){
+        //Salon list: Lat|Long|Name, first split
 
-        salons.forEach(salon => {
-            let [id, lat, lng, name] = salon.split("|");
+        console.log(salonsList)
 
-            // Skip salons with null latitude or longitude
-            if (lat === 'null' || lng === 'null') {
-                console.warn(`Skipping salon with null coordinates: ${name}`);
-                return;
-            }
+        salonsList = salonsList.substring(1, salonsList.length - 1).split(", ");
+        const accuracy= 200;
 
-            id = parseInt(id);
-            lat = parseFloat(lat);
-            lng = parseFloat(lng);
+        salonsList.forEach(salon => {
+            // id|lat|lng|name
+            // 1|42.00|21.00|Bord winery
+            let parts = salon.split("|");
+            let id = parseInt(parts[0]);
+            let lat = parseFloat(parts[1]);
+            let lng = parseFloat(parts[2]);
+            let name = parts[3];
 
             marker_helper = L.marker([lat, lng]).addTo(map);
             circle_helper = L.circle([lat, lng], { radius: accuracy }).addTo(map);
 
-            marker_helper.bindPopup(createPopup(id, name));
-            circle_helper.bindPopup(createPopup(id, name));
-        });
+            marker_helper.bindPopup(createPopup(id, name));//.openPopup();
+            circle_helper.bindPopup(createPopup(id, name));//.openPopup();
+        })
     }
 
     function addMarkerForUserLocation() {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
-                    const accuracy = 500;
+                    const accuracy= 500;
                     const { latitude, longitude } = position.coords;
 
+                    // marker_helper = L.marker([latitude, longitude], {color: 'green'}).addTo(map);
                     let greenIcon = new L.Icon({
                         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -76,11 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         shadowSize: [41, 41]
                     });
 
-                    const userMarker = L.marker([latitude, longitude], { icon: greenIcon }).addTo(map);
-                    const circle_helper = L.circle([latitude, longitude], { radius: accuracy, color: 'green' }).addTo(map);
+                    const userMarker = L.marker([latitude, longitude], {icon: greenIcon}).addTo(map);
+                    const circle_helper = L.circle([latitude, longitude], { radius: accuracy, color: 'green'}).addTo(map);
 
                     userMarker.bindPopup(createUserPopup("Your location")).openPopup();
-                    circle_helper.bindPopup(createUserPopup("Your radius"));
+                    circle_helper.bindPopup(createUserPopup("Your radius"));//.openPopup();
                 },
                 function (error) {
                     console.error("Error getting user location:", error);
@@ -90,13 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    try {
-        var parsedSalons = JSON.parse(salons);
-        console.log("Parsed salons:", parsedSalons); // Print parsed salons to console
-        drawLocations(parsedSalons);
-    } catch (e) {
-        console.error("Failed to parse salons JSON: ", e);
-    }
-
+    const wineriesList = document.getElementById('map').getAttribute('salonsList');
+    // Now you can use 'myData' in your JavaScript logic
+    drawLocations(wineriesList);
     addMarkerForUserLocation();
 });
