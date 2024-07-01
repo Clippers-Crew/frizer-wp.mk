@@ -1,19 +1,35 @@
 package mk.frizer.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
-public class City {
-    private String mkTitle;
-    private String enTitle;
-    private Float latitude;
-    private Float longitude;
+@Entity
+public class City{
+    @Id
+    private String name;
+    @OneToMany(mappedBy = "city")
+    private List<Salon> salonsInCity;
 
-    public boolean checkCityIs(String city) {
-        return mkTitle.toLowerCase().contains(city.toLowerCase())
-                || enTitle.toLowerCase().contains(city.toLowerCase());
+    public City() {
+    }
+
+    public City(String name) {
+        this.name = name;
+        this.salonsInCity = new ArrayList<>();
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }
 

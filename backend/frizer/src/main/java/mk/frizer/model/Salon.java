@@ -25,8 +25,10 @@ public class Salon {
     private String name;
     private String description;
     private String location;
-    private String phoneNumber;
+    @ManyToOne
+    private City city;
 
+    private String phoneNumber;
     //cascade = Cascade.ALL
     @OneToMany(mappedBy = "salon", fetch = FetchType.EAGER, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -50,11 +52,12 @@ public class Salon {
 
     private Float latitude;
     private Float longitude;
-    public Salon(String name, String description, String location, String phoneNumber,
+    public Salon(String name, String description, String location, City city, String phoneNumber,
                  BusinessOwner owner,Float rating,Float latitude, Float longitude) {
         this.name = name;
         this.description = description;
         this.location = location;
+        this.city = city;
         this.phoneNumber = phoneNumber;
         this.employees = new ArrayList<>();
         this.salonTreatments = new ArrayList<>();

@@ -4,10 +4,13 @@ import jakarta.annotation.PostConstruct;
 
 import mk.frizer.model.*;
 import mk.frizer.model.dto.*;
+import mk.frizer.repository.CityRepository;
 import mk.frizer.service.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 
@@ -20,8 +23,9 @@ public class DataInitializer {
     private final EmployeeService employeeService;
     private final CustomerService customerService;
     private final ReviewService reviewService;
-    private final AppointmentService appointmentService;
-    public DataInitializer(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, SalonService salonService, TreatmentService treatmentService, TagService tagService, EmployeeService employeeService, CustomerService customerService, ReviewService reviewService, AppointmentService appointmentService){//, BusinessOwnerRepository businessOwnerRepository, SalonRepository salonRepository) {
+    private final CityRepository cityRepository;
+
+    public DataInitializer(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, SalonService salonService, TreatmentService treatmentService, TagService tagService, EmployeeService employeeService, CustomerService customerService, ReviewService reviewService, CityRepository cityRepository){
         this.baseUserService = baseUserService;
         this.businessOwnerService = businessOwnerService;
         this.salonService = salonService;
@@ -30,10 +34,26 @@ public class DataInitializer {
         this.employeeService = employeeService;
         this.customerService = customerService;
         this.reviewService = reviewService;
-        this.appointmentService = appointmentService;
+        this.cityRepository = cityRepository;
     }
+
     @PostConstruct
     public void init(){
+        List<String> all_cities = Arrays.asList(
+                "Цела Македонија", "Берово", "Битола", "Богданци", "Валандово", "Велес", "Виница", "Гевгелија",
+                "Гостивар", "Дебар", "Делчево", "Демир Капија", "Демир Хисар", "Кавадарци",
+                "Кичево", "Кочани", "Кратово", "Крива Паланка", "Крушево", "Куманово",
+                "Македонски Брод", "Македонска Каменица", "Неготино", "Охрид", "Пехчево",
+                "Прилеп", "Пробиштип", "Радовиш", "Ресен", "Свети Николе", "Скопје",
+                "Струга", "Струмица", "Тетово", "Штип");
+
+        if(cityRepository.findAll().isEmpty()) {
+            for (String city : all_cities) {
+                cityRepository.save(new City(city));
+            }
+        }
+
+
         boolean init = false;
         if(init){
             baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com","password","Dario","Delov","phoneNumber"));
@@ -56,10 +76,10 @@ public class DataInitializer {
             BusinessOwner businessOwner2 = businessOwnerService.getBusinessOwners().get(1);
             BusinessOwner businessOwner3 = businessOwnerService.getBusinessOwners().get(2);
 
-            salonService.createSalon(new SalonAddDTO("Krc krc","Berber","doma","broj", businessOwner1.getId(), (float) 4.2, (float) 42.0037876, (float) 21.9278854));
-            salonService.createSalon(new SalonAddDTO("Nenko","Berber","kaj komsiite","broj1", businessOwner1.getId(), (float) 3.8,(float) 42.0586418, (float) 21.3176565));
-            salonService.createSalon(new SalonAddDTO("Kaj Shekspiro","Frizerski salon za mazhi","prilep","broj2", businessOwner2.getId(), (float) 4.7,(float) 41.4360468, (float) 22.0048696));
-            salonService.createSalon(new SalonAddDTO("Frizerski salon Asim","Frizerski salon za mazhi","veles","broj3", businessOwner1.getId(), (float) 4.2,(float) 41.4676689, (float) 22.0844239));
+            salonService.createSalon(new SalonAddDTO("Krc krc","Berber","doma", "Скопје", "broj", businessOwner1.getId(), (float) 4.2, (float) 42.0037876, (float) 21.9278854));
+            salonService.createSalon(new SalonAddDTO("Nenko","Berber","kaj komsiite","Скопје", "broj1", businessOwner1.getId(), (float) 3.8,(float) 42.0586418, (float) 21.3176565));
+            salonService.createSalon(new SalonAddDTO("Kaj Shekspiro","Frizerski salon za mazhi","prilep","Прилеп","broj2", businessOwner2.getId(), (float) 4.7,(float) 41.4360468, (float) 22.0048696));
+            salonService.createSalon(new SalonAddDTO("Frizerski salon Asim","Frizerski salon za mazhi","veles","Велес", "broj3", businessOwner1.getId(), (float) 4.2,(float) 41.4676689, (float) 22.0844239));
 
             Salon salon1 = salonService.getSalons().get(1);
             Salon salon2 = salonService.getSalons().get(2);

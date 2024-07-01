@@ -7,13 +7,11 @@ import mk.frizer.model.dto.SalonUpdateDTO;
 import mk.frizer.model.dto.TagAddDTO;
 import mk.frizer.model.events.SalonCreatedEvent;
 import mk.frizer.model.events.SalonUpdatedEvent;
+import mk.frizer.model.exceptions.CityNotFoundException;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.TagNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
-import mk.frizer.repository.BusinessOwnerRepository;
-import mk.frizer.repository.EmployeeRepository;
-import mk.frizer.repository.SalonRepository;
-import mk.frizer.repository.TagRepository;
+import mk.frizer.repository.*;
 import mk.frizer.service.SalonService;
 import mk.frizer.utilities.DistanceCalculator;
 import org.springframework.context.ApplicationEventPublisher;
@@ -39,14 +37,16 @@ public class SalonServiceImpl implements SalonService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final DistanceCalculator distanceCalculator;
     private static final String UPLOAD_DIR = "src/main/resources/static/images/salons/";
+    private final CityRepository cityRepository;
 
-    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator) {
+    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator, CityRepository cityRepository) {
         this.salonRepository = salonRepository;
         this.businessOwnerRepository = businessOwnerRepository;
         this.employeeRepository = employeeRepository;
         this.tagRepository = tagRepository;
         this.applicationEventPublisher = applicationEventPublisher;
         this.distanceCalculator = distanceCalculator;
+        this.cityRepository = cityRepository;
     }
 
     @Override
@@ -64,8 +64,10 @@ public class SalonServiceImpl implements SalonService {
     @Transactional
     public Optional<Salon> createSalon(SalonAddDTO salonAddDTO) {
         BusinessOwner businessOwner = businessOwnerRepository.findById(salonAddDTO.getBusinessOwnerId()).orElseThrow(UserNotFoundException::new);
+        City city = cityRepository.findByName(salonAddDTO.getCity())
+                .orElseThrow(CityNotFoundException::new);
 
-        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), salonAddDTO.getPhoneNumber(), businessOwner,salonAddDTO.getRating(),salonAddDTO.getLatitude(),salonAddDTO.getLongitude());
+        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), city, salonAddDTO.getPhoneNumber(), businessOwner, salonAddDTO.getRating(), salonAddDTO.getLatitude(), salonAddDTO.getLongitude());
 
         salonRepository.save(salon);
 
@@ -159,15 +161,17 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public List<Salon> filterSalons(String name, String city, Float distance, Float rating, String userLocation){
-//        List<Salon> salonByName = salonRepository.findAllByNameContaining(name);
+    public List<Salon> filterSalons(String name, String city, Float distance, Float rating, String userLocation) {
         List<Salon> salonByName = salonRepository.findAll()
                 .stream().filter(salon -> salon.getName().toLowerCase().contains(name.toLowerCase()))
                 .toList();
         List<Salon> salonsByRating = salonRepository.findAllByRatingGreaterThanEqual(rating);
-        List<Salon> salonsByLocation;
+        List<Salon> salonsByLocation = new ArrayList<>();
         if (!city.equals("Цела Македонија")) {
-            salonsByLocation = salonRepository.findAllByLocationContaining(city);
+            Optional<City> city1 = cityRepository.findByNameEqualsIgnoreCase(city);
+            if (city1.isPresent()) {
+                salonsByLocation = city1.get().getSalonsInCity();
+            }
         } else {
             salonsByLocation = this.getSalons();
         }

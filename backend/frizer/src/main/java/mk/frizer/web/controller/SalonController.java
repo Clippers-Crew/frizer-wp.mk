@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import mk.frizer.model.*;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.service.*;
+import mk.frizer.service.impl.CityServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,14 @@ public class SalonController {
     private final ReviewService reviewService;
     private final CustomerService customerService;
     private final BaseUserService baseUserService;
+    private final CityService cityService;
 
-    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService) {
+    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService, CityService cityService) {
         this.salonService = salonService;
         this.reviewService = reviewService;
         this.customerService = customerService;
         this.baseUserService = baseUserService;
+        this.cityService = cityService;
     }
 
     @GetMapping("/{id}")
@@ -93,7 +96,7 @@ public class SalonController {
         if (distance == null || distance < 0) {
             distance = (float) 300;
         }
-        if (city == null) {
+        if (city == null || city.isEmpty()) {
             city = "Цела Македонија";
         }
 
@@ -113,6 +116,8 @@ public class SalonController {
                             @RequestParam(name = "sort", required = false) String sortingMethod,
                             Model model, HttpSession session) {
         setSearchAttributes(name, rating, distance, city, sortingMethod, model, session);
+        model.addAttribute("cities", cityService.getCities());
+        model.addAttribute("salonRatings", reviewService.getStatisticsForSalon(salonService.getSalons()));
         model.addAttribute("bodyContent", "salon-list");
         return "master-template";
     }
