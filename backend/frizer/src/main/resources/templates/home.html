@@ -57,10 +57,11 @@
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
-                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> reviews)
+                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> рецензии)
                 </p>
-                <p class="salonLocation" th:text="${salon.getLocation()}">
+                <p class="salonLocation" >
                     <i class="ri-map-pin-line"></i>
+                    <span th:text="${salon.getLocation()} + ', ' + ${salon.getCity()}"></span>
                 </p>
                 <a th:href="@{'/salons/{id}' (id=${salon.getId()})}">
                 <button class="salonButton">Прегледај</button>

@@ -106,15 +106,18 @@
             <div class="salonCard" th:each="salon : ${salons}">
                 <img class="salonImage" th:src="@{/images/salon_image.png}" alt="Salon"/>
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
-                <p class="salonDistance" th:data-salon-id="${salon.getId()}"
-                   th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
                     <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span
-                        th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> reviews)
+                        th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> рецензии)
                 </p>
-                <p class="salonLocation" th:text="${salon.getLocation()}">
+                <p>Одалеченост
+                <span class="salonDistance" th:data-salon-id="${salon.getId()}"
+                      th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></span>
+                </p>
+                <p class="salonLocation" >
                     <i class="ri-map-pin-line"></i>
+                    <span th:text="${salon.getLocation()} + ', ' + ${salon.getCity()}"></span>
                 </p>
                 <a th:href="@{'/salons/{id}' (id=${salon.getId()})}">
                     <button class="salonButton">Прегледај</button>

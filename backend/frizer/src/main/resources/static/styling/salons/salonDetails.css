@@ -125,10 +125,8 @@
     grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
     gap: 1em;
 }
-
-#openSalon .employees > h1 {
+#openSalon .employees h1{
     grid-column: 1/-1;
-    margin-bottom: 1em;
 }
 
 #openSalon .employee {
@@ -171,3 +169,40 @@
 #openSalon a {
     color: black;
 }
+/* MAP END*/
+
+
+/* ADD REVIEW  &&  ADD EMPLOYEE*/
+#openSalon .reviewAddForm, #openSalon .employeeAddForm{
+    max-width: 50vw;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    gap: 0.5em;
+    justify-content: center;
+    border: 1px solid var(--darker-color);
+    padding: 1em 2em;
+    border-radius: var(--border-radius);
+    grid-column: 1/-1;
+}
+#openSalon .reviewAddForm h2, #openSalon .employeeAddForm h2{
+    grid-column: 1/-1;
+    margin-bottom: 0.5em;
+}
+
+#openSalon .reviewAddForm input,
+#openSalon .reviewAddForm select,
+#openSalon .reviewAddForm textarea,
+#openSalon .employeeAddForm select{
+    box-sizing: border-box;
+    padding: 1em;
+    background-color: #d9d9d9;
+    border-radius: var(--border-radius);
+    border: none;
+}
+#openSalon .reviewAddForm .primaryButton,
+#openSalon .employeeAddForm .primaryButton {
+    margin-top: 1em;
+    grid-column: 2/3;
+    justify-self: flex-end;
+}
+/* ADD REVIEW  &&  ADD EMPLOYEE END*/
