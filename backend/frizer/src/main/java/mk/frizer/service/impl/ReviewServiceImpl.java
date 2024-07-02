@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.ReviewAddDTO;
 import mk.frizer.model.dto.ReviewUpdateDTO;
-import mk.frizer.model.events.SalonUpdatedEvent;
 import mk.frizer.model.exceptions.ReviewNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.BaseUserRepository;
@@ -12,8 +11,6 @@ import mk.frizer.repository.CustomerRepository;
 import mk.frizer.repository.EmployeeRepository;
 import mk.frizer.repository.ReviewRepository;
 import mk.frizer.service.ReviewService;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -111,6 +107,18 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public ReviewStats getStatisticsForEmployee(Employee employee) {
+
+        Double rating = reviewRepository.findAll().stream().filter(r -> r.getUserTo().equals(employee.getBaseUser()))
+                .mapToDouble(e -> e.getRating()).average().orElse(0.0);
+        int numberOfReviews = (int) reviewRepository.findAll().stream()
+                .filter(r -> r.getUserTo().equals(employee.getBaseUser()))
+                .count();
+        ReviewStats reviewStats = new ReviewStats(rating, numberOfReviews);
+        return reviewStats;
+    }
+
+    @Override
     public Map<Long, ReviewStats> getStatisticsForSalon(List<Salon> salons) {
         Map<Long, ReviewStats> salonMap = new HashMap<>();
         for (Salon salon : salons) {
@@ -136,6 +144,31 @@ public class ReviewServiceImpl implements ReviewService {
             salonMap.put(salon.getId(), salonStats);
         }
         return salonMap;
+    }
+    @Override
+    public ReviewStats getStatisticsForSalon(Salon salon) {
+
+            Map<Long, ReviewStats> employeeMap = getStatisticsForEmployee(salon.getEmployees());
+
+            ReviewStats salonStats = employeeMap.values().stream()
+                    .collect(Collector.of(
+                            () -> new double[3],
+                            (a, rs) -> {
+                                a[0] += rs.getRating();
+                                a[1] += rs.getNumberOfReviews();
+                                a[2]++;
+                            },
+                            (a, b) -> { // combiner
+                                a[0] += b[0];
+                                a[1] += b[1];
+                                a[2] += b[2];
+                                return a;
+                            },
+                            a -> new ReviewStats(a[0] / (a[2] == 0 ? 1 : a[2]), (int) a[1]) // finisher
+                    ));
+
+
+        return salonStats;
     }
 
     @Override

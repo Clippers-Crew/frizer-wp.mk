@@ -24,7 +24,11 @@ public interface ReviewService {
 
     Map<Long, ReviewStats> getStatisticsForEmployee(List<Employee> employees);
 
+    ReviewStats getStatisticsForEmployee(Employee employee);
+
     Map<Long, ReviewStats> getStatisticsForSalon(List<Salon> salons);
+
+    ReviewStats getStatisticsForSalon(Salon salon);
 
     List<Review> getReviewsForEmployees(List<Employee> employees);
 }

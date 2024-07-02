@@ -19,63 +19,129 @@
         <div class="row">
             <i class="ri-map-pin-line"></i>
             <p class="salonLocation" th:text="${salon.getLocation()}"></p>
-            <p class="salonRating"><i class="fas fa-star"></i> 4.4 (80reviews)</p>
+            <p class="salonRating"><i class="fas fa-star"></i> <span th:text="${salonStats.getRating()}"></span> (<span
+                    th:text="${salonStats.getNumberOfReviews()}"></span> <span
+                    th:text="${salonStats.getNumberOfReviews() > 1 ? 'reviews': 'review'}"></span>)</p>
         </div>
     </div>
 
     <div class="employees">
-        <h1>Вработени</h1>
-        <div class="employee" th:each="employee : ${employees}">
-            <div class="employeeImage">
-                <img th:src="@{/salon_image.png}" alt="Barber image"/>
-            </div>
-            <div class="employeeName">
-                <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
-            </div>
-            <p class="employeeRating"
-               th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'"></p>
-            <br>
-            <button class="confirmationButton">Резервирај</button>
-        </div>
-    </div>
-
-    <div class="reviews">
-        <h1>Резиме на рецензии</h1>
-        <div class="review" th:each="review : ${reviews}">
-            <div class="row">
-                <div class="reviewName">
-                    <h2 th:text="${(review.getUserFrom()?.getFirstName() ?: '') + ' ' + (review.getUserFrom()?.getLastName() ?: '')}"></h2>
+        <h1>Вработен</h1>
+        <div class="cards">
+            <div class="employee salonCard" th:each="employee : ${employees}">
+                <div class="employeeImage">
+                    <img src="../images/salon_image.png" alt="Barber image"/>
                 </div>
-                <div class="reviewEmployeeName"
-                     th:text="${(review.getUserTo()?.getFirstName() ?: '') + ' ' + (review.getUserTo()?.getLastName() ?: '')}"></div>
+                <div class="employeeName">
+                    <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
+                </div>
+                <p class="employeeRating"
+                   th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'"></p>
+                <br>
+                <form method="post" th:action="'/appointments/reserve/'+${employee.getId()}">
+                    <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                    <button class="employeeButton">Резервирај</button>
+                </form>
             </div>
-            <div class="row">
-                <div class="reviewStars" th:text="${review.getRating()}"></div>
-<!--                <div class="reviewDate"-->
-<!--                     th:text="${review.getDate().format(formatter)}"></div>-->
-            </div>
-            <div class="row">
-                <div class="reviewText" th:text="${review.getComment()}">
+        </div>
+    </div>
 
+
+            <div class="reviews">
+                <h1>Резиме на рецензии</h1>
+                <div class="review" th:each="review : ${reviews}">
+                    <div class="row">
+                        <div class="reviewName">
+                            <h2 th:text="${(review.getUserFrom()?.getFirstName() ?: '') + ' ' + (review.getUserFrom()?.getLastName() ?: '')}"></h2>
+                        </div>
+                        <div class="reviewEmployeeName"
+                             th:text="${(review.getUserTo()?.getFirstName() ?: '') + ' ' + (review.getUserTo()?.getLastName() ?: '')}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="reviewStars">
+                            <span th:text="${review.getRating()}"></span>
+                            <span>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                    </span>
+                        </div>
+                        <div class="reviewDate"
+                             th:text="${review.getDate().format(formatter)}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="reviewText" th:text="${review.getComment()}">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <form action="/reviews/add" method="post">
+                        <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                        <!--                TODO add field for current customer -->
+                        <label for="comment">Коментар</label>
+                        <input type="text" name="comment" id="comment">
+                        <br>
+                        <label for="rating">Оценка</label>
+                        <input type="number" name="rating" id="rating">
+                        <br>
+                        <label for="employee">Вработен</label>
+                        <select name="employeeId" id="employee">
+                            <option th:each="employee: ${employees}" th:value="${employee.getId()}"
+                                    th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}">
+                            </option>
+                        </select>
+                        <br>
+                        <label for="customer">Клиент</label>
+                        <select name="customerId" id="customer">
+                            <option th:each="customer: ${customers}" th:value="${customer.getId()}"
+                                    th:text="${customer.getBaseUser().getFirstName() + ' ' + customer.getBaseUser().getLastName()}">
+                            </option>
+                        </select>
+                        <br>
+                        <button type="submit" class="primaryButton">Додади рецензија</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="employees">
+                    <h1>Вработени</h1>
+                    <div class="employee" th:each="employee : ${employees}">
+                        <div class="employeeImage">
+                            <!--                <img th:src="@{/images/salon_image.png}" alt="Barber image"/>-->
+                            <img src="../static/images/salons/default/default_barber.jpg" alt="Barber image"/>
+                        </div>
+                        <div class="employeeName">
+                            <h2 th:text="${employee.getBaseUser().getFirstName()}"></h2>
+                        </div>
+                        <p class="employeeRating">
+                            <span th:text="${employeeMap[employee.id].getRating()}"></span>
+                            <i class="ri-star-fill"></i>
+                            <span th:text="'(' + ${employeeMap[employee.id].getNumberOfReviews()} + ' reviews)'"></span>
+                        </p>
+                        <p class="employeeExperience">Working since </p>
+                    </div>
+                </div>
+                <div>
+                    <form action="/employees/add" method="post">
+                        <h2>Додади вработен</h2>
+                        <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                        <label for="userId">Корисник</label>
+                        <select name="userId" id="userId">
+                            <option th:each="user: ${baseUsers}" th:value="${user.getId()}"
+                                    th:text="${user.getFirstName() + ' ' + user.getLastName()}">
+                            </option>
+                        </select>
+                        <br>
+                        <button type="submit" class="primaryButton">Додади вработен</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="employees">
-        <h1>Вработени</h1>
-        <div class="employee" th:each="employee : ${employees}">
-            <div class="employeeImage">
-                <img th:src="@{/images/salon_image.png}" alt="Barber image"/>
-            </div>
-            <div class="employeeName">
-                <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
-            </div>
-            <p class="employeeRating"
-               th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'">
-                5.0 (80 reviews) </p>
-        </div>
-    </div>
-
-    <div id="map"></div>
+            <div id="map" th:salon="${salonAsString}"></div>
+            <script th:src="@{../static/javascript/drawMap.js}" defer></script>
 </div>
