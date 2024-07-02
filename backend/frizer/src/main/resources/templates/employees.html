@@ -38,10 +38,9 @@
                 <p class="employeeRating"
                    th:text="${employeeMap[employee.id].getRating() + ' dzvezdi (' + employeeMap[employee.id].getNumberOfReviews()}+' reviews)'"></p>
                 <br>
-                <form method="post" th:action="'/appointments/reserve/'+${employee.getId()}">
-                    <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                <a th:href="'/appointments/reserve/'+${employee.getId()}+'?salonId='+${salon.getId()}">
                     <button class="employeeButton">Резервирај</button>
-                </form>
+                </a>
             </div>
         </div>
     </div>

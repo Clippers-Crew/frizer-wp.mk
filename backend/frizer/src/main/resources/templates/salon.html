@@ -45,7 +45,9 @@
             <div class="serviceType" th:each="treatment : ${treatments}">
                 <p class="serviceTitle" th:text="${treatment.getName()}"></p>
                 <p class="servicePrice" th:text="${treatment.getPrice() + ' МКД'}"></p>
-                <button class="reserve primaryButton">Резервирај</button>
+                <a th:href="'/appointments/'+${salon.getId()}">
+                    <button class="reserve primaryButton">Резервирај</button>
+                </a>
             </div>
             <hr>
 
@@ -130,20 +132,21 @@
                 </p>
                 <p class="employeeExperience">Working since </p>
             </div>
-            <form action="/employees/add" method="post" class="employeeAddForm">
-                <h2>Додади вработен</h2>
-                <input type="hidden" name="salonId" th:value="${salon.getId()}">
-                <label for="userId">Корисник</label>
-                <select name="userId" id="userId">
-                    <option th:each="user: ${baseUsers}" th:value="${user.getId()}"
-                            th:text="${user.getFirstName() + ' ' + user.getLastName()}">
-                    </option>
-                </select>
-                <button type="submit" class="primaryButton">Додади вработен</button>
-            </form>
         </div>
-
-        <div id="map" th:salon="${salonAsString}"></div>
-        <script th:src="@{/javascript/drawMap.js}" defer></script>
-
+        <form action="/employees/add" method="post" class="employeeAddForm">
+            <h2>Додади вработен</h2>
+            <input type="hidden" name="salonId" th:value="${salon.getId()}">
+            <label for="userId">Корисник</label>
+            <select name="userId" id="userId">
+                <option th:each="user: ${baseUsers}" th:value="${user.getId()}"
+                        th:text="${user.getFirstName() + ' ' + user.getLastName()}">
+                </option>
+            </select>
+            <button type="submit" class="primaryButton">Додади вработен</button>
+        </form>
     </div>
+
+    <div id="map" th:salon="${salonAsString}"></div>
+    <script th:src="@{/javascript/drawMap.js}" defer></script>
+
+</div>

@@ -54,7 +54,7 @@ public class AppointmentController {
         return "master-template";
     }
 
-    @PostMapping("/reserve/{id}")
+    @GetMapping("/reserve/{id}")
     public String getAvailableAppointments(Model model, @PathVariable Long id, @RequestParam Long salonId) {
 
         LocalDateTime start = LocalDateTime.now();
