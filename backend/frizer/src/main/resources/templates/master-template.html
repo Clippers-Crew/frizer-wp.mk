@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styling/root.css">
-    <link rel="stylesheet" href="../static/styling/navbar.css">
-    <link rel="stylesheet" href="../static/styling/footer.css">
-    <link rel="stylesheet" href="../static/styling/home/landingPage.css">
-    <link rel="stylesheet" href="../static/styling/home/featuredSalons.css">
+    <link rel="stylesheet" th:href="@{/styling/root.css}">
+    <link rel="stylesheet" th:href="@{/styling/navbar.css}">
+    <link rel="stylesheet" th:href="@{/styling/footer.css}">
+    <link rel="stylesheet" th:href="@{/styling/home/landingPage.css}">
+    <link rel="stylesheet" th:href="@{/styling/home/featuredSalons.css}">
 
-    <!--        <link rel="stylesheet" href="../static/styling/salons/confirmation.css"/>-->
-    <link rel="stylesheet" href="../static/styling/salons/openSalon.css"/>
-    <link rel="stylesheet" href="../static/styling/salons/salonsList.css"/>
-    <!--    <link rel="stylesheet" href="../static/styling/icons.css"/>-->
-    <link rel="stylesheet" href="../static/styling/map/salonsMap.css"/>
+    <!--        <link rel="stylesheet" th:href=@{../static/styling/salons/confirmation.css"/>-->
+    <link rel="stylesheet" th:href="@{/styling/salons/openSalon.css}"/>
+    <link rel="stylesheet" th:href="@{/styling/salons/salonsList.css}"/>
+    <!--    <link rel="stylesheet" th:href=@{../static/styling/icons.css"/>-->
+    <link rel="stylesheet" th:href="@{/styling/map/salonsMap.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -25,8 +25,8 @@
 
 <main th:include="${bodyContent}"></main>
 
-<footer th:replace="fragments/footer"/>
-<script src="../static/javascript/home.js"></script>
-<script src="../static/javascript/saveUserLocation.js"></script>
+<footer th:replace="fragments/footer"></footer>
+<script th:src="@{/javascript/navigation.js}"></script>
+<script th:src="@{/javascript/saveUserLocation.js}"></script>
 </body>
 </html>

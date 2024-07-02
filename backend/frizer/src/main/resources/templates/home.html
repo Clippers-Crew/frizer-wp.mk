@@ -53,7 +53,7 @@
         <h1>Најчесто пребарувани салони</h1>
         <div class="cards">
             <div class="salonCard" th:each="salon : ${salons}">
-                <img class="salonImage" src="../static/images/salon_image.png" alt="Salon">
+                <img class="salonImage" th:src="@{/images/salon_image.png}" alt="Salon">
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>

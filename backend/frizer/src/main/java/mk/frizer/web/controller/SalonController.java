@@ -142,7 +142,6 @@ public class SalonController {
     }
 
 
-
 //
 //    @PostMapping("/map")
 //    public String showFilteredSalonsMap(HttpSession session, Model model){
@@ -161,5 +160,6 @@ public class SalonController {
 //        model.addAttribute("bodyContent","map");
 //        return "master-template";
 //    }
+
 
 }

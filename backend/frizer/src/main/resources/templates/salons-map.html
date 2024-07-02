@@ -18,6 +18,6 @@
             </div>
         </div>
         <div id="map" th:salonsList="${salonsAsString}"></div>
-        <script src="../static/javascript/drawSalonsMap.js" defer="defer"></script>
+        <script th:src="@{/javascript/drawSalonsMap.js}" defer="defer"></script>
     </div>
 </div>

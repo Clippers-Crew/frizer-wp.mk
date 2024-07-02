@@ -104,7 +104,7 @@
 
         <div class="cards">
             <div class="salonCard" th:each="salon : ${salons}">
-                <img class="salonImage" src="../static/images/salon_image.png" alt="Salon"/>
+                <img class="salonImage" th:src="@{/images/salon_image.png}" alt="Salon"/>
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonDistance" th:data-salon-id="${salon.getId()}"
                    th:data-salon-lat="${salon.getLatitude()}" th:data-salon-lng="${salon.getLongitude()}"></p>
@@ -121,7 +121,6 @@
                 </a>
             </div>
         </div>
-        <script th:src="@{../static/javascript/geoLocation.js}" defer></script>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script th:src="@{/javascript/geoLocation.js}" defer></script>
     </main>
 </div>

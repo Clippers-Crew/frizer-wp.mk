@@ -19,12 +19,12 @@ function updateDistance(element, id, lat2, lon2) {
             },
             function(error) {
                 console.error("Error getting geolocation:", error);
-                element.innerText = "Location not available";
+                element.innerText = "Непознато";
             },
             { timeout: 10000 } // Set a timeout of 10 seconds
         );
     } else {
-        element.innerText = "Location not available";
+        element.innerText = "Непознато";
     }
 }
 

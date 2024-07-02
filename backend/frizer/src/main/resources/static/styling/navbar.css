@@ -51,6 +51,13 @@ a {
 .nav__logo {
   color: var(--font-color);
   font-weight: var(--font-medium);
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+.nav__logo img{
+  height: 2.5em;
+  border-radius: 0.5em;
 }
 
 .nav__close, 

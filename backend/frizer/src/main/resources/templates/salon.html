@@ -1,19 +1,19 @@
 <div class="bodyContent" id="openSalon">
     <div class="featuredImages">
         <div class="primaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? '../' + salon.getImagePaths()[0] : '/static/images/salons/default/default_salon_1.jpg'}}"
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? salon.getImagePaths()[0] : '/images/salons/default/default_salon_1.jpg'}}"
                  alt="Salon image"/>
         </div>
         <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? '../' + salon.getImagePaths()[1] : '/static/images/salons/default/default_salon_2.jpg'}}"
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? salon.getImagePaths()[1] : '/images/salons/default/default_salon_2.jpg'}}"
                  alt="Salon image"/>
         </div>
         <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? '../' + salon.getImagePaths()[2] : '/static/images/salons/default/default_salon_3.jpg'}}"
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? salon.getImagePaths()[2] : '/images/salons/default/default_salon_3.jpg'}}"
                  alt="Salon image"/>
         </div>
         <div class="teritaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? '../' + salon.getImagePaths()[3] : '/static/images/salons/default/default_salon_4.jpg'}}"
+            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? salon.getImagePaths()[3] : '/images/salons/default/default_salon_4.jpg'}}"
                  alt="Salon image"/>
         </div>
     </div>
@@ -21,7 +21,7 @@
     <div class="salonProfile" th:if="${salon}">
         <div class="row">
             <div class="salonImage">
-                <img src="../static/images/salon_image.png" alt="Salon image"/>
+                <img th:src="@{/images/salon_image.png}" alt="Salon image"/>
             </div>
             <div class="salonName">
                 <h1 th:text="${salon.getName()}"><i class="ri-heart-line"></i></h1>
@@ -117,8 +117,8 @@
         <h1>Вработени</h1>
         <div class="employee" th:each="employee : ${employees}">
             <div class="employeeImage">
-                <!--                <img src="@{/images/salon_image.png}" alt="Barber image"/>-->
-                <img src="../static/images/salons/default/default_barber.jpg" alt="Barber image"/>
+<!--                    <img src="@{/images/salons/default/default_barber.jpg}" alt="Barber image"/>-->
+                <img th:src="@{/images/salons/default/default_barber.jpg}" alt="Barber image"/>
             </div>
             <div class="employeeName">
                 <h2 th:text="${employee.getBaseUser().getFirstName()}"></h2>
@@ -148,6 +148,6 @@
     </div>
 
     <div id="map" th:salon="${salonAsString}"></div>
-    <script th:src="@{../static/javascript/drawMap.js}" defer></script>
+    <script th:src="@{/javascript/drawMap.js}" defer></script>
 
 </div>

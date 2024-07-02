@@ -152,7 +152,7 @@ public class SalonServiceImpl implements SalonService {
         Optional<Salon> salon = getSalonById(id);
         if (salon.isPresent()) {
             String fullPath = filePath.toString().replace("templates/", "");
-            String pathAfterStatic = fullPath.substring(fullPath.indexOf("static"));
+            String pathAfterStatic = fullPath.substring(fullPath.indexOf("static") + 6);
             salon.get().getImagePaths().add(pathAfterStatic);
             salonRepository.save(salon.get());
             return salon;

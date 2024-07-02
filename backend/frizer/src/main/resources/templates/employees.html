@@ -9,7 +9,7 @@
     <div class="salonProfile" th:if="${salon}">
         <div class="row">
             <div class="salonImage">
-                <img src="../static/images/salon_image.png" alt="Salon image"/>
+                <img th:src="@{/images/salon_image.png}" alt="Salon image"/>
             </div>
             <div class="salonName">
                 <h1 th:text="${salon.getName()}"><i class="ri-heart-line"></i></h1>
@@ -27,7 +27,7 @@
         <h1>Вработени</h1>
         <div class="employee" th:each="employee : ${employees}">
             <div class="employeeImage">
-                <img src="../images/salon_image.png" alt="Barber image"/>
+                <img th:src="@{/salon_image.png}" alt="Barber image"/>
             </div>
             <div class="employeeName">
                 <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
@@ -66,7 +66,7 @@
         <h1>Вработени</h1>
         <div class="employee" th:each="employee : ${employees}">
             <div class="employeeImage">
-                <img src="../images/salon_image.png" alt="Barber image"/>
+                <img th:src="@{/images/salon_image.png}" alt="Barber image"/>
             </div>
             <div class="employeeName">
                 <h2 th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}"></h2>
