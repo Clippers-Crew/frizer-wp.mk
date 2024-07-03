@@ -84,8 +84,8 @@ public class DataInitializer {
             Salon salon1 = salonService.getSalons().get(1);
             Salon salon2 = salonService.getSalons().get(2);
 
-            treatmentService.createTreatment(new TreatmentAddDTO("mienje", salon1.getId(), 50.0));
-            treatmentService.createTreatment(new TreatmentAddDTO("pedikir", salon2.getId(), 500.0));
+            treatmentService.createTreatment(new TreatmentAddDTO("mienje", salon1.getId(), 50.0, 1));
+            treatmentService.createTreatment(new TreatmentAddDTO("pedikir", salon2.getId(), 500.0, 2));
 
             Treatment treatment = treatmentService.getTreatments().get(1);
 

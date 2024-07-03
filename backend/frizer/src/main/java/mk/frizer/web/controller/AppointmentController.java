@@ -76,9 +76,6 @@ public class AppointmentController {
     public String getAvailableAppointments(@RequestParam Long salon,
                                            @RequestParam Long treatment,
                                            @RequestParam Long employee, Model model) {
-        LocalDateTime start = DateTimeRounding.roundToNextHour(LocalDateTime.now());
-        LocalDateTime end = start.plusDays(10);
-
         Salon chosenSalon = null;
         Treatment chosenTreatment = null;
         Employee chosenEmployee = null;
@@ -101,7 +98,9 @@ public class AppointmentController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
         Map<Long, ReviewStats> employeeMap = reviewService.getStatisticsForEmployee(employees);
-        List<LocalDateTime> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(start, end);
+
+        List<AppointmentTimeSlot> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(salon, employee, chosenTreatment.getDurationMultiplier());
+
         ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
 
         model.addAttribute("salon", chosenSalon);
@@ -167,7 +166,14 @@ public class AppointmentController {
                                     @RequestParam Long treatment,
                                     @RequestParam Long employee,
                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time) {
-        LocalDateTime dateTo = time.plusMinutes(20);
+        Treatment chosenTreatment = null;
+        try {
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            chosenTreatment = optionalOfTreatment.get();
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        }
+        LocalDateTime dateTo = time.plusMinutes(20L * chosenTreatment.getDurationMultiplier());
         AppointmentAddDTO appointmentAddDTO =
                 new AppointmentAddDTO(time, dateTo, treatment, salon, employee, 1L);
 

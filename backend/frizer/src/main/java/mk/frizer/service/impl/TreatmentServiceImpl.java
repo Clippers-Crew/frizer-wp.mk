@@ -57,7 +57,7 @@ public class TreatmentServiceImpl implements TreatmentService {
         Salon salon = salonRepository.findById(treatmentAddDTO.getSalonId())
                 .orElseThrow(SalonNotFoundException::new);
 
-        Treatment treatment = new Treatment(treatmentAddDTO.getName(), salon, treatmentAddDTO.getPrice());
+        Treatment treatment = new Treatment(treatmentAddDTO.getName(), salon, treatmentAddDTO.getPrice(), treatmentAddDTO.getDuration());
         treatmentRepository.save(treatment);
 
         applicationEventPublisher.publishEvent(new TreatmentCreatedEvent(treatment));
@@ -70,6 +70,7 @@ public class TreatmentServiceImpl implements TreatmentService {
         Treatment treatment = getTreatmentById(id).get();
         treatment.setName(treatmentUpdateDTO.getName());
         treatment.setPrice(treatmentUpdateDTO.getPrice());
+        treatment.setDurationMultiplier(treatmentUpdateDTO.getDuration());
         treatmentRepository.save(treatment);
 
         applicationEventPublisher.publishEvent(new TreatmentUpdatedEvent(treatment));

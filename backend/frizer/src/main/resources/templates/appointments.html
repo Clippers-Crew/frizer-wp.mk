@@ -38,8 +38,8 @@
                 <label for="time">Датум и време:</label>
                 <select name="time" id="time">
                     <option th:each="timeSlot : ${availableTimeSlots}"
-                            th:value="${#temporals.format(timeSlot, 'yyyy-MM-dd HH:mm')}"
-                            th:text="${#temporals.format(timeSlot, 'yyyy-MM-dd HH:mm')}"></option>
+                            th:value="${#temporals.format(timeSlot.getFrom(), 'yyyy-MM-dd HH:mm')}"
+                            th:text="${#temporals.format(timeSlot.getFrom(), 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(timeSlot.getTo(), 'yyyy-MM-dd HH:mm')}"></option>
                 </select>
                 <button type="submit" class="reserve primaryButton">Резервирај</button>
             </form>

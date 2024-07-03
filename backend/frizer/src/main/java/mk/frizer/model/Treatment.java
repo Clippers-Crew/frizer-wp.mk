@@ -17,16 +17,18 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Integer durationMultiplier;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Salon salon;
     private Double price;
 
-    public Treatment(String name, Salon salon, Double price) {
+    public Treatment(String name, Salon salon, Double price, Integer durationMultiplier) {
         this.name = name;
         this.salon = salon;
         this.price = price;
+        this.durationMultiplier = durationMultiplier;
     }
 }
 

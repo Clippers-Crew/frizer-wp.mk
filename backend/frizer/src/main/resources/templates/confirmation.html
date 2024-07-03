@@ -38,8 +38,7 @@
             <div class="treatmentInfoItem" th:text="'Почеток: ' + ${#temporals.format(timeSlot, 'HH:mm')}"></div>
             <div class="treatmentInfoItem" th:text="'Услуги: ' + ${treatment.getName()}"></div>
             <div class="treatmentInfoItem">Тип на коса: Летна</div>
-            <div class="treatmentInfoItem">Траење на третман: 20 минути</div>
-            <div class="treatmentInfoItem">Вкупно времетраење: 20 минути</div>
+            <div class="treatmentInfoItem" th:text="'Траење на третман: '+${20 * treatment.getDurationMultiplier()}+' минути'"></div>
             <br>
             <div class="treatmentInfoItem totalPrice"
                  th:text="'Вкупна цена: ' + ${treatment.getPrice()} + ' ден'"></div>
