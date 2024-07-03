@@ -37,17 +37,20 @@
                         th:text="${employeeStats.getNumberOfReviews()}"></span> <span
                         th:text="${employeeStats.getNumberOfReviews() > 1 ? 'reviews': 'review'}"></span>)</p>
         </div>
-
         <div class="treatmentInfo">
-            <form action="#" method="post">
-                <select name="selectedTimeSlot">
-                    <option th:each="timeSlot : ${availableTimeSlots}" th:value="${timeSlot}" th:text="${#temporals.format(timeSlot, 'yyyy-MM-dd HH:mm')}"></option>
+            <form th:action="'/appointments/confirm/'+${employee.getId()}" method="get">
+                <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                <select name="timeSlot">
+                    <option th:each="timeSlot : ${availableTimeSlots}"
+                            th:value="${#temporals.format(timeSlot, 'yyyy-MM-dd HH:mm')}"
+                            th:text="${#temporals.format(timeSlot, 'yyyy-MM-dd HH:mm')}"></option>
                 </select>
-                <button type="submit">Резервирај</button>
+                <input type="hidden" name="treatmentId" th:value="${treatment.getId()}">
+                <button type="submit" class="employeeButton">Резервирај</button>
             </form>
-
-          </div>
         </div>
+
+    </div>
 
     <div class="reviews">
         <h1>Резиме на рецензии</h1>

@@ -31,7 +31,7 @@ public class TimeSlotGenerator {
             if (isAvailable) {
                 availableTimeSlots.add(current);
             }
-            current = current.plusMinutes(30);
+            current = current.plusMinutes(20);
         }
 
         return availableTimeSlots;
