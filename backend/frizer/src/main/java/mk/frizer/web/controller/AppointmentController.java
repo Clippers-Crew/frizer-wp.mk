@@ -14,11 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/appointments")
@@ -41,19 +41,29 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    @GetMapping("/{id}")
-    public String getHomePage(@PathVariable Long id, Model model, @RequestParam Long treatmentId) {
-
-        Salon salon = salonService.getSalonById(id).orElseThrow(SalonNotFoundException::new);
-        List<Employee> employees = employeeService.getEmployeesForSalon(id);
+    @GetMapping("")
+    public String getAppointments(@RequestParam Long salon, Model model, @RequestParam Long treatment) {
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        }
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
         List<Review> reviews = reviewService.getReviewsForEmployees(employees);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        ReviewStats salonStats = reviewService.getStatisticsForSalon(salon);
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
         Map<Long, ReviewStats> employeeMap = reviewService.getStatisticsForEmployee(employees);
-        Treatment treatment = treatmentService.getTreatmentById(treatmentId).orElseThrow(TreatmentNotFoundException::new);
-        model.addAttribute("treatment", treatment);
+
+        model.addAttribute("treatment", chosenTreatment);
         model.addAttribute("employeeMap", employeeMap);
-        model.addAttribute("salon", salon);
+        model.addAttribute("salon", chosenSalon);
         model.addAttribute("employees", employees);
         model.addAttribute("reviews", reviews);
         model.addAttribute("formatter", formatter);
@@ -62,74 +72,107 @@ public class AppointmentController {
         return "master-template";
     }
 
-    @GetMapping("/reserve/{id}")
-    public String getAvailableAppointments(Model model, @PathVariable Long id, @RequestParam Long salonId, @RequestParam Long treatmentId) {
-
+    @GetMapping("/reserve")
+    public String getAvailableAppointments(@RequestParam Long salon,
+                                           @RequestParam Long treatment,
+                                           @RequestParam Long employee, Model model) {
         LocalDateTime start = DateTimeRounding.roundToNextHour(LocalDateTime.now());
         LocalDateTime end = start.plusDays(10);
-        List<Employee> employees = employeeService.getEmployeesForSalon(salonId);
-        Salon salon = salonService.getSalonById(salonId).orElseThrow(SalonNotFoundException::new);
+
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        Employee chosenEmployee = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            Optional<Employee> employeeOptional = employeeService.getEmployeeById(employee);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+            chosenEmployee =  employeeOptional.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        } catch (EmployeeNotFoundException e) {
+            return "redirect:/app-error?message=" + "Employee not found";
+        }
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
         List<Review> reviews = reviewService.getReviewsForEmployees(employees);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        ReviewStats salonStats = reviewService.getStatisticsForSalon(salon);
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
         Map<Long, ReviewStats> employeeMap = reviewService.getStatisticsForEmployee(employees);
-        Employee employee = employeeService.getEmployeeById(id).orElseThrow(EmployeeNotFoundException::new);
         List<LocalDateTime> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(start, end);
-        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(employee);
-        Treatment treatment = treatmentService.getTreatmentById(treatmentId).orElseThrow(TreatmentNotFoundException::new);
-        model.addAttribute("treatment", treatment);
+        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
+
+        model.addAttribute("salon", chosenSalon);
+        model.addAttribute("employee", chosenEmployee);
+        model.addAttribute("treatment", chosenTreatment);
         model.addAttribute("employeeMap", employeeMap);
-        model.addAttribute("salon", salon);
-        model.addAttribute("employees", employees);
-        model.addAttribute("reviews", reviews);
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
-        model.addAttribute("salon", salon);
         model.addAttribute("employeeStats", employeeStats);
-        model.addAttribute("employee", employee);
         model.addAttribute("availableTimeSlots", availableTimeSlots);
         model.addAttribute("bodyContent", "appointments");
+
         return "master-template";
     }
 
-    @GetMapping("/confirm/{id}")
-    public String confirmAppointment(@PathVariable Long id, Model model, @RequestParam Long salonId,
-                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime timeSlot,
-                                     @RequestParam Long treatmentId) {
-        List<Employee> employees = employeeService.getEmployeesForSalon(salonId);
-        Salon salon = salonService.getSalonById(salonId).orElseThrow(SalonNotFoundException::new);
+    @GetMapping("/confirm")
+    public String confirmAppointment(@RequestParam Long salon,
+                                     @RequestParam Long treatment,
+                                     @RequestParam Long employee,
+                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time,
+                                     Model model) {
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        Employee chosenEmployee = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            Optional<Employee> employeeOptional = employeeService.getEmployeeById(employee);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+            chosenEmployee =  employeeOptional.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        } catch (EmployeeNotFoundException e) {
+            return "redirect:/app-error?message=" + "Employee not found";
+        }
+
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
         List<Review> reviews = reviewService.getReviewsForEmployees(employees);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        ReviewStats salonStats = reviewService.getStatisticsForSalon(salon);
-        Employee employee = employeeService.getEmployeeById(id).orElseThrow(EmployeeNotFoundException::new);
-        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(employee);
-        Treatment treatment = treatmentService.getTreatmentById(treatmentId).orElseThrow(TreatmentNotFoundException::new);
-        List<Tag> tags = tagService.getTagsForSalon(salonId);
-        model.addAttribute("tags", tags);
-        model.addAttribute("treatment", treatment);
-        model.addAttribute("timeSlot", timeSlot);
-        model.addAttribute("salon", salon);
-        model.addAttribute("employees", employees);
-        model.addAttribute("reviews", reviews);
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
+        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
+
+        model.addAttribute("salon", chosenSalon);
+        model.addAttribute("treatment", chosenTreatment);
+        model.addAttribute("employee", chosenEmployee);
+        model.addAttribute("timeSlot", time);
+
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
-        model.addAttribute("salon", salon);
         model.addAttribute("employeeStats", employeeStats);
-        model.addAttribute("employee", employee);
+
         model.addAttribute("bodyContent", "confirmation");
         return "master-template";
     }
 
 
     // TODO: add customerId when login is implemented
-    @PostMapping("/add")
-    String addAppointment(@RequestParam Long salonId, @RequestParam Long treatmentId, @RequestParam Long employeeId,
-                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime dateFrom) {
-        LocalDateTime dateTo = dateFrom.plusMinutes(20);
+    @PostMapping("/create")
+    public String createAppointment(@RequestParam Long salon,
+                                    @RequestParam Long treatment,
+                                    @RequestParam Long employee,
+                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time) {
+        LocalDateTime dateTo = time.plusMinutes(20);
         AppointmentAddDTO appointmentAddDTO =
-                new AppointmentAddDTO(dateFrom, dateTo, treatmentId, salonId, employeeId, 1L);
+                new AppointmentAddDTO(time, dateTo, treatment, salon, employee, 1L);
 
         appointmentService.createAppointment(appointmentAddDTO);
         return "redirect:/home";
     }
+
 }

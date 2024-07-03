@@ -45,9 +45,11 @@
             <div class="serviceType" th:each="treatment : ${treatments}">
                 <p class="serviceTitle" th:text="${treatment.getName()}"></p>
                 <p class="servicePrice" th:text="${treatment.getPrice() + ' МКД'}"></p>
-                <a th:href="'/appointments/'+${salon.getId()}+'?treatmentId='+${treatment.getId()}">
-                    <button class="reserve primaryButton">Резервирај</button>
-                </a>
+                <form action="/appointments" method="get">
+                    <input type="hidden" name="salon" th:value="${salon.getId()}">
+                    <input type="hidden" name="treatment" th:value="${treatment.getId()}">
+                    <button type="submit" class="reserve primaryButton">Резервирај</button>
+                </form>
             </div>
             <hr>
 
@@ -148,5 +150,4 @@
 
     <div id="map" th:salon="${salonAsString}"></div>
     <script th:src="@{/javascript/drawMap.js}" defer></script>
-
 </div>

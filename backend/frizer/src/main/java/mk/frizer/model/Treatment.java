@@ -17,6 +17,7 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Salon salon;

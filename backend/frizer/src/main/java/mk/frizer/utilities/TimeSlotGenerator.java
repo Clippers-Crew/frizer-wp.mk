@@ -2,11 +2,13 @@ package mk.frizer.utilities;
 
 import mk.frizer.model.Appointment;
 import mk.frizer.repository.AppointmentRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class TimeSlotGenerator {
     private final AppointmentRepository appointmentRepository;
@@ -14,7 +16,6 @@ public class TimeSlotGenerator {
     public TimeSlotGenerator(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
     }
-
 
     public List<LocalDateTime> generateAvailableTimeSlots(LocalDateTime start, LocalDateTime end) {
         List<LocalDateTime> availableTimeSlots = new ArrayList<>();

@@ -14,6 +14,7 @@ import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.repository.*;
 import mk.frizer.service.SalonService;
 import mk.frizer.utilities.DistanceCalculator;
+import mk.frizer.utilities.SalonAdapter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

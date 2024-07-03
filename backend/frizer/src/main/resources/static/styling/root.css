@@ -37,6 +37,10 @@
     box-sizing: border-box;
   }
 
+  .bodyContent{
+      min-height: calc(100vh - 55px);
+  }
+
 .primaryButton {
     padding: 1em;
     border: none;

@@ -1,4 +1,4 @@
-package mk.frizer.service.impl;
+package mk.frizer.utilities;
 
 import mk.frizer.model.Salon;
 

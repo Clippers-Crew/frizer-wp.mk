@@ -1,23 +1,4 @@
 <div class="bodyContent">
-    <div class="featuredImages">
-        <div class="primaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 0 ? salon.getImagePaths()[0] : '/images/salons/default/default_salon_1.jpg'}}"
-                 alt="Salon image"/>
-        </div>
-        <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 1 ? salon.getImagePaths()[1] : '/images/salons/default/default_salon_2.jpg'}}"
-                 alt="Salon image"/>
-        </div>
-        <div class="secondaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 2 ? salon.getImagePaths()[2] : '/images/salons/default/default_salon_3.jpg'}}"
-                 alt="Salon image"/>
-        </div>
-        <div class="teritaryImage">
-            <img th:src="@{${salon.getImagePaths() != null && salon.getImagePaths().size() > 3 ? salon.getImagePaths()[3] : '/images/salons/default/default_salon_4.jpg'}}"
-                 alt="Salon image"/>
-        </div>
-    </div>
-
     <div class="salonProfile" th:if="${salon}">
         <div class="row">
             <div class="salonImage">
@@ -64,83 +45,18 @@
                  th:text="'Вкупна цена: ' + ${treatment.getPrice()} + ' ден'"></div>
             <br>
             <div class="treatmentInfoItem">
-                <form action="/appointments/add" method="post">
-                    <input type="hidden" th:value="${treatment.getId()}" name="treatmentId">
-                    <input type="hidden" th:value="${id}" name="employeeId">
-                    <input type="hidden" th:value="${salon.getId()}" name="salonId">
+                <form action="/appointments/create" method="post">
+                    <input type="hidden" name="salon" th:value="${salon.getId()}">
+                    <input type="hidden" name="treatment" th:value="${treatment.getId()}">
+                    <input type="hidden" name="employee" th:value="${employee.getId()}">
+                    <input type="hidden" th:value="${timeSlot}" name="time">
                     <!--                    <input type="hidden" value=1 name="customerId">-->
-                    <input type="hidden" th:value="${timeSlot}" name="dateFrom">
-
-                    <button class="confirmationButton">Потврди</button>
+                    <button class="confirmationButton primaryButton">Потврди</button>
                 </form>
 
             </div>
         </div>
 
     </div>
-    <div class="treatmentContainer">
-        <button class="treatmentItem" th:each="tag : ${tags}" th:text="${tag.getName()}"></button>
-
-    </div>
-    <div class="reviews">
-        <h1>Резиме на рецензии</h1>
-        <div th:if="${reviews == null || reviews.size() == 0}">
-            <p>Нема рецензии</p>
-        </div>
-        <div class="review" th:each="review : ${reviews}">
-            <div class="row">
-                <div class="reviewName">
-                    <h2 th:text="${(review.getUserFrom()?.getFirstName() ?: '') + ' ' + (review.getUserFrom()?.getLastName() ?: '')}"></h2>
-                </div>
-                <div class="reviewEmployeeName"
-                     th:text="${(review.getUserTo()?.getFirstName() ?: '') + ' ' + (review.getUserTo()?.getLastName() ?: '')}"></div>
-            </div>
-            <div class="row">
-                <div class="reviewStars">
-                    <span th:text="${review.getRating()}"></span>
-                    <span>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                    </span>
-                </div>
-                <div class="reviewDate"
-                     th:text="${review.getDate().format(formatter)}"></div>
-            </div>
-            <div class="row">
-                <div class="reviewText" th:text="${review.getComment()}">
-                </div>
-            </div>
-        </div>
-        <form action="/reviews/add" method="post" class="reviewAddForm">
-            <h2>Додади рецензија</h2>
-            <input type="hidden" name="salonId" th:value="${salon.getId()}">
-            <!--                TODO add field for current customer -->
-            <label for="comment">Коментар</label>
-            <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
-            <label for="rating">Оценка</label>
-            <input type="number" name="rating" id="rating">
-            <label for="employee">Вработен</label>
-            <select name="employeeId" id="employee">
-                <option th:each="employee: ${employees}" th:value="${employee.getId()}"
-                        th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}">
-                </option>
-            </select>
-            <!--                TODO client should not be chosen like this...-->
-            <label for="customer">Клиент</label>
-            <select name="customerId" id="customer">
-                <option th:each="customer: ${customers}" th:value="${customer.getId()}"
-                        th:text="${customer.getBaseUser().getFirstName() + ' ' + customer.getBaseUser().getLastName()}">
-                </option>
-            </select>
-            <button type="submit" class="primaryButton">Додади рецензија</button>
-        </form>
-    </div>
-
-
-    <div id="map" th:salon="${salonAsString}"></div>
-    <script th:src="@{/javascript/drawMap.js}" defer></script>
 
 </div>
