@@ -135,6 +135,7 @@
                 <p class="employeeExperience">Working since </p>
             </div>
         </div>
+        <br/>
         <form action="/employees/add" method="post" class="employeeAddForm">
             <h2>Додади вработен</h2>
             <input type="hidden" name="salonId" th:value="${salon.getId()}">
@@ -152,11 +153,11 @@
             <h2>Додади третман</h2>
             <input type="hidden" name="salonId" th:value="${salon.getId()}">
             <label for="name">Име</label>
-            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name" required>
             <label for="price">Цена</label>
-            <input type="number" id="price" name="price">
+            <input type="number" id="price" name="price" required>
             <label for="durationMultiplier">Времетраење</label>
-            <select name="durationMultiplier" id="durationMultiplier">
+            <select name="durationMultiplier" id="durationMultiplier" required>
                 <option th:each="number: ${#numbers.sequence(1,6)}" th:value="${number}"
                         th:text="${number*20}+ 'минути'">
                 </option>
