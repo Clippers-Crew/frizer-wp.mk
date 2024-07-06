@@ -35,4 +35,8 @@ public interface SalonService {
     List<String> getSalonsAsString(List<Salon> salons);
 
     String getSalonAsString(Salon salons);
+
+    boolean isUserAuthorizedToAddTreatment(Long id, String name);
+
+    boolean isUserAuthorizedToAddSalon(Long id, String email);
 }

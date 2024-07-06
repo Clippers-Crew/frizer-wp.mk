@@ -72,4 +72,9 @@ public class CustomerServiceImpl implements CustomerService {
         customer.getAppointmentsHistory().add(appointment);
         return Optional.of(customerRepository.save(customer));
     }
+
+    @Override
+    public Optional<Customer> getCustomerByEmail(String email) {
+        return customerRepository.findByBaseUser_Email(email);
+    }
 }

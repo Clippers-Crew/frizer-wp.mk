@@ -42,11 +42,9 @@ public class RegisterController {
                            @RequestParam String repeatedPassword,
                            @RequestParam String firstName,
                            @RequestParam String lastName,
-                           @RequestParam String phoneNumber
-//                           @RequestParam Role role
-    ) {
+                           @RequestParam String phoneNumber) {
         try{
-            this.userService.register(email,password,repeatedPassword,firstName,lastName,phoneNumber,Role.ROLE_USER);
+            this.userService.register(email,password,repeatedPassword,firstName,lastName,phoneNumber);
             return "redirect:/login";
         } catch (InvalidArgumentsException | PasswordsDoNotMatchException | UsernameAlreadyExistsException exception) {
             return "redirect:/register?error=" + exception.getMessage();

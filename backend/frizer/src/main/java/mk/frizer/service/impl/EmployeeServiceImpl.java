@@ -63,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .orElseThrow(UserNotFoundException::new);
 
             employee = new Employee(baseUser, salon);
-            baseUser.setRole(Role.ROLE_EMPLOYEE);
+            baseUser.getRoles().add(Role.ROLE_EMPLOYEE);
             baseUserRepository.save(baseUser);
         }
         employee.setSalon(salon);

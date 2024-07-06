@@ -16,7 +16,7 @@ public class BaseUserSerializer extends JsonSerializer<BaseUser> {
         jsonGenerator.writeStringField("firstName", baseUser.getFirstName());
         jsonGenerator.writeStringField("lastName", baseUser.getLastName());
         jsonGenerator.writeStringField("phoneNumber", baseUser.getPhoneNumber());
-        jsonGenerator.writeStringField("role", baseUser.getRole().name());
+        jsonGenerator.writeStringField("roles", baseUser.getRoles().toString());
         jsonGenerator.writeEndObject();
     }
 }

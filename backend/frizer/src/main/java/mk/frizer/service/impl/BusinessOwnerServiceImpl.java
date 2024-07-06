@@ -46,7 +46,7 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
         BaseUser baseUser = baseUserRepository.findById(baseUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        baseUser.setRole(Role.ROLE_OWNER);
+        baseUser.getRoles().add(Role.ROLE_OWNER);
         BusinessOwner user = new BusinessOwner(baseUser);
         baseUserRepository.save(baseUser);
         return Optional.of(businessOwnerRepository.save(user));

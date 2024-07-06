@@ -5,6 +5,7 @@ import mk.frizer.model.*;
 import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.dto.SalonUpdateDTO;
 import mk.frizer.model.dto.TagAddDTO;
+import mk.frizer.model.enums.Role;
 import mk.frizer.model.events.SalonCreatedEvent;
 import mk.frizer.model.events.SalonUpdatedEvent;
 import mk.frizer.model.exceptions.CityNotFoundException;
@@ -39,8 +40,9 @@ public class SalonServiceImpl implements SalonService {
     private final DistanceCalculator distanceCalculator;
     private static final String UPLOAD_DIR = "src/main/resources/static/images/salons/";
     private final CityRepository cityRepository;
+    private final UserRepository userRepository;
 
-    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator, CityRepository cityRepository) {
+    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator, CityRepository cityRepository, UserRepository userRepository) {
         this.salonRepository = salonRepository;
         this.businessOwnerRepository = businessOwnerRepository;
         this.employeeRepository = employeeRepository;
@@ -48,6 +50,7 @@ public class SalonServiceImpl implements SalonService {
         this.applicationEventPublisher = applicationEventPublisher;
         this.distanceCalculator = distanceCalculator;
         this.cityRepository = cityRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -199,6 +202,35 @@ public class SalonServiceImpl implements SalonService {
     @Override
     public String getSalonAsString(Salon salon) {
         return SalonAdapter.convertToString(salon);
+    }
+
+    @Override
+    public boolean isUserAuthorizedToAddTreatment(Long id, String userEmail) {
+        Salon salon = salonRepository.findById(id).orElseThrow(SalonNotFoundException::new);
+        BaseUser user = userRepository.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+
+        if (user.getRoles().contains(Role.ROLE_OWNER) && salon.getOwner().getBaseUser().getEmail().equals(userEmail)) {
+            return true;
+        }
+        if (user.getRoles().contains(Role.ROLE_EMPLOYEE)) {
+            for (Employee employee : salon.getEmployees()) {
+                if (employee.getBaseUser().getEmail().equals(userEmail)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isUserAuthorizedToAddSalon(Long id, String email) {
+        Salon salon = salonRepository.findById(id).orElseThrow(SalonNotFoundException::new);
+        BaseUser user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        if (user.getRoles().contains(Role.ROLE_OWNER) && salon.getOwner().getBaseUser().getEmail().equals(email)) {
+            return true;
+        }
+        return false;
     }
 
 }

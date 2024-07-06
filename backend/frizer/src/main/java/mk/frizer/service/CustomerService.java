@@ -15,4 +15,5 @@ public interface CustomerService {
     Optional<Customer> deleteCustomerById(Long id);
     Optional<Customer> addActiveAppointmentForCustomer(Appointment appointment);
     Optional<Customer> addHistoryAppointmentForCustomer(Appointment appointment);
+    Optional<Customer> getCustomerByEmail(String email);
 }

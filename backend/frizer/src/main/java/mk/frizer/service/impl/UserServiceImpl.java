@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseUser register(String email, String password,String repeatPassword, String firstName, String lastName, String phoneNumber,Role role) {
+    public BaseUser register(String email, String password,String repeatPassword, String firstName, String lastName, String phoneNumber) {
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             throw new InvalidUsernameOrPasswordException();
         }
@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
                 passwordEncoder.encode(password),
                 firstName,
                 lastName,
-                phoneNumber,
-                role
+                phoneNumber
         );
 
         return userRepository.save(user);

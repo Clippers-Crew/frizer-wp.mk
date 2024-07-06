@@ -8,9 +8,7 @@ import mk.frizer.model.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
@@ -27,7 +25,8 @@ public class BaseUser implements UserDetails {
     @Column(unique = true)
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Role> roles;
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired =  true;
@@ -40,7 +39,7 @@ public class BaseUser implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.role = Role.ROLE_USER;
+        this.roles = Set.of(Role.ROLE_USER);
     }
     public BaseUser(String email, String password, String firstName, String lastName, String phoneNumber,Role role) {
         this.email = email;
@@ -48,7 +47,8 @@ public class BaseUser implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.roles.add(role);
+
     }
 
     @Override
@@ -60,12 +60,12 @@ public class BaseUser implements UserDetails {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(role);
+        return roles;
     }
 
     @Override

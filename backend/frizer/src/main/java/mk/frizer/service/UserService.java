@@ -5,5 +5,5 @@ import mk.frizer.model.enums.Role;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
-    BaseUser register(String email, String password, String repeatPassword, String firstName, String lastName, String phoneNumber, Role role);
+    BaseUser register(String email, String password, String repeatPassword, String firstName, String lastName, String phoneNumber);
 }

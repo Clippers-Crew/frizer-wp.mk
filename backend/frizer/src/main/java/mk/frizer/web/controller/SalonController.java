@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class SalonController {
     }
 
     @GetMapping("/{id}")
-    public String salonDetailsPage(@PathVariable Long id, Model model) {
+    public String salonDetailsPage(@PathVariable Long id, Model model, Principal principal) {
         Salon salon = salonService.getSalonById(id).orElseThrow(SalonNotFoundException::new);
         List<Tag> tags = salon.getTags();
         List<Treatment> treatments = salon.getSalonTreatments();
@@ -59,7 +60,14 @@ public class SalonController {
                         },
                         a -> new ReviewStats(a[0] / (a[2] == 0 ? 1 : a[2]), (int) a[1]) // finisher
                 ));
-
+        boolean canAddTreatment = false;
+        boolean canAddEmployee = false;
+        if(principal != null)  {
+          canAddTreatment  = salonService.isUserAuthorizedToAddTreatment(id, principal.getName());
+          canAddEmployee = salonService.isUserAuthorizedToAddSalon(id, principal.getName());
+        }
+        model.addAttribute("canAddTreatment", canAddTreatment);
+        model.addAttribute("canAddEmployee", canAddEmployee);
         model.addAttribute("employeeMap", employeeMap);
         model.addAttribute("treatments", treatments);
         model.addAttribute("formatter", formatter);
