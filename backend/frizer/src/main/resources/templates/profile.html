@@ -1,26 +1,47 @@
 <div class="bodyContent" id="profilePage">
-<!--    @Id-->
-<!--    @GeneratedValue(strategy = GenerationType.IDENTITY)-->
-<!--    private Long id;-->
-<!--    @Column(unique = true)-->
-<!--    private String email;-->
-<!--    private String password;-->
-<!--    private String firstName;-->
-<!--    private String lastName;-->
-<!--    @Column(unique = true)-->
-<!--    private String phoneNumber;-->
-<!--    @Enumerated(EnumType.STRING)-->
-<!--    @ElementCollection(fetch = FetchType.EAGER)-->
-<!--    private Set<Role> roles;-->
-<!--    private boolean isAccountNonExpired = true;-->
-<!--    private boolean isAccountNonLocked = true;-->
-<!--    private boolean isCredentialsNonExpired =  true;-->
-<!--    private boolean isEnabled = true;-->
+    <div>
+        <p>First name: <span th:text="${user.getFirstName()}"></span></p>
+        <p>Last name: <span th:text="${user.getLastName()}"></span></p>
+        <p>Email: <span th:text="${user.getEmail()}"></span></p>
+        <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
+    </div>
 
-    <p>First name: <span th:text="${user.getFirstName()}"></span></p>
-    <p>Last name: <span th:text="${user.getLastName()}"></span></p>
-    <p>Email: <span th:text="${user.getEmail()}"></span></p>
-    <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
+    <ul th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">
+        <li th:each="salon: ${businessOwner.getSalonList()}">
+            <a th:href="'/salons/' + ${salon.getId()}" th:text="${salon.getName()}"></a>
+        </li>
+    </ul>
+
+    <form th:if="${businessOwner != null}" action="/salons/create" method="post" >
+        <h2>Додади салон</h2>
+        <label for="name">Име на салонот: </label>
+        <input type="text" name="name" id="name">
+        <br>
+        <label for="description">Опис: </label>
+        <input type="text" name="description" id="description">
+        <br>
+        <label for="location">Локација: </label>
+        <input type="text" name="location" id="location">
+        <br>
+        <label for="city">Град</label>
+        <select id="city" name="city">
+            <option th:each="city : ${cities}" th:value="${city.getName()}" th:text="${city.getName()}"></option>
+        </select>
+        <br>
+        <label for="phoneNumber">Телефонски број: </label>
+        <input type="text" name="phoneNumber" id="phoneNumber">
+        <input type="hidden" name="businessOwner" th:value="${businessOwner.getId()}">
+        <br>
+        <label for="latitude">Географска ширина: </label>
+        <input type="text" name="latitude" id="latitude">
+        <br>
+        <label for="longitude">Географска должина: </label>
+        <input type="text" name="longitude" id="longitude">
+        <br>
+        <button type="submit" class="primaryButton">Додади</button>
+    </form>
+
+    <br>
     <a href="/profile/edit">
         <button class="primaryButton">Edit details</button>
     </a>

@@ -41,6 +41,13 @@ public class BusinessOwnerServiceImpl implements BusinessOwnerService {
     }
 
     @Override
+    public Optional<BusinessOwner> getBusinessOwnerByBaseUserId(Long id) {
+        BusinessOwner owner = businessOwnerRepository.findByBaseUserId(id)
+                .orElse(null);
+        return owner != null ? Optional.of(owner): Optional.empty();
+    }
+
+    @Override
     @Transactional
     public Optional<BusinessOwner> createBusinessOwner(Long baseUserId) {
         BaseUser baseUser = baseUserRepository.findById(baseUserId)

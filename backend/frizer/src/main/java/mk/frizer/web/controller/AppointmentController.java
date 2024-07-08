@@ -78,7 +78,7 @@ public class AppointmentController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
-        model.addAttribute("bodyContent", "employees");
+        model.addAttribute("bodyContent", "appointment-employees");
         return "master-template";
     }
 
@@ -107,7 +107,6 @@ public class AppointmentController {
         List<Review> reviews = reviewService.getReviewsForEmployees(employees);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
-        Map<Long, ReviewStats> employeeMap = reviewService.getStatisticsForEmployee(employees);
 
         List<AppointmentTimeSlot> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(salon, employee, chosenTreatment.getDurationMultiplier());
 
@@ -116,12 +115,12 @@ public class AppointmentController {
         model.addAttribute("salon", chosenSalon);
         model.addAttribute("employee", chosenEmployee);
         model.addAttribute("treatment", chosenTreatment);
-        model.addAttribute("employeeMap", employeeMap);
+
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
         model.addAttribute("employeeStats", employeeStats);
         model.addAttribute("availableTimeSlots", availableTimeSlots);
-        model.addAttribute("bodyContent", "appointments");
+        model.addAttribute("bodyContent", "appointment-choose-app");
 
         return "master-template";
     }
@@ -159,13 +158,14 @@ public class AppointmentController {
         model.addAttribute("salon", chosenSalon);
         model.addAttribute("treatment", chosenTreatment);
         model.addAttribute("employee", chosenEmployee);
-        model.addAttribute("timeSlot", time);
+        model.addAttribute("startAppointmentTime", time);
+        model.addAttribute("endAppointmentTime", time.plusMinutes(20L * chosenTreatment.getDurationMultiplier()));
 
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
         model.addAttribute("employeeStats", employeeStats);
 
-        model.addAttribute("bodyContent", "confirmation");
+        model.addAttribute("bodyContent", "appointment-confirm");
         return "master-template";
     }
 

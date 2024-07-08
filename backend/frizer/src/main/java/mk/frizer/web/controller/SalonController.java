@@ -2,6 +2,7 @@ package mk.frizer.web.controller;
 
 import jakarta.servlet.http.HttpSession;
 import mk.frizer.model.*;
+import mk.frizer.model.dto.SalonAddDTO;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.service.*;
 import mk.frizer.service.impl.CityServiceImpl;
@@ -161,25 +162,19 @@ public class SalonController {
         return "master-template";
     }
 
-
-//
-//    @PostMapping("/map")
-//    public String showFilteredSalonsMap(HttpSession session, Model model){
-//
-//        SearchQuery retrievedQuery = (SearchQuery) session.getAttribute("searchQuery");
-//
-//        if(retrievedQuery == null){
-//            List<String> salons = salonService.getSalonsAsString(salonService.getSalons());
-//            model.addAttribute("salons", salons);
-//        }
-//        else{
-//
-//            List<String> salons = salonService.getSalonsAsString(retrievedQuery.getSalons());
-//            model.addAttribute("salons",salons);
-//        }
-//        model.addAttribute("bodyContent","map");
-//        return "master-template";
-//    }
+    @PostMapping("/create")
+    public String createSalon(@RequestParam String name,
+                              @RequestParam String description,
+                              @RequestParam String location,
+                              @RequestParam String city,
+                              @RequestParam String phoneNumber,
+                              @RequestParam Long businessOwner,
+                              @RequestParam Float latitude,
+                              @RequestParam Float longitude){
 
 
+        // sesija refresh
+        salonService.createSalon(new SalonAddDTO(name, description, location, city, phoneNumber, businessOwner, (float)0, latitude, longitude));
+        return "redirect:/profile";
+    }
 }

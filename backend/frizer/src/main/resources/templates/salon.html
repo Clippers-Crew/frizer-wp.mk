@@ -114,7 +114,6 @@
             </div>
             <div class="employee" th:each="employee : ${employees}">
                 <div class="employeeImage">
-                    <!--                    <img src="@{/images/salons/default/default_barber.jpg}" alt="Barber image"/>-->
                     <img th:src="@{/images/salons/default/default_barber.jpg}" alt="Barber image"/>
                 </div>
                 <div class="employeeName">
@@ -125,7 +124,7 @@
                     <i class="ri-star-fill"></i>
                     <span th:text="'(' + ${employeeMap[employee.id].getNumberOfReviews()} + ' reviews)'"></span>
                 </p>
-                <p class="employeeExperience">Working since </p>
+                <p class="employeeExperience">Working since 2024</p>
             </div>
         </div>
         <br/>

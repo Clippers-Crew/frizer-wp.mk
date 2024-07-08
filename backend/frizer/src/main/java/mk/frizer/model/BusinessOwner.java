@@ -28,6 +28,7 @@ public class BusinessOwner {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
+
     public BusinessOwner(BaseUser baseUser) {
         this.baseUser = baseUser;
         this.salonList = new ArrayList<>();

@@ -28,18 +28,18 @@ public class BusinessOwnerRestController {
         return businessOwnerService.getBusinessOwners();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BusinessOwner> getBusinessOwners(@PathVariable Long id){
-        return this.businessOwnerService.getBusinessOwnerById(id)
-                .map(owner -> ResponseEntity.ok().body(owner))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @PostMapping("/add/{id}")
     public ResponseEntity<BusinessOwner> createBusinessOwner(@PathVariable Long id) {
         return this.businessOwnerService.createBusinessOwner(id)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BusinessOwner> getBusinessOwners(@PathVariable Long id){
+        return this.businessOwnerService.getBusinessOwnerById(id)
+                .map(owner -> ResponseEntity.ok().body(owner))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete/{id}")

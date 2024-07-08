@@ -52,6 +52,7 @@ public class Salon {
 
     private Float latitude;
     private Float longitude;
+
     public Salon(String name, String description, String location, City city, String phoneNumber,
                  BusinessOwner owner,Float rating,Float latitude, Float longitude) {
         this.name = name;
