@@ -44,13 +44,11 @@ public class RegisterController {
                            @RequestParam String lastName,
                            @RequestParam String phoneNumber) {
         try{
-            this.userService.register(email,password,repeatedPassword,firstName,lastName,phoneNumber);
+            this.userService.register(email, password, repeatedPassword, firstName, lastName, phoneNumber);
             return "redirect:/login";
-        } catch (InvalidArgumentsException | PasswordsDoNotMatchException | UsernameAlreadyExistsException exception) {
+        } catch (UsernameAlreadyExistsException exception) {
             return "redirect:/register?error=" + exception.getMessage();
         }
     }
-
-
 }
 

@@ -89,10 +89,9 @@
             </div>
         </div>
 
-        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm">
+        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm" onsubmit="return validateForm();">
             <h2>Додади рецензија</h2>
             <input type="hidden" name="salonId" th:value="${salon.getId()}">
-            <!--                TODO add field for current customer -->
             <label for="comment">Коментар</label>
             <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
             <label for="rating">Оценка</label>
@@ -164,5 +163,6 @@
     </div>
 
     <div id="map" th:salon="${salonAsString}"></div>
+    <script th:src="@{/javascript/validateForm.js}"></script>
     <script th:src="@{/javascript/drawMap.js}" defer></script>
 </div>

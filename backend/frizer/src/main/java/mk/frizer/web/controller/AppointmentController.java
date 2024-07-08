@@ -1,5 +1,6 @@
 package mk.frizer.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.AppointmentAddDTO;
 import mk.frizer.model.exceptions.EmployeeNotFoundException;
@@ -9,11 +10,18 @@ import mk.frizer.service.*;
 import mk.frizer.service.impl.AppointmentServiceImpl;
 import mk.frizer.utilities.DateTimeRounding;
 import mk.frizer.utilities.TimeSlotGenerator;
+import org.apache.coyote.Request;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,8 +38,9 @@ public class AppointmentController {
     private final TimeSlotGenerator timeSlotGenerator;
     private final TreatmentService treatmentService;
     private final AppointmentServiceImpl appointmentService;
+    private final CustomerService customerService;
 
-    public AppointmentController(SalonService salonService, TagService tagService, ReviewService reviewService, EmployeeService employeeService, TimeSlotGenerator timeSlotGenerator, TreatmentService treatmentService, AppointmentServiceImpl appointmentServiceImpl, AppointmentServiceImpl appointmentService) {
+    public AppointmentController(SalonService salonService, TagService tagService, ReviewService reviewService, EmployeeService employeeService, TimeSlotGenerator timeSlotGenerator, TreatmentService treatmentService, AppointmentServiceImpl appointmentServiceImpl, AppointmentServiceImpl appointmentService, CustomerService customerService) {
         this.salonService = salonService;
         this.tagService = tagService;
         this.reviewService = reviewService;
@@ -39,6 +48,7 @@ public class AppointmentController {
         this.timeSlotGenerator = timeSlotGenerator;
         this.treatmentService = treatmentService;
         this.appointmentService = appointmentService;
+        this.customerService = customerService;
     }
 
     @GetMapping("")
@@ -160,12 +170,12 @@ public class AppointmentController {
     }
 
 
-    // TODO: add customerId when login is implemented
     @PostMapping("/create")
     public String createAppointment(@RequestParam Long salon,
                                     @RequestParam Long treatment,
                                     @RequestParam Long employee,
-                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time) {
+                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time,
+                                    RedirectAttributes redirectAttributes, HttpServletRequest request) {
         Treatment chosenTreatment = null;
         try {
             Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
@@ -173,9 +183,27 @@ public class AppointmentController {
         } catch (TreatmentNotFoundException e) {
             return "redirect:/app-error?message=" + "Treatment not found";
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            redirectAttributes.addFlashAttribute("message", "You need to be logged in to create an appointment.");
+            return "redirect:/login";
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
+        Customer loggedInCustomer = customerService.getCustomerByEmail(email)
+                .orElse(null);
+        Long customerId = null;
+
+        if (loggedInCustomer != null) {
+            customerId = loggedInCustomer.getId();
+        }
+
         LocalDateTime dateTo = time.plusMinutes(20L * chosenTreatment.getDurationMultiplier());
         AppointmentAddDTO appointmentAddDTO =
-                new AppointmentAddDTO(time, dateTo, treatment, salon, employee, 1L);
+                new AppointmentAddDTO(time, dateTo, treatment, salon, employee, customerId);
 
         appointmentService.createAppointment(appointmentAddDTO);
         return "redirect:/home";

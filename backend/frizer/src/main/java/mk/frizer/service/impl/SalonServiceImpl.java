@@ -40,9 +40,9 @@ public class SalonServiceImpl implements SalonService {
     private final DistanceCalculator distanceCalculator;
     private static final String UPLOAD_DIR = "src/main/resources/static/images/salons/";
     private final CityRepository cityRepository;
-    private final UserRepository userRepository;
+    private final BaseUserRepository userRepository;
 
-    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator, CityRepository cityRepository, UserRepository userRepository) {
+    public SalonServiceImpl(SalonRepository salonRepository, BusinessOwnerRepository businessOwnerRepository, EmployeeRepository employeeRepository, TagRepository tagRepository, ApplicationEventPublisher applicationEventPublisher, DistanceCalculator distanceCalculator, CityRepository cityRepository, BaseUserRepository userRepository) {
         this.salonRepository = salonRepository;
         this.businessOwnerRepository = businessOwnerRepository;
         this.employeeRepository = employeeRepository;

@@ -25,9 +25,8 @@ public class DataInitializer {
     private final CustomerService customerService;
     private final ReviewService reviewService;
     private final CityRepository cityRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, SalonService salonService, TreatmentService treatmentService, TagService tagService, EmployeeService employeeService, CustomerService customerService, ReviewService reviewService, CityRepository cityRepository, PasswordEncoder passwordEncoder){
+    public DataInitializer(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, SalonService salonService, TreatmentService treatmentService, TagService tagService, EmployeeService employeeService, CustomerService customerService, ReviewService reviewService, CityRepository cityRepository){
         this.baseUserService = baseUserService;
         this.businessOwnerService = businessOwnerService;
         this.salonService = salonService;
@@ -37,7 +36,6 @@ public class DataInitializer {
         this.customerService = customerService;
         this.reviewService = reviewService;
         this.cityRepository = cityRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -59,12 +57,12 @@ public class DataInitializer {
 
         boolean init = false;
         if(init){
-            baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com", passwordEncoder.encode("password"), "Dario","Delov","phoneNumber"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com", passwordEncoder.encode("password"), "Sanja","Petkova","numberPhone"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("denis@email.com", passwordEncoder.encode("password"), "Denis","Ibraimi","LycaMobile"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("tajfun@email.com", passwordEncoder.encode("password"), "Tajfun","Ventilator","telelink"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("salon@email.com", passwordEncoder.encode("password"), "Salon","Biznis","kabelnet"));
-            baseUserService.createBaseUser(new BaseUserAddDTO("toni@email.com", passwordEncoder.encode("password"), "Toni","Tarabov","telekabel"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("dario@email.com", "password", "Dario","Delov","phoneNumber"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("sanja@email.com", "password", "Sanja","Petkova","numberPhone"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("denis@email.com", "password", "Denis","Ibraimi","LycaMobile"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("tajfun@email.com", "password", "Tajfun","Ventilator","telelink"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("salon@email.com", "password", "Salon","Biznis","kabelnet"));
+            baseUserService.createBaseUser(new BaseUserAddDTO("toni@email.com", "password", "Toni","Tarabov","telekabel"));
             BaseUser baseUser1 = baseUserService.getBaseUsers().get(0);
             BaseUser baseUser2 = baseUserService.getBaseUsers().get(1);
             BaseUser baseUser3 = baseUserService.getBaseUsers().get(2);
@@ -104,8 +102,6 @@ public class DataInitializer {
 
             employeeService.createEmployee(new EmployeeAddDTO(baseUser4.getId(), salon2.getId()));
             employeeService.createEmployee(new EmployeeAddDTO(baseUser5.getId(), salon2.getId()));
-
-            customerService.createCustomer(baseUser6.getId());
 
             Employee employee1 = employeeService.getEmployees().get(0);
             Employee employee2 = employeeService.getEmployees().get(1);

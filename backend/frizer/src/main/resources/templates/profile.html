@@ -1,0 +1,30 @@
+<div class="bodyContent" id="profilePage">
+<!--    @Id-->
+<!--    @GeneratedValue(strategy = GenerationType.IDENTITY)-->
+<!--    private Long id;-->
+<!--    @Column(unique = true)-->
+<!--    private String email;-->
+<!--    private String password;-->
+<!--    private String firstName;-->
+<!--    private String lastName;-->
+<!--    @Column(unique = true)-->
+<!--    private String phoneNumber;-->
+<!--    @Enumerated(EnumType.STRING)-->
+<!--    @ElementCollection(fetch = FetchType.EAGER)-->
+<!--    private Set<Role> roles;-->
+<!--    private boolean isAccountNonExpired = true;-->
+<!--    private boolean isAccountNonLocked = true;-->
+<!--    private boolean isCredentialsNonExpired =  true;-->
+<!--    private boolean isEnabled = true;-->
+
+    <p>First name: <span th:text="${user.getFirstName()}"></span></p>
+    <p>Last name: <span th:text="${user.getLastName()}"></span></p>
+    <p>Email: <span th:text="${user.getEmail()}"></span></p>
+    <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
+    <a href="/profile/edit">
+        <button class="primaryButton">Edit details</button>
+    </a>
+    <a href="/logout">
+        <button>Log out</button>
+    </a>
+</div>

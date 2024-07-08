@@ -26,7 +26,6 @@ public class ReviewController {
     @PostMapping("/add")
     public String addReview(@RequestParam Long salonId,
                             @RequestParam Long employeeId,
-                            @RequestParam(required = false) Long customerId,
                             @RequestParam String comment,
                             @RequestParam Double rating,
                             RedirectAttributes redirectAttributes) {
@@ -40,7 +39,9 @@ public class ReviewController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
 
-        Customer loggedInCustomer = customerService.getCustomerByEmail(email).orElseThrow(CustomerNotFoundException::new);
+        Customer loggedInCustomer = customerService.getCustomerByEmail(email)
+                .orElse(null);
+        Long customerId = null;
         if (loggedInCustomer != null) {
             customerId = loggedInCustomer.getId();
         }

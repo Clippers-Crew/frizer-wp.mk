@@ -5,6 +5,9 @@ import mk.frizer.model.*;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.service.*;
 import mk.frizer.service.impl.CityServiceImpl;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,12 +63,24 @@ public class SalonController {
                         },
                         a -> new ReviewStats(a[0] / (a[2] == 0 ? 1 : a[2]), (int) a[1]) // finisher
                 ));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         boolean canAddTreatment = false;
         boolean canAddEmployee = false;
-        if(principal != null)  {
-          canAddTreatment  = salonService.isUserAuthorizedToAddTreatment(id, principal.getName());
-          canAddEmployee = salonService.isUserAuthorizedToAddSalon(id, principal.getName());
+
+        if (authentication != null && authentication.isAuthenticated() && principal != null) {
+            canAddTreatment  = salonService.isUserAuthorizedToAddTreatment(id, principal.getName());
+            canAddEmployee = salonService.isUserAuthorizedToAddSalon(id, principal.getName());
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            model.addAttribute("employees", employees.stream()
+                    .filter(e -> !e.getBaseUser().getEmail().equals(userDetails.getUsername())).toList());
         }
+        else{
+            model.addAttribute("employees", employees);
+        }
+
         model.addAttribute("canAddTreatment", canAddTreatment);
         model.addAttribute("canAddEmployee", canAddEmployee);
         model.addAttribute("employeeMap", employeeMap);
@@ -73,17 +88,14 @@ public class SalonController {
         model.addAttribute("formatter", formatter);
         model.addAttribute("salon", salon);
         model.addAttribute("salonStats", salonStats);
-        model.addAttribute("employees", employees);
         model.addAttribute("reviews", reviews);
         model.addAttribute("tags", tags);
         model.addAttribute("salonAsString", salonService.getSalonAsString(salon));
         model.addAttribute("customers", customerService.getCustomers());
 
-
         model.addAttribute("baseUsers", baseUserService.getBaseUsers().stream()
                 .filter(e -> !salon.getOwner().getBaseUser().equals(e) &&
                         salon.getEmployees().stream().map(Employee::getBaseUser).noneMatch(emp -> emp.equals(e))));
-
 
         model.addAttribute("bodyContent", "salon");
         return "master-template";
