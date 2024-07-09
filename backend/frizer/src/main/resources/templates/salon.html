@@ -52,7 +52,6 @@
                 </form>
             </div>
             <hr>
-
         </div>
     </div>
 
@@ -89,7 +88,7 @@
             </div>
         </div>
 
-        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm" onsubmit="return validateForm();">
+        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm" onsubmit="return validateReviewForm();">
             <h2>Додади рецензија</h2>
             <input type="hidden" name="salonId" th:value="${salon.getId()}">
             <label for="comment">Коментар</label>

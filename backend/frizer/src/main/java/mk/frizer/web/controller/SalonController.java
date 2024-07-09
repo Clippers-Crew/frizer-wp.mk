@@ -27,13 +27,15 @@ public class SalonController {
     private final ReviewService reviewService;
     private final CustomerService customerService;
     private final BaseUserService baseUserService;
+    private final BusinessOwnerService businessOwnerService;
     private final CityService cityService;
 
-    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService, CityService cityService) {
+    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService, BusinessOwnerService businessOwnerService, CityService cityService) {
         this.salonService = salonService;
         this.reviewService = reviewService;
         this.customerService = customerService;
         this.baseUserService = baseUserService;
+        this.businessOwnerService = businessOwnerService;
         this.cityService = cityService;
     }
 
@@ -168,12 +170,18 @@ public class SalonController {
                               @RequestParam String location,
                               @RequestParam String city,
                               @RequestParam String phoneNumber,
-                              @RequestParam Long businessOwner,
+                              @RequestParam(required = false) Long businessOwner,
+                              @RequestParam(required = false) Long baseUserId,
                               @RequestParam Float latitude,
                               @RequestParam Float longitude){
 
-
-        // sesija refresh
+        if (businessOwner == null && baseUserId != null){
+            BusinessOwner owner = businessOwnerService.createBusinessOwner(baseUserId)
+                    .orElse(null);
+            if (owner != null) {
+                businessOwner = owner.getId();
+            }
+        }
         salonService.createSalon(new SalonAddDTO(name, description, location, city, phoneNumber, businessOwner, (float)0, latitude, longitude));
         return "redirect:/profile";
     }

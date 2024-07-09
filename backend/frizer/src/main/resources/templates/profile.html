@@ -6,14 +6,15 @@
         <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
     </div>
 
+    <h2>Вашите салони:</h2>
     <ul th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">
         <li th:each="salon: ${businessOwner.getSalonList()}">
             <a th:href="'/salons/' + ${salon.getId()}" th:text="${salon.getName()}"></a>
         </li>
     </ul>
 
-    <form th:if="${businessOwner != null}" action="/salons/create" method="post" >
-        <h2>Додади салон</h2>
+    <form action="/salons/create" method="post" id="salonAddForm" onsubmit="return validateSalonAddForm()">
+        <h2>Регистрирај салон</h2>
         <label for="name">Име на салонот: </label>
         <input type="text" name="name" id="name">
         <br>
@@ -30,13 +31,14 @@
         <br>
         <label for="phoneNumber">Телефонски број: </label>
         <input type="text" name="phoneNumber" id="phoneNumber">
-        <input type="hidden" name="businessOwner" th:value="${businessOwner.getId()}">
+        <input type="hidden" name="businessOwner" th:value="${businessOwner != null ? businessOwner.getId() : null}">
+        <input type="hidden" name="baseUserId" th:value="${businessOwner == null ? user.getId(): null}">
         <br>
         <label for="latitude">Географска ширина: </label>
-        <input type="text" name="latitude" id="latitude">
+        <input type="text" name="latitude" id="latitude" title="Од 40.873926 до 42.376477">
         <br>
         <label for="longitude">Географска должина: </label>
-        <input type="text" name="longitude" id="longitude">
+        <input type="text" name="longitude" id="longitude" title="Од 20.453475 do 23.040348">
         <br>
         <button type="submit" class="primaryButton">Додади</button>
     </form>
@@ -48,4 +50,5 @@
     <a href="/logout">
         <button>Log out</button>
     </a>
+    <script th:src="@{/javascript/validateForm.js}"></script>
 </div>

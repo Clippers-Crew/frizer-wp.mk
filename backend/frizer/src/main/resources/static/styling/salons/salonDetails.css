@@ -173,7 +173,9 @@
 
 
 /* ADD REVIEW  &&  ADD EMPLOYEE*/
-#openSalon .reviewAddForm, #openSalon .employeeAddForm, #openSalon .treatmentAddForm {
+#openSalon .reviewAddForm,
+#openSalon .employeeAddForm,
+#openSalon .treatmentAddForm {
     max-width: 50vw;
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -184,7 +186,7 @@
     border-radius: var(--border-radius);
     grid-column: 1/-1;
 }
- #openSalon .treatmentAddForm {
+#openSalon .treatmentAddForm {
       max-width: 50vw;
       display: grid;
       grid-template-columns: 4fr;

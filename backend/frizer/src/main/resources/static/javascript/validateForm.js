@@ -1,4 +1,4 @@
-function validateForm() {
+function validateReviewForm() {
     const ratingInput = document.querySelector(".reviewAddForm #rating")
 
     if (ratingInput) {
@@ -60,16 +60,46 @@ function validateProfileEditForm() {
     return true;
 }
 
+function validateSalonAddForm() {
+    const name = document.querySelector("#salonAddForm #name").value;
+    const description = document.querySelector("#salonAddForm #description").value;
+    const location = document.querySelector("#salonAddForm #location").value;
+    const phoneNumber = document.querySelector("#salonAddForm #phoneNumber").value;
+    const latitude = document.querySelector("#salonAddForm #latitude").value;
+    const longitude = document.querySelector("#salonAddForm #longitude").value;
+
+    if (!isNameOk(name)) {
+        alert("Името треба да содржи само букви и да не биде празно.")
+        return false;
+    }
+
+    if (location.length === 0) {
+        alert("Локацијата не треба да биде празна.")
+        return false;
+    }
+
+    if (!isPhoneOk(phoneNumber)) {
+        alert("Телефонскиот број мора да е 9 карактери и да почнува со 07 или +3897.");
+        return false;
+    }
+
+    if (!isCoordinateOk(latitude, "lat") || !isCoordinateOk(longitude, "lon")) {
+        alert("Географската ширина или должина не се во ред.")
+        return false;
+    }
+
+    return true;
+}
+
 function isNameOk(name) {
-    const hasOnlyLetters = /^[A-Za-z]+$/.test(name);
-    return name !== null && name.length > 0 && hasOnlyLetters;
+    const hasOnlyLettersAndSpaces = /^[A-Za-zА-Яа-яЁё\u0400-\u04FF\u0500-\u052F\s]+$/.test(name);
+    return name !== null && name.length > 0 && hasOnlyLettersAndSpaces;
 }
 
 function isPhoneOk(phone) {
     return (phone.length === 9 && phone.startsWith("07")) ||
         (phone.length === 12 && phone.startsWith("+3897"));
 }
-
 
 function isPasswordOk(password) {
     const minLength = 8;
@@ -79,4 +109,23 @@ function isPasswordOk(password) {
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
     return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+}
+
+function isCoordinateOk(coordinate, type) {
+    //40.873926 - 42.376477 latitude
+    //20.453475 - 23.040348 longitude
+    const isValidCoordinate = /^-?\d+(\.\d+)?$/.test(coordinate);
+    if (isValidCoordinate) {
+        let isTypeGood = false;
+        const value = parseFloat(coordinate);
+
+        if (type === "lat") {
+            isTypeGood = value >= 40.873926 && value <= 42.376477;
+        } else if (type === "lon") {
+            isTypeGood = value >= 20.453475 && value <= 23.040348;
+        }
+
+        return isTypeGood;
+    }
+    return false;
 }

@@ -46,10 +46,10 @@ public class ProfileController {
                 .getBusinessOwnerByBaseUserId(user.getId());
 
         businessOwner.ifPresent(owner -> {
-            model.addAttribute("cities", cityService.getCities().stream().skip(1));
             model.addAttribute("businessOwner", businessOwner.get());
         });
 
+        model.addAttribute("cities", cityService.getCities().stream().skip(1));
         model.addAttribute("user", user);
         return "profile";
     }
