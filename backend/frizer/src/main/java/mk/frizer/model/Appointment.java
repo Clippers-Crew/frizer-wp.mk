@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @Entity
@@ -51,6 +52,16 @@ public class Appointment {
         this.salon = salon;
         this.employee = employee;
         this.customer = customer;
-        this.attended = true;
+        this.attended = false;
+    }
+
+    public String getDateFromFormatted(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return dateFrom.format(formatter);
+    }
+
+    public String getDateToFormatted(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return dateTo.format(formatter);
     }
 }

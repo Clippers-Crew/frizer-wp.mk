@@ -3,6 +3,7 @@ package mk.frizer.web.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.AppointmentAddDTO;
+import mk.frizer.model.exceptions.AppointmentNotFoundException;
 import mk.frizer.model.exceptions.EmployeeNotFoundException;
 import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.TreatmentNotFoundException;
@@ -70,7 +71,9 @@ public class AppointmentController {
             model.addAttribute("customer", customer.get());
         });
 
-        return "appointments";
+        model.addAttribute("bodyContent", "appointments");
+
+        return "master-template";
     }
 
     @PostMapping("/create")
@@ -110,6 +113,21 @@ public class AppointmentController {
 
         appointmentService.createAppointment(appointmentAddDTO);
         return "redirect:/home";
+    }
+
+    @PostMapping("/mark-as-done/{id}")
+    public String markAppointmentAsDone(@PathVariable Long id) {
+        Appointment appointment = appointmentService
+                .getAppointmentById(id).orElseThrow(AppointmentNotFoundException::new);
+        employeeService.addHistoryAppointmentForEmployee(appointment);
+        customerService.addHistoryAppointmentForCustomer(appointment);
+        return "redirect:/appointments";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteAppointment(@PathVariable Long id) {
+        appointmentService.deleteAppointmentById(id);
+        return "redirect:/appointments";
     }
 
 }

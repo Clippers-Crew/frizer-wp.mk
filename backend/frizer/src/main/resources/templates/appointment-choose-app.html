@@ -32,12 +32,6 @@
                 <span th:text="'(' + ${employeeStats.getNumberOfReviews()} + ' reviews)'"></span>
             </p>
             <p class="employeeExperience">Working since 2024</p>
-            <form action="/salons/appointment/reserve" method="get">
-                <input type="hidden" name="salon" th:value="${salon.getId()}">
-                <input type="hidden" name="treatment" th:value="${treatment.getId()}">
-                <input type="hidden" name="employee" th:value="${employee.getId()}">
-                <button type="submit" class="reserve primaryButton">Резервирај</button>
-            </form>
         </div>
     </div>
 

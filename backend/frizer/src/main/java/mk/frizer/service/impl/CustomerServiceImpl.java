@@ -40,8 +40,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<Customer> getCustomerByBaseUserId(Long id) {
         Customer customer = customerRepository.findByBaseUserId(id)
-                .orElseThrow(CustomerNotFoundException::new);
-        return Optional.of(customer);
+                .orElse(null);
+        if (customer != null) {
+            return Optional.of(customer);
+        }
+        return Optional.empty();
     }
 
 
@@ -79,6 +82,8 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = getCustomerById(appointment.getCustomer().getId()).get();
         customer.getAppointmentsActive().remove(appointment);
         customer.getAppointmentsHistory().add(appointment);
+        appointment.setAttended(true);
+        appointmentRepository.save(appointment);
         return Optional.of(customerRepository.save(customer));
     }
 

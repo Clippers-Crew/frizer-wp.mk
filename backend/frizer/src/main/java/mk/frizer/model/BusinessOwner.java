@@ -40,4 +40,8 @@ public class BusinessOwner {
                 ", salonList= " + salonList +
                 "}";
     }
+
+    public String getFullName(){
+        return String.format("%s %s", baseUser.getFirstName(), baseUser.getLastName());
+    }
 }

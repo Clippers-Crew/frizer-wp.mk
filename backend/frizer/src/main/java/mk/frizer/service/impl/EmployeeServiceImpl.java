@@ -43,8 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Optional<Employee> getEmployeeByBaseUserId(Long id) {
         Employee employee = employeeRepository.findByBaseUserId(id)
-                .orElseThrow(EmployeeNotFoundException::new);
-        return Optional.of(employee);
+                .orElse(null);
+        if (employee != null) {
+            return Optional.of(employee);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -52,9 +55,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Salon salon = salonRepository.findById(id)
                 .orElseThrow(SalonNotFoundException::new);
 
-        List<Employee> employees = employeeRepository.findAll().stream().filter(e -> e.getSalon().equals(salon))
+        return employeeRepository.findAll().stream().filter(e -> e.getSalon().equals(salon))
                 .collect(Collectors.toList());
-        return employees;
     }
 
     @Override

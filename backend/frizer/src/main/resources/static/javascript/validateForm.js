@@ -92,7 +92,11 @@ function validateSalonAddForm() {
 }
 
 function confirmDelete() {
-    return confirm("Are you sure you want to delete this item?");
+    return confirm("Дали си сигурен дека сакаш да го откажеш овој термин?");
+}
+
+function confirmDone() {
+    return confirm("Дали си сигурен дека овој термин е завршен?");
 }
 
 function isNameOk(name) {

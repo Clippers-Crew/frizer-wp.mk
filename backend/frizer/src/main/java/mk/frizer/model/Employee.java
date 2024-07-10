@@ -36,10 +36,15 @@ public class Employee {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
+
     public Employee(BaseUser baseUser, Salon salon) {
         this.baseUser = baseUser;
         this.appointmentsActive = new ArrayList<>();
         this.appointmentsHistory = new ArrayList<>();
         this.salon = salon;
+    }
+
+    public String getFullName(){
+        return String.format("%s %s", baseUser.getFirstName(), baseUser.getLastName());
     }
 }

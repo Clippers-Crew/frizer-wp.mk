@@ -30,9 +30,14 @@ public class Customer {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "base_user_id")
     private BaseUser baseUser;
+
     public Customer(BaseUser baseUser) {
         this.baseUser = baseUser;
         this.appointmentsActive = new ArrayList<>();
         this.appointmentsHistory = new ArrayList<>();
+    }
+
+    public String getFullName(){
+        return String.format("%s %s", baseUser.getFirstName(), baseUser.getLastName());
     }
 }

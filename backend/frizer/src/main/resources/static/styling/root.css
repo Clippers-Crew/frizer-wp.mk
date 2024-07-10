@@ -11,6 +11,8 @@
     --dark-color: #20232e;
     --star-color: #ffff16;
     --primary-color: #FF0B23;
+    --secondary-color: #333;
+    --secondary-accent-color: #757575;
     --accent-color: #ff5265;
 
     /*========== Font and typography ==========*/
@@ -55,4 +57,17 @@
 }
 button{
     cursor: pointer;
+}
+
+.secondaryButton{
+    padding: 0.8em 1em;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--secondary-color);
+    color: var(--off-white);
+    /*font-weight: bold;*/
+    cursor: pointer;
+}
+.secondaryButton:hover{
+    background-color: var(--secondary-accent-color);
 }
