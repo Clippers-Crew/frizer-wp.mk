@@ -32,7 +32,7 @@
                 <span th:text="'(' + ${employeeStats.getNumberOfReviews()} + ' reviews)'"></span>
             </p>
             <p class="employeeExperience">Working since 2024</p>
-            <form action="/appointments/reserve" method="get">
+            <form action="/salons/appointment/reserve" method="get">
                 <input type="hidden" name="salon" th:value="${salon.getId()}">
                 <input type="hidden" name="treatment" th:value="${treatment.getId()}">
                 <input type="hidden" name="employee" th:value="${employee.getId()}">
@@ -42,7 +42,7 @@
     </div>
 
     <div class="treatmentInfo">
-        <form action="/appointments/confirm" method="get" class="treatmentChooseTimeForm">
+        <form action="/salons/appointment/confirm" method="get" class="treatmentChooseTimeForm">
             <h2>Одбери термин</h2>
             <input type="hidden" name="salon" th:value="${salon.getId()}">
             <input type="hidden" name="treatment" th:value="${treatment.getId()}">

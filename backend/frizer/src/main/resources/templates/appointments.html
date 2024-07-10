@@ -1,0 +1,20 @@
+<div class="bodyContent">
+    <div class="customerAppointments" th:if="${customer != null}">
+        <ul th:if="${customer.getAppointmentsActive().size() > 0}">
+            <li th:each="appointment: ${customer.getAppointmentsActive()}">
+
+            </li>
+        </ul>
+        <ul th:if="${customer.getAppointmentsHistory().size() > 0}">
+            <li th:each="appointment: ${customer.getAppointmentsHistory()}"></li>
+        </ul>
+    </div>
+    <div class="employeeAppointments" th:if="${employee != null}">
+        <ul th:if="${employee.getAppointmentsActive().size() > 0}">
+            <li th:each="appointment: ${employee.getAppointmentsActive()}"></li>
+        </ul>
+        <ul th:if="${employee.getAppointmentsHistory().size() > 0}">
+            <li th:each="appointment: ${employee.getAppointmentsHistory()}"></li>
+        </ul>
+    </div>
+</div>

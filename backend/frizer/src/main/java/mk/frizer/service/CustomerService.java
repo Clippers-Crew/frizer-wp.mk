@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface CustomerService {
     List<Customer> getCustomers();
     Optional<Customer> getCustomerById(Long id);
+    Optional<Customer> getCustomerByBaseUserId(Long id);
     Optional<Customer> createCustomer(Long baseUserId);
     Optional<Customer> deleteCustomerById(Long id);
     Optional<Customer> addActiveAppointmentForCustomer(Appointment appointment);

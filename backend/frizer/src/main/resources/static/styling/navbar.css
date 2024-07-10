@@ -138,6 +138,7 @@ a {
 .nav__link span {
   position: relative;
   transition: margin .4s;
+  font-weight: 600;
 }
 
 .nav__link span::after {

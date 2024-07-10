@@ -6,10 +6,15 @@
         <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
     </div>
 
-    <h2>Вашите салони:</h2>
+    <h2 th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">Вашите салони:</h2>
     <ul th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">
         <li th:each="salon: ${businessOwner.getSalonList()}">
             <a th:href="'/salons/' + ${salon.getId()}" th:text="${salon.getName()}"></a>
+            <form th:action="@{'/salons/delete/' + ${salon.getId()}}" method="post" onsubmit="return confirmDelete()">
+                <button type="submit" class="primaryButton">
+                    Избриши
+                </button>
+            </form>
         </li>
     </ul>
 

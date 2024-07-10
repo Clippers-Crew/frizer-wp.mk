@@ -12,31 +12,31 @@
 
     <div class="nav__menu" id="nav-menu">
       <ul class="nav__list">
-        <li class="nav__item">
-          <a href="#" class="nav__link">
-            <i class="ri-arrow-right-up-line"></i>
-            <span>Messaging</span>
-          </a>
-        </li>
+<!--        <li class="nav__item">-->
+<!--          <a href="#" class="nav__link">-->
+<!--            <i class="ri-arrow-right-up-line"></i>-->
+<!--            <span>Messaging</span>-->
+<!--          </a>-->
+<!--        </li>-->
 
         <li class="nav__item">
-          <a href="#" class="nav__link">
+          <a href="/appointments" class="nav__link">
             <i class="ri-arrow-right-up-line"></i>
-            <span>Notifications</span>
+            <span>Термини</span>
           </a>
         </li>
 
         <li class="nav__item" sec:authorize="isAnonymous()">
           <a href="/login" class="nav__link">
             <i class="ri-arrow-right-up-line"></i>
-            <span>Log in</span>
+            <span>Најави се</span>
           </a>
         </li>
 
         <li class="nav__item" sec:authorize="isAuthenticated()">
           <a href="/profile" class="nav__link">
             <i class="ri-arrow-right-up-line"></i>
-            <span>Profile</span>
+            <span>Профил</span>
           </a>
         </li>
       </ul>

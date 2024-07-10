@@ -91,6 +91,10 @@ function validateSalonAddForm() {
     return true;
 }
 
+function confirmDelete() {
+    return confirm("Are you sure you want to delete this item?");
+}
+
 function isNameOk(name) {
     const hasOnlyLettersAndSpaces = /^[A-Za-zА-Яа-яЁё\u0400-\u04FF\u0500-\u052F\s]+$/.test(name);
     return name !== null && name.length > 0 && hasOnlyLettersAndSpaces;

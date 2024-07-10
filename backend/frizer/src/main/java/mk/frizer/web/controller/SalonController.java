@@ -3,21 +3,29 @@ package mk.frizer.web.controller;
 import jakarta.servlet.http.HttpSession;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.SalonAddDTO;
+import mk.frizer.model.exceptions.EmployeeNotFoundException;
 import mk.frizer.model.exceptions.SalonNotFoundException;
+import mk.frizer.model.exceptions.TreatmentNotFoundException;
 import mk.frizer.service.*;
 import mk.frizer.service.impl.CityServiceImpl;
+import mk.frizer.utilities.TimeSlotGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collector;
 
 @Controller
@@ -29,18 +37,26 @@ public class SalonController {
     private final BaseUserService baseUserService;
     private final BusinessOwnerService businessOwnerService;
     private final CityService cityService;
+    private final EmployeeService employeeService;
+    private final TreatmentService treatmentService;
+    private final TimeSlotGenerator timeSlotGenerator;
 
-    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService, BusinessOwnerService businessOwnerService, CityService cityService) {
+    public SalonController(SalonService salonService, ReviewService reviewService, CustomerService customerService, BaseUserService baseUserService, BusinessOwnerService businessOwnerService, CityService cityService, EmployeeService employeeService, TreatmentService treatmentService, TimeSlotGenerator timeSlotGenerator) {
         this.salonService = salonService;
         this.reviewService = reviewService;
         this.customerService = customerService;
         this.baseUserService = baseUserService;
         this.businessOwnerService = businessOwnerService;
         this.cityService = cityService;
+        this.employeeService = employeeService;
+        this.treatmentService = treatmentService;
+        this.timeSlotGenerator = timeSlotGenerator;
     }
 
     @GetMapping("/{id}")
-    public String salonDetailsPage(@PathVariable Long id, Model model, Principal principal) {
+    public String salonDetailsPage(@PathVariable Long id,
+                                   @RequestParam(required = false) String error,
+                                   Model model, Principal principal) {
         Salon salon = salonService.getSalonById(id).orElseThrow(SalonNotFoundException::new);
         List<Tag> tags = salon.getTags();
         List<Treatment> treatments = salon.getSalonTreatments();
@@ -68,12 +84,12 @@ public class SalonController {
                 ));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        boolean canAddTreatment = false;
-        boolean canAddEmployee = false;
+        boolean isBusinessOwnerOrEmployee = false;
+        boolean isBusinessOwner = false;
 
         if (authentication != null && authentication.isAuthenticated() && principal != null) {
-            canAddTreatment  = salonService.isUserAuthorizedToAddTreatment(id, principal.getName());
-            canAddEmployee = salonService.isUserAuthorizedToAddSalon(id, principal.getName());
+            isBusinessOwnerOrEmployee  = salonService.isUserAuthorizedToAddTreatment(id, principal.getName());
+            isBusinessOwner = salonService.isUserAuthorizedToAddSalon(id, principal.getName());
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -84,8 +100,8 @@ public class SalonController {
             model.addAttribute("employees", employees);
         }
 
-        model.addAttribute("canAddTreatment", canAddTreatment);
-        model.addAttribute("canAddEmployee", canAddEmployee);
+        model.addAttribute("isBusinessOwnerOrEmployee", isBusinessOwnerOrEmployee);
+        model.addAttribute("isBusinessOwner", isBusinessOwner);
         model.addAttribute("employeeMap", employeeMap);
         model.addAttribute("treatments", treatments);
         model.addAttribute("formatter", formatter);
@@ -95,6 +111,7 @@ public class SalonController {
         model.addAttribute("tags", tags);
         model.addAttribute("salonAsString", salonService.getSalonAsString(salon));
         model.addAttribute("customers", customerService.getCustomers());
+        model.addAttribute("error", error);
 
         model.addAttribute("baseUsers", baseUserService.getBaseUsers().stream()
                 .filter(e -> !salon.getOwner().getBaseUser().equals(e) &&
@@ -183,6 +200,141 @@ public class SalonController {
             }
         }
         salonService.createSalon(new SalonAddDTO(name, description, location, city, phoneNumber, businessOwner, (float)0, latitude, longitude));
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/appointment")
+    public String getAppointments(@RequestParam Long salon, Model model, @RequestParam Long treatment) {
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        }
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
+        List<Review> reviews = reviewService.getReviewsForEmployees(employees);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
+        Map<Long, ReviewStats> employeeMap = reviewService.getStatisticsForEmployee(employees);
+
+        model.addAttribute("treatment", chosenTreatment);
+        model.addAttribute("employeeMap", employeeMap);
+        model.addAttribute("salon", chosenSalon);
+        model.addAttribute("employees", employees);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("formatter", formatter);
+        model.addAttribute("salonStats", salonStats);
+        model.addAttribute("bodyContent", "appointment-employees");
+        return "master-template";
+    }
+
+    @GetMapping("/appointment/reserve")
+    public String getAvailableAppointments(@RequestParam Long salon,
+                                           @RequestParam Long treatment,
+                                           @RequestParam Long employee, Model model) {
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        Employee chosenEmployee = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            Optional<Employee> employeeOptional = employeeService.getEmployeeById(employee);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+            chosenEmployee =  employeeOptional.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        } catch (EmployeeNotFoundException e) {
+            return "redirect:/app-error?message=" + "Employee not found";
+        }
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
+        List<Review> reviews = reviewService.getReviewsForEmployees(employees);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
+
+        List<AppointmentTimeSlot> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(salon, employee, chosenTreatment.getDurationMultiplier());
+
+        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
+
+        model.addAttribute("salon", chosenSalon);
+        model.addAttribute("employee", chosenEmployee);
+        model.addAttribute("treatment", chosenTreatment);
+
+        model.addAttribute("formatter", formatter);
+        model.addAttribute("salonStats", salonStats);
+        model.addAttribute("employeeStats", employeeStats);
+        model.addAttribute("availableTimeSlots", availableTimeSlots);
+        model.addAttribute("bodyContent", "appointment-choose-app");
+
+        return "master-template";
+    }
+
+    @GetMapping("/appointment/confirm")
+    public String confirmAppointment(@RequestParam Long salon,
+                                     @RequestParam Long treatment,
+                                     @RequestParam Long employee,
+                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime time,
+                                     Model model) {
+        Salon chosenSalon = null;
+        Treatment chosenTreatment = null;
+        Employee chosenEmployee = null;
+        try {
+            Optional<Salon> optionalOfSalon = salonService.getSalonById(salon);
+            Optional<Treatment> optionalOfTreatment = treatmentService.getTreatmentById(treatment);
+            Optional<Employee> employeeOptional = employeeService.getEmployeeById(employee);
+            chosenSalon = optionalOfSalon.get();
+            chosenTreatment = optionalOfTreatment.get();
+            chosenEmployee =  employeeOptional.get();
+        } catch (SalonNotFoundException e) {
+            return "redirect:/app-error?message=" + "Salon not found";
+        } catch (TreatmentNotFoundException e) {
+            return "redirect:/app-error?message=" + "Treatment not found";
+        } catch (EmployeeNotFoundException e) {
+            return "redirect:/app-error?message=" + "Employee not found";
+        }
+
+        List<Employee> employees = employeeService.getEmployeesForSalon(salon);
+        List<Review> reviews = reviewService.getReviewsForEmployees(employees);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
+        ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
+
+        model.addAttribute("salon", chosenSalon);
+        model.addAttribute("treatment", chosenTreatment);
+        model.addAttribute("employee", chosenEmployee);
+        model.addAttribute("startAppointmentTime", time);
+        model.addAttribute("endAppointmentTime", time.plusMinutes(20L * chosenTreatment.getDurationMultiplier()));
+
+        model.addAttribute("formatter", formatter);
+        model.addAttribute("salonStats", salonStats);
+        model.addAttribute("employeeStats", employeeStats);
+
+        model.addAttribute("bodyContent", "appointment-confirm");
+        return "master-template";
+    }
+
+
+    @PostMapping("/{id}/image/add")
+    public String addSalonImage(@PathVariable Long id,
+                                @RequestParam("image") MultipartFile image,
+                                @RequestParam Integer imageNo) throws IOException{
+        if (!image.isEmpty()) {
+            salonService.saveImageWithId(id, imageNo, image);
+        }
+        return "redirect:/salons/" + id.toString();
+    }
+
+    @PostMapping("/delete/{id}")
+    public String removeSalon(@PathVariable Long id){
+        salonService.deleteSalonById(id);
         return "redirect:/profile";
     }
 }

@@ -64,7 +64,12 @@ public class Salon {
         this.salonTreatments = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.owner = owner;
-        this.imagePaths = new ArrayList<>();
+        this.imagePaths = List.of(
+                "/images/salons/default/default_salon_1.jpg",
+                "/images/salons/default/default_salon_2.jpg",
+                "/images/salons/default/default_salon_3.jpg",
+                "/images/salons/default/default_salon_4.jpg"
+        );
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;

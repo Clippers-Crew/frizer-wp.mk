@@ -34,7 +34,7 @@
                 <span th:text="'(' + ${employeeMap[employee.id].getNumberOfReviews()} + ' reviews)'"></span>
             </p>
             <p class="employeeExperience">Working since 2024</p>
-            <form action="/appointments/reserve" method="get">
+            <form action="/salons/appointment/reserve" method="get">
                 <input type="hidden" name="salon" th:value="${salon.getId()}">
                 <input type="hidden" name="treatment" th:value="${treatment.getId()}">
                 <input type="hidden" name="employee" th:value="${employee.getId()}">

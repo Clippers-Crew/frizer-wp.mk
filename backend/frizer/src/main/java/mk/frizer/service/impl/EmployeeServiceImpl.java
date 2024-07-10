@@ -41,6 +41,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Optional<Employee> getEmployeeByBaseUserId(Long id) {
+        Employee employee = employeeRepository.findByBaseUserId(id)
+                .orElseThrow(EmployeeNotFoundException::new);
+        return Optional.of(employee);
+    }
+
+    @Override
     public List<Employee> getEmployeesForSalon(Long id) {
         Salon salon = salonRepository.findById(id)
                 .orElseThrow(SalonNotFoundException::new);
@@ -79,6 +86,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        appointmentRepository.deleteAll(employee.get().getAppointmentsActive());
         employeeRepository.deleteById(id);
         return employee;
+    }
+
+    @Override
+    @Transactional
+    public Optional<Employee> deleteEmployeeByIdFromSalon(Long id, Long salonId) {
+        Salon salon = salonRepository.findById(salonId)
+                .orElseThrow(SalonNotFoundException::new);
+        Optional<Employee> employee = salon.getEmployees().stream()
+                .filter(e -> e.getId().equals(id)).findFirst();
+        if (employee.isPresent()) {
+            return deleteEmployeeById(id);
+        }
+        return Optional.empty();
     }
 
     @Override

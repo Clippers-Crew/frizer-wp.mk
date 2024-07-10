@@ -26,8 +26,6 @@ public class Appointment {
     @ManyToOne
     private Treatment treatment;
 
-
-    // TODO check here??
     @ManyToOne
     @JsonIgnore
     private Salon salon;

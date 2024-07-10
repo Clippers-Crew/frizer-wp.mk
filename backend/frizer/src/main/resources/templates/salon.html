@@ -37,15 +37,38 @@
         </div>
     </div>
 
+    <div th:if="${isBusinessOwner}">
+        <h4 th:if="${error != null && error.length > 0}" th:text="${error}"></h4>
+        <form action="/salons/3/image/add" method="post" class="addImageForm" enctype="multipart/form-data">
+            <h2>Додади слика</h2>
+            <label for="image">Слика</label>
+            <input type="file" name="image" id="image" required>
+            <label for="imageNo">Број на слика: </label>
+            <select name="imageNo" id="imageNo">
+                <option value="0">Слика 1</option>
+                <option value="1">Слика 2</option>
+                <option value="2">Слика 3</option>
+                <option value="3">Слика 4</option>
+            </select>
+            <button type="submit" class="primaryButton">
+                Промени
+            </button>
+        </form>
+    </div>
+
     <div class="services">
-        <div class="column">
+        <h1>Третмани</h1>
+        <div th:if="${treatments == null || treatments.size() == 0}">
+            <p>Нема третмани</p>
+        </div>
+        <div class="column" th:if="${treatments != null && treatments.size() > 0}">
             <button class="service" th:each="treatment : ${treatments}" th:text="${treatment.getName()}"></button>
         </div>
-        <div class="column">
+        <div class="column" th:if="${treatments != null && treatments.size() > 0}">
             <div class="serviceType" th:each="treatment : ${treatments}">
                 <p class="serviceTitle" th:text="${treatment.getName()}"></p>
                 <p class="servicePrice" th:text="${treatment.getPrice() + ' МКД'}"></p>
-                <form action="/appointments" method="get">
+                <form action="/salons/appointment" method="get">
                     <input type="hidden" name="salon" th:value="${salon.getId()}">
                     <input type="hidden" name="treatment" th:value="${treatment.getId()}">
                     <button type="submit" class="reserve primaryButton">Резервирај</button>
@@ -88,7 +111,8 @@
             </div>
         </div>
 
-        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm" onsubmit="return validateReviewForm();">
+        <form th:if="${salon.getEmployees().size() != 0}" action="/reviews/add" method="post" class="reviewAddForm"
+              onsubmit="return validateReviewForm();">
             <h2>Додади рецензија</h2>
             <input type="hidden" name="salonId" th:value="${salon.getId()}">
             <label for="comment">Коментар</label>
@@ -127,7 +151,7 @@
             </div>
         </div>
         <br/>
-        <div th:if="${canAddEmployee}">
+        <div th:if="${isBusinessOwner}">
             <form action="/employees/add" method="post" class="employeeAddForm">
                 <h2>Додади вработен</h2>
                 <input type="hidden" name="salonId" th:value="${salon.getId()}">
@@ -140,8 +164,20 @@
                 <button type="submit" class="primaryButton">Додади вработен</button>
             </form>
         </div>
-        <br/>
-        <div th:if="${canAddTreatment}">
+        <div th:if="${isBusinessOwner && employees != null && employees.size() != 0}">
+            <form action="/employees/remove" method="post" class="employeeRemoveForm">
+                <h2>Отстрани вработен</h2>
+                <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                <label for="employeeId">Вработен</label>
+                <select name="employeeId" id="employeeId">
+                    <option th:each="employee: ${employees}" th:value="${employee.getId()}"
+                            th:text="${employee.getBaseUser().getFirstName() + ' ' + employee.getBaseUser().getLastName()}">
+                    </option>
+                </select>
+                <button type="submit" class="primaryButton">Отстрани вработен</button>
+            </form>
+        </div>
+        <div th:if="${isBusinessOwnerOrEmployee}">
             <form action="/treatments/add" method="post" class="treatmentAddForm">
                 <h2>Додади третман</h2>
                 <input type="hidden" name="salonId" th:value="${salon.getId()}">
