@@ -1,12 +1,8 @@
 #appointmentConfirmationPage{
-    margin: 10vh 8vw 5vh;
+    padding: 10vh 8vw 5vh;
 }
 
 /* SALON CARD */
-#appointmentConfirmationPage .salonProfile {
-    margin-top: 10vh;
-}
-
 #appointmentConfirmationPage .row {
     display: flex;
     gap: 1em;

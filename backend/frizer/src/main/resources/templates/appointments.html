@@ -27,7 +27,7 @@
                     <td th:text="${appointment.getEmployee().getFullName()}"></td>
                     <td th:text="${appointment.isAttended() ? 'Да' : 'Не'}"></td>
                     <td>
-                        <form th:action="@{'/appointments/delete/' + ${appointment.getId()}}" method="post" onsubmit="return confirmDelete()">
+                        <form th:if="${!appointment.isDateOneDayFromNow()}" th:action="@{'/appointments/delete/' + ${appointment.getId()}}" method="post" onsubmit="return confirmDelete('термин')">
                             <button type="submit" class="secondaryButton">Откажи термин</button>
                         </form>
                     </td>
@@ -87,7 +87,8 @@
                     <td th:text="${appointment.getCustomer().getFullName()}"></td>
                     <td th:text="${appointment.isAttended() ? 'Да' : 'Не'}"></td>
                     <td class="actionsCell">
-                        <form th:action="@{'/appointments/delete/' + ${appointment.getId()}}" method="post" onsubmit="return confirmDelete()">
+
+                        <form th:if="${!appointment.isDateOneDayFromNow()}" th:action="@{'/appointments/delete/' + ${appointment.getId()}}" method="post" onsubmit="return confirmDelete('термин')">
                             <button type="submit" class="secondaryButton">Откажи термин</button>
                         </form>
                         <form th:action="@{'/appointments/mark-as-done/' + ${appointment.getId()}}" method="post" onsubmit="return confirmDone()">

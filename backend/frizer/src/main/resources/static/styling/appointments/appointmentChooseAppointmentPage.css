@@ -1,12 +1,8 @@
 #appointmentChooseAppointmentPage{
-    margin: 10vh 8vw 5vh;
+    padding: 10vh 8vw 5vh;
 }
 
 /* SALON CARD */
-#appointmentChooseAppointmentPage .salonProfile {
-    margin-top: 10vh;
-}
-
 #appointmentChooseAppointmentPage .row {
     display: flex;
     gap: 1em;

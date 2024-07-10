@@ -91,8 +91,8 @@ function validateSalonAddForm() {
     return true;
 }
 
-function confirmDelete() {
-    return confirm("Дали си сигурен дека сакаш да го откажеш овој термин?");
+function confirmDelete(type) {
+    return confirm(`Дали си сигурен дека сакаш да го откажеш овој ${type}?`);
 }
 
 function confirmDone() {

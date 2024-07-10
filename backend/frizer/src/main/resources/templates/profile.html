@@ -1,59 +1,76 @@
 <div class="bodyContent" id="profilePage">
-    <div>
-        <p>First name: <span th:text="${user.getFirstName()}"></span></p>
-        <p>Last name: <span th:text="${user.getLastName()}"></span></p>
-        <p>Email: <span th:text="${user.getEmail()}"></span></p>
-        <p>Phone number: <span th:text="${user.getPhoneNumber()}"></span></p>
+    <div class="userDetails">
+        <h2>Детали</h2>
+        <p>Име:</p>
+        <p th:text="${user.getFirstName()}"></p>
+        <p>Презиме:</p>
+        <p th:text="${user.getLastName()}"></p>
+        <p>Е-маил:</p>
+        <p th:text="${user.getEmail()}"></p>
+        <p>Телефонски број:</p>
+        <p th:text="${user.getPhoneNumber()}"></p>
+        <div class="buttons">
+            <a href="/profile/edit">
+                <button class="secondaryButton">Промени детали</button>
+            </a>
+            <a href="/logout">
+                <button class="secondaryButton">Log out</button>
+            </a>
+        </div>
     </div>
 
-    <h2 th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">Вашите салони:</h2>
-    <ul th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">
-        <li th:each="salon: ${businessOwner.getSalonList()}">
-            <a th:href="'/salons/' + ${salon.getId()}" th:text="${salon.getName()}"></a>
-            <form th:action="@{'/salons/delete/' + ${salon.getId()}}" method="post" onsubmit="return confirmDelete()">
-                <button type="submit" class="primaryButton">
-                    Избриши
-                </button>
-            </form>
-        </li>
-    </ul>
+
+    <div class="businessOwnerSalons" th:if="${businessOwner != null && businessOwner.getSalonList() != null && businessOwner.getSalonList().size() > 0}">
+        <h2>Вашите салони:</h2>
+        <div class="cards">
+            <div class="salonCard" th:each="salon : ${businessOwner.getSalonList()}">
+                <img class="salonImage" th:src="@{/images/salon_image.png}" alt="Salon">
+                <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
+                <p class="salonRating">
+                    <i class="ri-star-fill"></i>
+                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> рецензии)
+                </p>
+                <p class="salonLocation" >
+                    <i class="ri-map-pin-line"></i>
+                    <span th:text="${salon.getLocation()} + ', ' + ${salon.getCity()}"></span>
+                </p>
+                <div class="buttons">
+                    <a th:href="@{'/salons/{id}' (id=${salon.getId()})}">
+                        <button class="salonButton">Прегледај</button>
+                    </a>
+                    <form th:action="@{'/salons/delete/' + ${salon.getId()}}" method="post"
+                          onsubmit="return confirmDelete('салон')">
+                        <button type="submit" class="secondaryButton">
+                            Избриши
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <form action="/salons/create" method="post" id="salonAddForm" onsubmit="return validateSalonAddForm()">
         <h2>Регистрирај салон</h2>
         <label for="name">Име на салонот: </label>
         <input type="text" name="name" id="name">
-        <br>
         <label for="description">Опис: </label>
         <input type="text" name="description" id="description">
-        <br>
         <label for="location">Локација: </label>
         <input type="text" name="location" id="location">
-        <br>
         <label for="city">Град</label>
         <select id="city" name="city">
             <option th:each="city : ${cities}" th:value="${city.getName()}" th:text="${city.getName()}"></option>
         </select>
-        <br>
         <label for="phoneNumber">Телефонски број: </label>
         <input type="text" name="phoneNumber" id="phoneNumber">
         <input type="hidden" name="businessOwner" th:value="${businessOwner != null ? businessOwner.getId() : null}">
         <input type="hidden" name="baseUserId" th:value="${businessOwner == null ? user.getId(): null}">
-        <br>
         <label for="latitude">Географска ширина: </label>
         <input type="text" name="latitude" id="latitude" title="Од 40.873926 до 42.376477">
-        <br>
         <label for="longitude">Географска должина: </label>
         <input type="text" name="longitude" id="longitude" title="Од 20.453475 do 23.040348">
-        <br>
         <button type="submit" class="primaryButton">Додади</button>
     </form>
-
-    <br>
-    <a href="/profile/edit">
-        <button class="primaryButton">Edit details</button>
-    </a>
-    <a href="/logout">
-        <button>Log out</button>
-    </a>
     <script th:src="@{/javascript/validateForm.js}"></script>
 </div>

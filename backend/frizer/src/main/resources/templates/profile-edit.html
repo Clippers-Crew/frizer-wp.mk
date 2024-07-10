@@ -1,11 +1,10 @@
-<div class="bodyContent">
+<div class="bodyContent" id="profilePage">
     <form action="/profile/edit" method="post" onsubmit="return validateProfileEditForm()" id="profileEditForm">
+        <h2>Промени детали</h2>
         <label for="firstName">Име: </label>
         <input type="text" name="firstName" id="firstName" th:value="${user.getFirstName()}">
-        <br>
         <label for="lastName">Презиме: </label>
         <input type="text" name="lastName" id="lastName" th:value="${user.getLastName()}">
-        <br>
         <label for="phoneNumber">Телефонски број: </label>
         <input type="text" name="phoneNumber" id="phoneNumber" th:value="${user.getPhoneNumber()}">
         <button type="submit" class="primaryButton">

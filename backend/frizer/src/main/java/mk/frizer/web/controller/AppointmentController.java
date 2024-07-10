@@ -4,14 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import mk.frizer.model.*;
 import mk.frizer.model.dto.AppointmentAddDTO;
 import mk.frizer.model.exceptions.AppointmentNotFoundException;
-import mk.frizer.model.exceptions.EmployeeNotFoundException;
-import mk.frizer.model.exceptions.SalonNotFoundException;
 import mk.frizer.model.exceptions.TreatmentNotFoundException;
 import mk.frizer.service.*;
-import mk.frizer.service.impl.AppointmentServiceImpl;
-import mk.frizer.utilities.DateTimeRounding;
-import mk.frizer.utilities.TimeSlotGenerator;
-import org.apache.coyote.Request;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,12 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller

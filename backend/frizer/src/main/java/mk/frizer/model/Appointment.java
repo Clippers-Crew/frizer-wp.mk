@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Data
 @Entity
@@ -63,5 +64,16 @@ public class Appointment {
     public String getDateToFormatted(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return dateTo.format(formatter);
+    }
+
+    public boolean isDateNDaysFromNow(int days) {
+//        LocalDateTime targetDate = dateFrom.plusDays(days);
+//        return dateFrom.truncatedTo(ChronoUnit.DAYS).equals(targetDate.truncatedTo(ChronoUnit.DAYS));
+        LocalDateTime now = LocalDateTime.now();
+        return !dateFrom.isAfter(now.plusDays(days));
+    }
+
+    public boolean isDateOneDayFromNow(){
+        return isDateNDaysFromNow(1);
     }
 }

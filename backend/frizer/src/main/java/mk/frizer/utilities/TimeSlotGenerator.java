@@ -59,12 +59,12 @@ public class TimeSlotGenerator {
 
 
     public List<AppointmentTimeSlot> generateAvailableTimeSlots(Long salonId, Long employeeId, Integer durationMultiplier) {
-        List<Appointment> reservedApointments = appointmentRepository.findAll()
+        List<Appointment> reservedAppointments = appointmentRepository.findAll()
                 .stream().filter(a -> a.getSalon().getId().equals(salonId)
                         && a.getEmployee().getId().equals(employeeId)).toList();
-        List<AppointmentTimeSlot> availableAppointmentTimeSlots = getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.now(), reservedApointments, durationMultiplier);
+        List<AppointmentTimeSlot> availableAppointmentTimeSlots = getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.now(), reservedAppointments, durationMultiplier);
         for(int i=1; i< 10; i++){
-            availableAppointmentTimeSlots.addAll(getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.of(LocalDate.now().plusDays(i), START_SHIFT_TIME), reservedApointments, durationMultiplier));
+            availableAppointmentTimeSlots.addAll(getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.of(LocalDate.now().plusDays(i), START_SHIFT_TIME), reservedAppointments, durationMultiplier));
         }
 
         return availableAppointmentTimeSlots;

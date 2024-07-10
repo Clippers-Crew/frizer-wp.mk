@@ -195,7 +195,7 @@
             </form>
         </div>
         <div th:if="${isBusinessOwnerOrEmployee && treatments != null && treatments.size() != 0}">
-            <form action="/treatments/remove" method="post" class="treatmentRemoveForm">
+            <form action="/treatments/remove" method="post" class="treatmentRemoveForm" onsubmit="return confirmDelete('третман')">
                 <h2>Отстрани третман</h2>
                 <input type="hidden" name="salonId" th:value="${salon.getId()}">
                 <label for="treatmentId">Третман</label>

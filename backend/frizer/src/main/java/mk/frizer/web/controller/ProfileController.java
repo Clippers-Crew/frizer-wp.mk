@@ -8,6 +8,8 @@ import mk.frizer.model.exceptions.UserNotFoundException;
 import mk.frizer.service.BaseUserService;
 import mk.frizer.service.BusinessOwnerService;
 import mk.frizer.service.CityService;
+import mk.frizer.service.ReviewService;
+import mk.frizer.service.impl.ReviewServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,11 +26,13 @@ public class ProfileController {
     private final BaseUserService baseUserService;
     private final BusinessOwnerService businessOwnerService;
     private final CityService cityService;
+    private final ReviewService reviewService;
 
-    public ProfileController(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, CityService cityService) {
+    public ProfileController(BaseUserService baseUserService, BusinessOwnerService businessOwnerService, CityService cityService, ReviewService reviewService) {
         this.baseUserService = baseUserService;
         this.businessOwnerService = businessOwnerService;
         this.cityService = cityService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -47,11 +51,13 @@ public class ProfileController {
 
         businessOwner.ifPresent(owner -> {
             model.addAttribute("businessOwner", businessOwner.get());
+            model.addAttribute("salonRatings", reviewService.getStatisticsForSalon(businessOwner.get().getSalonList()));
         });
 
         model.addAttribute("cities", cityService.getCities().stream().skip(1));
         model.addAttribute("user", user);
-        return "profile";
+        model.addAttribute("bodyContent", "profile");
+        return "master-template";
     }
 
     @GetMapping("/edit")
@@ -65,7 +71,9 @@ public class ProfileController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         BaseUser user = (BaseUser) userDetails;
         model.addAttribute("user", user);
-        return "profile-edit";
+
+        model.addAttribute("bodyContent", "profile-edit");
+        return "master-template";
     }
 
     @PostMapping("/edit")
