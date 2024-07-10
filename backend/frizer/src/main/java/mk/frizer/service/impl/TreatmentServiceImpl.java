@@ -1,11 +1,11 @@
 package mk.frizer.service.impl;
 
 import jakarta.transaction.Transactional;
+import mk.frizer.model.Employee;
 import mk.frizer.model.Salon;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.TreatmentAddDTO;
 import mk.frizer.model.dto.TreatmentUpdateDTO;
-import mk.frizer.model.events.SalonCreatedEvent;
 import mk.frizer.model.events.TreatmentCreatedEvent;
 import mk.frizer.model.events.TreatmentUpdatedEvent;
 import mk.frizer.model.exceptions.SalonNotFoundException;
@@ -83,5 +83,17 @@ public class TreatmentServiceImpl implements TreatmentService {
         Treatment treatment = getTreatmentById(id).get();
         treatmentRepository.deleteById(id);
         return Optional.of(treatment);
+    }
+    @Override
+    @Transactional
+    public Optional<Treatment> deleteTreatmentByIdFromSalon(Long id, Long salonId) {
+        Salon salon = salonRepository.findById(salonId)
+                .orElseThrow(SalonNotFoundException::new);
+        Optional<Treatment> treatment = salon.getSalonTreatments().stream()
+                .filter(t -> t.getId().equals(id)).findFirst();
+        if (treatment.isPresent()) {
+            return deleteTreatmentById(id);
+        }
+        return Optional.empty();
     }
 }

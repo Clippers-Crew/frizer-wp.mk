@@ -194,6 +194,19 @@
                 <button type="submit" class="primaryButton">Додади третман</button>
             </form>
         </div>
+        <div th:if="${isBusinessOwnerOrEmployee && treatments != null && treatments.size() != 0}">
+            <form action="/treatments/remove" method="post" class="treatmentRemoveForm">
+                <h2>Отстрани третман</h2>
+                <input type="hidden" name="salonId" th:value="${salon.getId()}">
+                <label for="treatmentId">Третман</label>
+                <select name="treatmentId" id="treatmentId">
+                    <option th:each="treatment: ${treatments}" th:value="${treatment.getId()}"
+                            th:text="${treatment.getName()}">
+                    </option>
+                </select>
+                <button type="submit" class="primaryButton">Отстрани третман</button>
+            </form>
+        </div>
     </div>
 
     <div id="map" th:salon="${salonAsString}"></div>
