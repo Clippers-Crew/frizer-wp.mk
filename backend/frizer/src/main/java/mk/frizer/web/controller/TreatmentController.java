@@ -24,9 +24,16 @@ public class TreatmentController {
 
     @PostMapping("/add")
     public String addTreatment(@RequestParam Long salonId, @RequestParam String name,
-                               @RequestParam Double price,@RequestParam Integer durationMultiplier) {
-        Optional<Treatment> treatment = treatmentService.createTreatment(new TreatmentAddDTO(name,salonId,price,durationMultiplier));
+                               @RequestParam Double price, @RequestParam Integer durationMultiplier) {
+        Optional<Treatment> treatment = treatmentService.createTreatment(new TreatmentAddDTO(name, salonId, price, durationMultiplier));
         return "redirect:/salons/" + salonId;
     }
+
+    @PostMapping("/remove")
+    public String removeTreatmentFromSalon(@RequestParam Long salonId, @RequestParam Long treatmentId) {
+        treatmentService.deleteTreatmentByIdFromSalon(treatmentId, salonId);
+        return "redirect:/salons/" + salonId;
+    }
+
 }
 

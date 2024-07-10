@@ -1,5 +1,6 @@
 package mk.frizer.service;
 
+import jakarta.transaction.Transactional;
 import mk.frizer.model.Treatment;
 import mk.frizer.model.dto.TreatmentAddDTO;
 import mk.frizer.model.dto.TreatmentUpdateDTO;
@@ -14,4 +15,7 @@ public interface TreatmentService{
     Optional<Treatment> createTreatment(TreatmentAddDTO treatmentAddDTO);
     Optional<Treatment> updateTreatment(Long id, TreatmentUpdateDTO treatmentUpdateDTO);
     Optional<Treatment> deleteTreatmentById(Long id);
+
+    @Transactional
+    Optional<Treatment> deleteTreatmentByIdFromSalon(Long id, Long salonId);
 }

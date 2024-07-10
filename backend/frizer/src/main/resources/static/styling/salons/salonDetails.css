@@ -58,7 +58,8 @@
     grid-template-columns: 1fr 4fr;
     gap: 1em;
 }
-#openSalon .services h1{
+
+#openSalon .services h1 {
     grid-column: 1/-1;
 }
 
@@ -128,7 +129,8 @@
     grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
     gap: 1em;
 }
-#openSalon .employees h1{
+
+#openSalon .employees h1 {
     grid-column: 1/-1;
 }
 
@@ -172,18 +174,21 @@
 #openSalon a {
     color: black;
 }
+
 /* MAP END*/
 
 
-/* ADD REVIEW  &&  ADD EMPLOYEE && REMOVE EMPLOYEE && ADD TREATMENT START */
-#openSalon .addImageForm{
+/* ADD REVIEW  &&  ADD EMPLOYEE && REMOVE EMPLOYEE && ADD TREATMENT && REMOVE TREATMENT START */
+#openSalon .addImageForm {
     margin-top: 1em;
 }
+
 #openSalon .reviewAddForm,
 #openSalon .employeeAddForm,
 #openSalon .treatmentAddForm,
 #openSalon .employeeRemoveForm,
-#openSalon .addImageForm{
+#openSalon .addImageForm,
+#openSalon .treatmentRemoveForm {
     max-width: 50vw;
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -195,14 +200,17 @@
     grid-column: 1/-1;
     margin-bottom: 2em;
 }
+
 #openSalon .treatmentAddForm {
-      grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3fr;
 }
+
 #openSalon .reviewAddForm h2,
 #openSalon .employeeAddForm h2,
 #openSalon .treatmentAddForm h2,
 #openSalon .employeeRemoveForm h2,
-#openSalon .addImageForm h2{
+#openSalon .addImageForm h2,
+#openSalon .treatmentRemoveForm h2 {
     grid-column: 1/-1;
     margin-bottom: 0.5em;
 }
@@ -216,20 +224,25 @@
 #openSalon .employeeRemoveForm select,
 #openSalon .employeeRemoveForm input,
 #openSalon .addImageForm select,
-#openSalon .addImageForm input {
+#openSalon .addImageForm input,
+#openSalon .treatmentRemoveForm select,
+#openSalon .treatmentRemoveForm input {
     box-sizing: border-box;
     padding: 1em;
     background-color: #d9d9d9;
     border-radius: var(--border-radius);
     border: none;
 }
+
 #openSalon .reviewAddForm .primaryButton,
 #openSalon .employeeAddForm .primaryButton,
 #openSalon .employeeRemoveForm .primaryButton,
 #openSalon .treatmentAddForm .primaryButton,
-#openSalon .addImageForm .primaryButton{
+#openSalon .addImageForm .primaryButton,
+#openSalon .treatmentRemoveForm .primaryButton {
     margin-top: 1em;
     grid-column: 2/3;
     justify-self: flex-end;
 }
-/* ADD REVIEW  &&  ADD EMPLOYEE && REMOVE EMPLOYEE && ADD TREATMENT END*/
+
+/* ADD REVIEW  &&  ADD EMPLOYEE && REMOVE EMPLOYEE && ADD TREATMENT && REMOVE TREATMENT END*/
