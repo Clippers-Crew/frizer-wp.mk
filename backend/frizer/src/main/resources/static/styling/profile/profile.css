@@ -18,7 +18,8 @@
 /* USER DETAILS END */
 /* SALONS ADD FORM START */
 #profilePage #salonAddForm,
-#profileEditForm{
+#profileEditForm,
+#passwordEditForm {
     max-width: 50vw;
     margin: 3em 0 2em;
     display: grid;
@@ -32,12 +33,14 @@
 }
 
 #profilePage #salonAddForm,
-#profilePage #profileEditForm {
+#profilePage #profileEditForm ,
+#profilePage #passwordEditForm {
     grid-template-columns: 1fr 3fr;
 }
 
 #profilePage #salonAddForm h2,
-#profilePage #profileEditForm h2 {
+#profilePage #profileEditForm h2,
+#profilePage #passwordEditForm h2{
     grid-column: 1/-1;
     margin-bottom: 0.5em;
 }
@@ -45,7 +48,9 @@
 #profilePage #salonAddForm select,
 #profilePage #salonAddForm input,
 #profilePage #profileEditForm select,
-#profilePage #profileEditForm input{
+#profilePage #profileEditForm input,
+#profilePage #passwordEditForm select,
+#profilePage #passwordEditForm input{
     box-sizing: border-box;
     padding: 1em;
     background-color: #d9d9d9;
@@ -54,7 +59,8 @@
 }
 
 #profilePage #salonAddForm .primaryButton,
-#profilePage #profileEditForm .primaryButton{
+#profilePage #profileEditForm .primaryButton,
+#profilePage #passwordEditForm .primaryButton {
     margin-top: 1em;
     grid-column: 2/3;
     justify-self: flex-end;
@@ -117,6 +123,17 @@
     gap: 0.5em;
     justify-content: center;
 }
+/* PASSWORD EDIT FORM START */
+
+#profilePage #passwordEditForm #hasError {
+    grid-column: 1/-1;
+    color: red;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* PASSWORD EDIT FORM END */
+
 /* SALON LIST END */
 
 
@@ -125,3 +142,4 @@
 
 }
 /* PROFILE EDIT FORM END */
+

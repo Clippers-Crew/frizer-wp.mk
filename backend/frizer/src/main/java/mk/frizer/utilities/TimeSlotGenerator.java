@@ -36,16 +36,11 @@ public class TimeSlotGenerator {
 
     private static List<AppointmentTimeSlot> generateAllSlots(LocalTime openTime, LocalTime closeTime, LocalDateTime date, Integer durationMultiplier) {
         List<AppointmentTimeSlot> allSlots = new ArrayList<>();
-        LocalDateTime currentSlot = date.withHour(openTime.getHour()).withMinute(openTime.getMinute());
-        LocalDateTime now = LocalDateTime.now();
-        LocalTime currentTime = now.toLocalTime();
-        LocalDateTime endOfDay = date.withHour(closeTime.getHour()).withMinute(closeTime.getMinute());
+        LocalDateTime currentSlot = date.toLocalTime().isAfter(openTime) ?
+                date.plusHours(1).truncatedTo(ChronoUnit.HOURS) :
+                date.withHour(openTime.getHour()).withMinute(openTime.getMinute());
 
-        if (currentTime.isAfter(closeTime)) {
-            currentSlot = currentSlot.plusDays(1);
-        } else if(currentTime.isAfter(openTime) && currentTime.isBefore(closeTime)){
-            currentSlot = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
-        }
+        LocalDateTime endOfDay = date.withHour(closeTime.getHour()).withMinute(closeTime.getMinute());
 
         while (currentSlot.plusMinutes((long) SLOT_DURATION_MINUTES * durationMultiplier).isBefore(endOfDay) ||
                 currentSlot.plusMinutes((long) SLOT_DURATION_MINUTES * durationMultiplier).equals(endOfDay)) {

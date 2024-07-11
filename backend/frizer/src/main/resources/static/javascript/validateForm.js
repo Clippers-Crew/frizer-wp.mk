@@ -137,3 +137,20 @@ function isCoordinateOk(coordinate, type) {
     }
     return false;
 }
+
+function validatePasswordUpdateForm() {
+    oldPassword = document.querySelector('#passwordEditForm #oldPassword').value
+    newPassword = document.querySelector('#passwordEditForm #newPassword').value
+    repeatedPassword = document.querySelector('#passwordEditForm #repeatedPassword').value
+
+    if (!isPasswordOk(newPassword)) {
+        alert("Лозинката мора да има барем 8 карактери, една голема буква, една мала буква, еден број и еден специјален карактер.");
+        return false;
+    }
+    if (newPassword !== repeatedPassword) {
+        alert("Лозинките не се совпаѓаат.");
+        return false;
+    }
+
+    return true;
+}
