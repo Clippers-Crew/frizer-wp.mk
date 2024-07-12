@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collector;
 
 @Controller
@@ -260,7 +258,17 @@ public class SalonController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         ReviewStats salonStats = reviewService.getStatisticsForSalon(chosenSalon);
 
-        List<AppointmentTimeSlot> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(salon, employee, chosenTreatment.getDurationMultiplier());
+        List<List<AppointmentTimeSlot>> availableTimeSlots = timeSlotGenerator.generateAvailableTimeSlots(salon, employee, chosenTreatment.getDurationMultiplier());
+
+        List<String> days = new ArrayList<>();
+        availableTimeSlots.forEach(list -> {
+            if (!list.isEmpty()){
+                days.add(list.get(0).getFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+            else{
+                days.add(null);
+            }
+        });
 
         ReviewStats employeeStats = reviewService.getStatisticsForEmployee(chosenEmployee);
 
@@ -268,10 +276,13 @@ public class SalonController {
         model.addAttribute("employee", chosenEmployee);
         model.addAttribute("treatment", chosenTreatment);
 
+
         model.addAttribute("formatter", formatter);
         model.addAttribute("salonStats", salonStats);
         model.addAttribute("employeeStats", employeeStats);
+        model.addAttribute("tracker", List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
         model.addAttribute("availableTimeSlots", availableTimeSlots);
+        model.addAttribute("days", days);
         model.addAttribute("bodyContent", "appointment-choose-app");
 
         return "master-template";

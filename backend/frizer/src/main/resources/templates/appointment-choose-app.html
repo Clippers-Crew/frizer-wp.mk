@@ -41,12 +41,24 @@
             <input type="hidden" name="salon" th:value="${salon.getId()}">
             <input type="hidden" name="treatment" th:value="${treatment.getId()}">
             <input type="hidden" name="employee" th:value="${employee.getId()}">
+            <p>Одбери датум</p>
+            <p>Одбери време</p>
+            <p></p>
+            <select id="chooseDay">
+                <span th:each="i: ${tracker}">
+                    <option th:if="${i < days.size() && days.get(i) != null}" th:text="${days.get(i)}" th:value="${i}"></option>
+                </span>
+            </select>
             <select name="time" id="time">
-                <option th:each="timeSlot : ${availableTimeSlots}"
-                        th:value="${#temporals.format(timeSlot.getFrom(), 'yyyy-MM-dd HH:mm')}"
-                        th:text="${#temporals.format(timeSlot.getFrom(), 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(timeSlot.getTo(), 'yyyy-MM-dd HH:mm')}"></option>
+                <span th:each="i: ${tracker}" >
+                    <option th:each="timeSlot : ${availableTimeSlots.get(i)}"
+                            th:class="${i == 0} ? 'visible-option option options-' + ${i.toString()} : 'invisible-option option options-' + ${i.toString()}"
+                            th:value="${#temporals.format(timeSlot.getFrom(), 'yyyy-MM-dd HH:mm')}"
+                            th:text="${#temporals.format(timeSlot.getFrom(), 'HH:mm')} + ' - ' + ${#temporals.format(timeSlot.getTo(), 'HH:mm')}"></option>
+                </span>
             </select>
             <button type="submit" class="reserve primaryButton">Резервирај</button>
         </form>
     </div>
+    <script th:src="@{/javascript/selectChangeHandler.js}"></script>
 </div>

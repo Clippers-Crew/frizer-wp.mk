@@ -61,15 +61,19 @@ public class TimeSlotGenerator {
     }
 
 
-    public List<AppointmentTimeSlot> generateAvailableTimeSlots(Long salonId, Long employeeId, Integer durationMultiplier) {
+    public List<List<AppointmentTimeSlot>> generateAvailableTimeSlots(Long salonId, Long employeeId, Integer durationMultiplier) {
         List<Appointment> reservedAppointments = appointmentRepository.findAll()
                 .stream().filter(a -> a.getSalon().getId().equals(salonId)
                         && a.getEmployee().getId().equals(employeeId)).toList();
+        List<List<AppointmentTimeSlot>> slots = new ArrayList<>();
         List<AppointmentTimeSlot> availableAppointmentTimeSlots = getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.now(), reservedAppointments, durationMultiplier);
+        slots.add(availableAppointmentTimeSlots);
+
         for(int i=1; i< 10; i++){
-            availableAppointmentTimeSlots.addAll(getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.of(LocalDate.now().plusDays(i), START_SHIFT_TIME), reservedAppointments, durationMultiplier));
+            List<AppointmentTimeSlot> newSlots = getAvailableSlots(START_SHIFT_TIME, END_SHIFT_TIME, LocalDateTime.of(LocalDate.now().plusDays(i), START_SHIFT_TIME), reservedAppointments, durationMultiplier);
+            slots.add(newSlots);
         }
 
-        return availableAppointmentTimeSlots;
+        return slots;
     }
 }

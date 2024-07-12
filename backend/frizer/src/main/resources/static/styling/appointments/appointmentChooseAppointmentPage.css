@@ -60,7 +60,7 @@
 #appointmentChooseAppointmentPage .treatmentChooseTimeForm{
     margin-top: 3em;
     display: grid;
-    grid-template-columns: 4fr 1fr;
+    grid-template-columns: 2fr 2fr 1fr;
     gap: 0.5em;
     justify-content: center;
     border: 0.08em solid var(--darker-color);
@@ -73,6 +73,7 @@
     margin-bottom: 0.5em;
 }
 
+
 #appointmentChooseAppointmentPage .treatmentChooseTimeForm select {
     box-sizing: border-box;
     padding: 1em;
@@ -84,16 +85,26 @@
 #appointmentChooseAppointmentPage .treatmentChooseTimeForm select > *{
     padding: 0.2em 1em;
 }
+#appointmentChooseAppointmentPage .treatmentChooseTimeForm .visible-option{
+    display: block;
+}
+#appointmentChooseAppointmentPage .treatmentChooseTimeForm .invisible-option{
+    display: none;
+}
 @media screen and (min-width: 750px) {
     #appointmentChooseAppointmentPage .treatmentChooseTimeForm {
         max-width: 50vw;
     }
+
 }
 
 @media screen and (max-width: 750px) {
     #appointmentChooseAppointmentPage .treatmentChooseTimeForm {
         width: 100%;
         grid-template-columns: 1fr;
+    }
+    #appointmentChooseAppointmentPage .treatmentChooseTimeForm p:nth-of-type(2){
+        grid-row: 5;
     }
 }
 /* CHOOSE APPOINTMENT TIME END */
