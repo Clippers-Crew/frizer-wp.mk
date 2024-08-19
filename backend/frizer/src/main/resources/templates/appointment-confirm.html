@@ -12,9 +12,11 @@
         <div class="row">
             <i class="ri-map-pin-line"></i>
             <p class="salonLocation" th:text="${salon.getLocation()}"></p>
-            <p class="salonRating"><i class="fas fa-star"></i> <span th:text="${salonStats.getRating()}"></span> (<span
+
+            <p class="salonRating"><i class="fas fa-star"></i> <span
+                    th:text="${#numbers.formatDecimal(salon.getRating(), 1, 2)}"></span>> (<span
                     th:text="${salonStats.getNumberOfReviews()}"></span> <span
-                    th:text="${salonStats.getNumberOfReviews() > 1 ? 'reviews': 'review'}"></span>)</p>
+                    th:text="${salonStats.getNumberOfReviews() > 1 ? 'рецензии': 'рецензии'}"></span>)</p>
         </div>
     </div>
 
@@ -28,18 +30,23 @@
                 <h2 th:text="${employee.getBaseUser().getFirstName()}"></h2>
             </div>
             <p class="employeeRating">
-                <span th:text="${employeeStats.getRating()}"></span>
+
+                <span
+                        th:text="${#numbers.formatDecimal(employeeStats.getRating(), 1, 2)}"
+                ></span>
                 <i class="ri-star-fill"></i>
-                <span th:text="'(' + ${employeeStats.getNumberOfReviews()} + ' reviews)'"></span>
+                <span th:text="'(' + ${employeeStats.getNumberOfReviews()} + ' рецензии)'"></span>
             </p>
-            <p class="employeeExperience">Working since 2024</p>
+            <p class="employeeExperience">Работи од 2024</p>
         </div>
 
         <div class="treatmentInfo">
-             <h2>Детали за терминот</h2>
-            <p class="treatmentInfoItem" th:text="'Датум: ' + ${#temporals.format(startAppointmentTime, 'dd.MM.yyyy')}"></p>
+            <h2>Детали за терминот</h2>
+            <p class="treatmentInfoItem"
+               th:text="'Датум: ' + ${#temporals.format(startAppointmentTime, 'dd.MM.yyyy')}"></p>
             <p th:text="'Почеток на третман: ' + ${#temporals.format(startAppointmentTime, 'HH:mm')}"></p>
-            <p class="treatmentInfoItem" th:text="'Крај на третман: ' + ${#temporals.format(endAppointmentTime, 'HH:mm')}"></p>
+            <p class="treatmentInfoItem"
+               th:text="'Крај на третман: ' + ${#temporals.format(endAppointmentTime, 'HH:mm')}"></p>
             <p class="treatmentInfoItem" th:text="'Услуги: ' + ${treatment.getName()}"></p>
             <p class="treatmentInfoItem">Тип на третман: Летна</p>
             <p class="treatmentInfoItem"

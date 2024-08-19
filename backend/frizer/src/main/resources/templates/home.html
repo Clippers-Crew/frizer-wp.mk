@@ -8,41 +8,11 @@
         <div th:insert="~{fragments/Search :: search}"></div>
 
         <div class="tags">
-            <h4>Категории</h4>
-            <a href="#" class="tag">
+            <h4>Градови со највеќе салони</h4>
+            <a th:href="@{'/salons?name=&city=' + ${city.getName()} + '&distance=&rating='}" class="tag" th:each="city: ${topCities}">
                 <div>
-                    <h5>Коса</h5>
-                    <p>50 салони</p>
-                </div>
-            </a>
-            <a href="#" class="tag">
-                <div>
-                    <h5>Нега за лице</h5>
-                    <p>50 салони</p>
-                </div>
-            </a>
-            <a href="#" class="tag">
-                <div>
-                    <h5>Трепки</h5>
-                    <p>50 салони</p>
-                </div>
-            </a>
-            <a href="#" class="tag">
-                <div>
-                    <h5>Веѓи</h5>
-                    <p>50 салони</p>
-                </div>
-            </a>
-            <a href="#" class="tag">
-                <div>
-                    <h5>Нокти</h5>
-                    <p>50 салони</p>
-                </div>
-            </a>
-            <a href="#" class="tag">
-                <div>
-                    <h5>Депилација</h5>
-                    <p>50 салони</p>
+                    <h5 th:text="${city.getName()}"></h5>
+                    <p><span th:text="${city.getSalonsInCity().size()}"></span> салони</p>
                 </div>
             </a>
         </div>
@@ -50,14 +20,15 @@
     </div>
 
     <div class="featuredSalons">
-        <h1>Најчесто пребарувани салони</h1>
+        <h1>Највисоко рангирани салони</h1>
         <div class="cards">
             <div class="salonCard" th:each="salon : ${salons}">
                 <img class="salonImage" th:src="@{/images/salon_image.png}" alt="Salon">
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
-                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> рецензии)
+                    <span th:text="${#numbers.formatDecimal(salon.getRating(), 1, 2)}"></span>
+                    (<span th:text="${salon.getNumberOfReviews()}"></span> рецензии)
                 </p>
                 <p class="salonLocation" >
                     <i class="ri-map-pin-line"></i>

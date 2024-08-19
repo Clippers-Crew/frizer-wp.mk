@@ -31,15 +31,15 @@
         <div class="row">
             <i class="ri-map-pin-line"></i>
             <p class="salonLocation" th:text="${salon.getLocation()}"></p>
-            <p class="salonRating"><i class="fas fa-star"></i> <span th:text="${salonStats.getRating()}"></span> (<span
-                    th:text="${salonStats.getNumberOfReviews()}"></span> <span
-                    th:text="${salonStats.getNumberOfReviews() > 1 ? 'reviews': 'review'}"></span>)</p>
+            <p class="salonRating"><i class="fas fa-star"></i> <span th:text="${#numbers.formatDecimal(salon.getRating(), 1, 2)}"></span> (<span
+                    th:text="${salon.getNumberOfReviews()}"></span> <span
+                    th:text="${salon.getNumberOfReviews() > 1 ? 'рецензии': 'рецензија'}"></span>)</p>
         </div>
     </div>
 
     <div th:if="${isBusinessOwner}">
         <h4 th:if="${error != null && error.length > 0}" th:text="${error}"></h4>
-        <form action="/salons/3/image/add" method="post" class="addImageForm" enctype="multipart/form-data">
+        <form th:action="@{'/salons/' + ${salon.getId()} + '/image/add'}" method="post" class="addImageForm" enctype="multipart/form-data">
             <h2>Додади слика</h2>
             <label for="image">Слика</label>
             <input type="file" name="image" id="image" required>
@@ -143,11 +143,11 @@
                     <h2 th:text="${employee.getBaseUser().getFirstName()}"></h2>
                 </div>
                 <p class="employeeRating">
-                    <span th:text="${employeeMap[employee.id].getRating()}"></span>
+                    <span th:text="${#numbers.formatDecimal(employeeMap[employee.id].getRating(), 1, 2)}"></span>
                     <i class="ri-star-fill"></i>
                     <span th:text="'(' + ${employeeMap[employee.id].getNumberOfReviews()} + ' reviews)'"></span>
                 </p>
-                <p class="employeeExperience">Working since 2024</p>
+                <p class="employeeExperience">Работи од 2024</p>
             </div>
         </div>
         <br/>

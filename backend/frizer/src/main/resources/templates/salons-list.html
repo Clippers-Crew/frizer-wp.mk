@@ -108,8 +108,9 @@
                 <h3 class="salonTitle" th:text="${salon.getName()}"></h3>
                 <p class="salonRating">
                     <i class="ri-star-fill"></i>
-                    <span th:text="${salonRatings[salon.getId()].getRating()}"></span> (<span
-                        th:text="${salonRatings[salon.getId()].getNumberOfReviews()}"></span> рецензии)
+                    <span th:text="${#numbers.formatDecimal(salon.getRating(), 1, 2)}"></span>
+                    (<span th:text="${salon.getNumberOfReviews()}"></span>
+                    <span th:text="${salon.getNumberOfReviews() > 1 ? 'рецензии': 'рецензија'}"></span>)
                 </p>
                 <p>Одалеченост
                 <span class="salonDistance" th:data-salon-id="${salon.getId()}"

@@ -6,11 +6,9 @@ import mk.frizer.model.dto.ReviewAddDTO;
 import mk.frizer.model.dto.ReviewUpdateDTO;
 import mk.frizer.model.exceptions.ReviewNotFoundException;
 import mk.frizer.model.exceptions.UserNotFoundException;
-import mk.frizer.repository.BaseUserRepository;
-import mk.frizer.repository.CustomerRepository;
-import mk.frizer.repository.EmployeeRepository;
-import mk.frizer.repository.ReviewRepository;
+import mk.frizer.repository.*;
 import mk.frizer.service.ReviewService;
+import mk.frizer.service.SalonService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,12 +24,14 @@ public class ReviewServiceImpl implements ReviewService {
     private final BaseUserRepository baseUserRepository;
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
+    private final SalonRepository salonRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, BaseUserRepository baseUserRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, BaseUserRepository baseUserRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, SalonRepository salonRepository) {
         this.reviewRepository = reviewRepository;
         this.baseUserRepository = baseUserRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
+        this.salonRepository = salonRepository;
     }
 
     @Override
@@ -60,13 +60,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public Optional<Review> createReviewForEmployee(ReviewAddDTO reviewAddDTO) {
+        public Optional<Review> createReviewForEmployee(ReviewAddDTO reviewAddDTO) {
         Employee employee = employeeRepository.findById(reviewAddDTO.getEmployeeId())
                 .orElseThrow(UserNotFoundException::new);
         Customer customer = customerRepository.findById(reviewAddDTO.getCustomerId())
                 .orElseThrow(UserNotFoundException::new);
 
         Review review = reviewRepository.save(new Review(customer.getBaseUser(), employee.getBaseUser(), reviewAddDTO.getRating(), reviewAddDTO.getComment()));
+
+        Salon salon = employee.getSalon();
+        salon.setRating((salon.getRating() * salon.getNumberOfReviews() + review.getRating()) / (salon.getNumberOfReviews() + 1));
+        salon.setNumberOfReviews(salon.getNumberOfReviews() + 1);
+
+        salonRepository.save(salon);
 
         return Optional.of(review);
     }
@@ -138,13 +144,14 @@ public class ReviewServiceImpl implements ReviewService {
                                 a[2] += b[2];
                                 return a;
                             },
-                            a -> new ReviewStats(a[0] / (a[2] == 0 ? 1 : a[2]), (int) a[1]) // finisher
+                            a -> new ReviewStats(a[0] / (a[2] == 0 ? 1 : a[2]), (int) a[1])
                     ));
 
             salonMap.put(salon.getId(), salonStats);
         }
         return salonMap;
     }
+
     @Override
     public ReviewStats getStatisticsForSalon(Salon salon) {
 

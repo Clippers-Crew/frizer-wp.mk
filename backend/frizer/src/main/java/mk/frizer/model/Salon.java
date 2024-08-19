@@ -48,13 +48,14 @@ public class Salon {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imagePaths;
 
-    private Float rating;
+    private Double rating;
+    private Integer numberOfReviews;
 
     private Float latitude;
     private Float longitude;
 
     public Salon(String name, String description, String location, City city, String phoneNumber,
-                 BusinessOwner owner,Float rating,Float latitude, Float longitude) {
+                 BusinessOwner owner ,Float latitude, Float longitude) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -70,7 +71,8 @@ public class Salon {
                 "/images/salons/default/default_salon_3.jpg",
                 "/images/salons/default/default_salon_4.jpg"
         );
-        this.rating = rating;
+        this.rating = 0.0;
+        this.numberOfReviews = 0;
         this.latitude = latitude;
         this.longitude = longitude;
     }

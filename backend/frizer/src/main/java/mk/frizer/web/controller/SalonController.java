@@ -197,7 +197,7 @@ public class SalonController {
                 businessOwner = owner.getId();
             }
         }
-        salonService.createSalon(new SalonAddDTO(name, description, location, city, phoneNumber, businessOwner, (float)0, latitude, longitude));
+        salonService.createSalon(new SalonAddDTO(name, description, location, city, phoneNumber, businessOwner, latitude, longitude));
         return "redirect:/profile";
     }
 

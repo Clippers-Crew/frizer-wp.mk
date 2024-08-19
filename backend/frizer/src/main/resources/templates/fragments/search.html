@@ -6,14 +6,14 @@
         <i class="ri-arrow-down-line"></i>
     </a>
     <div class="advanced-menu" id="advanced-menu">
-        <label for="city">City</label>
+        <label for="city">Град</label>
         <select id="city" name="city">
             <option th:each="city : ${cities}" th:value="${city.getName()}" th:text="${city.getName()}"></option>
         </select>
-        <label for="distance">Distance</label>
+        <label for="distance">Растојание</label>
         <input type="text" name="distance" id="distance">
 
-        <label for="rating">Rating</label>
+        <label for="rating">Рејтинг</label>
         <input type="text" name="rating" id="rating">
     </div>
 </form>

@@ -59,6 +59,11 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
+    public List<Salon> getTop8Salons() {
+        return salonRepository.findTop8ByOrderByRatingDesc();
+    }
+
+    @Override
     public Optional<Salon> getSalonById(Long id) throws SalonNotFoundException {
         Salon salon = salonRepository.findById(id).orElseThrow(SalonNotFoundException::new);
         return Optional.of(salon);
@@ -71,7 +76,7 @@ public class SalonServiceImpl implements SalonService {
         City city = cityRepository.findByName(salonAddDTO.getCity())
                 .orElseThrow(CityNotFoundException::new);
 
-        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), city, salonAddDTO.getPhoneNumber(), businessOwner, salonAddDTO.getRating(), salonAddDTO.getLatitude(), salonAddDTO.getLongitude());
+        Salon salon = new Salon(salonAddDTO.getName(), salonAddDTO.getDescription(), salonAddDTO.getLocation(), city, salonAddDTO.getPhoneNumber(), businessOwner, salonAddDTO.getLatitude(), salonAddDTO.getLongitude());
 
         salonRepository.save(salon);
 
@@ -271,6 +276,5 @@ public class SalonServiceImpl implements SalonService {
         }
         return false;
     }
-
 }
 

@@ -10,35 +10,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping({"/home", "/"})
 public class HomeController {
     private final SalonService salonService;
-    private final ReviewService reviewService;
     private final CityService cityService;
 
-    public HomeController(SalonService salonService, ReviewService reviewService, CityService cityService) {
+    public HomeController(SalonService salonService, CityService cityService) {
         this.salonService = salonService;
-        this.reviewService = reviewService;
         this.cityService = cityService;
     }
 
     @GetMapping
     public String getHomePage(Model model) {
-
-        List<Salon> salons = salonService.getSalons();
-        model.addAttribute("salons",salons);
-        model.addAttribute("salonRatings", reviewService.getStatisticsForSalon(salons));
+        List<Salon> salons = salonService.getTop8Salons();
+        model.addAttribute("salons", salons);
         model.addAttribute("cities", cityService.getCities());
+        model.addAttribute("topCities", cityService.getTop6Cities());
         model.addAttribute("bodyContent", "home");
         return "master-template";
     }
-
-//    @GetMapping("/access_denied")
-//    public String getAccessDeniedPage(Model model) {
-//        model.addAttribute("bodyContent","access-denied");
-//        return "master-template";
-//    }
 }

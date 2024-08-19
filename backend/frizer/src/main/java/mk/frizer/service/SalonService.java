@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface SalonService {
     List<Salon> getSalons();
+    List<Salon> getTop8Salons();
 
     Optional<Salon> getSalonById(Long id);
 
